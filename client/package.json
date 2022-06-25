@@ -1,0 +1,42 @@
+{
+  "name": "project-name",
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "serve": "npm run build && vite preview"
+  },
+  "dependencies": {
+    "@auth0/auth0-react": "^1.10.1",
+    "@reduxjs/toolkit": "^1.8.2",
+    "axios": "^0.27.2",
+    "easymde": "^2.16.1",
+    "framer-motion": "^6.3.11",
+    "jwt-decode": "^3.1.2",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-icons": "^4.4.0",
+    "react-markdown": "^8.0.3",
+    "react-redux": "^8.0.2",
+    "react-router-dom": "^6.3.0",
+    "react-simplemde-editor": "^5.0.2",
+    "styled-components": "^5.3.5",
+    "tailwindcss": "^3.1.3"
+  },
+  "devDependencies": {
+    "@types/react": "^18.0.14",
+    "@types/react-dom": "^18.0.5",
+    "@vitejs/plugin-react": "^1.3.2",
+    "autoprefixer": "^10.4.7",
+    "postcss": "^8.4.14",
+    "twin.macro": "^2.8.2",
+    "vite": "^2.9.12",
+    "vite-plugin-babel-macros": "^1.0.6"
+  },
+  "babelMacros": {
+    "twin": {
+      "config": "./tailwind.config.js",
+      "preset": "styled-components"
+    }
+  }
+}
