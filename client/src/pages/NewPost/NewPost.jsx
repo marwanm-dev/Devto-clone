@@ -1,25 +1,22 @@
 import { useState, useRef, useEffect } from 'react';
 import tw from 'twin.macro';
 import RouteWrapper from '../../common/RouteWrapper';
-import BodyInput from './components/BodyInput';
+import SimpleMDE from 'react-simplemde-editor';
+import 'easymde/dist/easymde.min.css';
+import useBase64 from '../../hooks/useBase64';
 
-// Todo make reusable component for (imageUpload, Input)
+// Todo make reusable component for (Avatar, imageUpload, Input)
 const NewPost = () => {
+  const [title, setTitle] = useState('');
   const [file, setFile] = useState('');
-  const [previewURL, setPreviewURL] = useState('');
+  const [body, setBody] = useState('');
+  const [tags, setTags] = useState('');
   const filePickerRef = useRef();
+  const previewURL = useBase64(file);
 
-  useEffect(() => {
-    if (!file) return;
-    if (typeof file === 'string') setPreviewURL(`${file}`);
-    else {
-      const fileReader = new FileReader();
-      fileReader.onload = () => {
-        setPreviewURL(fileReader.result);
-      };
-      fileReader.readAsDataURL(file);
-    }
-  }, [file]);
+  const handleSubmit = () => {
+    // Submit with POST method to /post rest api route
+  };
 
   return (
     <RouteWrapper>
@@ -28,7 +25,7 @@ const NewPost = () => {
           <Heading>Create a new post</Heading>
           <InputWrapper>
             <label htmlFor='title'>Title</label>
-            <input name='title' />
+            <input name='title' value={title} onChange={e => setTitle(e.target.value)} />
           </InputWrapper>
           <InputWrapper>
             <input
@@ -38,17 +35,17 @@ const NewPost = () => {
               onChange={e => setFile(e.target.files[0])}
               style={{ display: 'none' }}
             />
-            <ImagePreview src={previewURL} alt='Please pick an image' />
+            <ImagePreview src={previewURL.toString()} alt='Please pick an image' />
             <Button onClick={() => filePickerRef.current.click()}>Choose image</Button>
           </InputWrapper>
           <InputWrapper>
-            <BodyInput />
+            <SimpleMDE value={body} onChange={setBody} />
           </InputWrapper>
           <InputWrapper>
             <label htmlFor='tags'>Tags</label>
-            <input name='tags' />
+            <input name='tags' value={tags} onChange={e => setTags(e.target.value)} />
           </InputWrapper>
-          <Submit>Submit</Submit>
+          <Submit onClick={handleSubmit}>Submit</Submit>
         </NewPostWrapper>
       </Wrapper>
     </RouteWrapper>

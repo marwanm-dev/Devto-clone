@@ -16,7 +16,6 @@ const handleNewUser = async (req, res) => {
   try {
     const hashedPwd = await bcrypt.hash(pwd, 10);
     const pictureUrl = await uploadToCloudinary(picture);
-    console.log({ picture, pictureUrl });
 
     await User.create({
       username: user,

@@ -75,7 +75,7 @@ const Card = styled.div`
   box-shadow: 0 8px 5px -7px rgba(0, 0, 0, 0.2);
   ${tw`bg-white flex flex-col items-center gap-sm relative rounded-md`}
 `;
-const Avatar = tw.img`w-28 rounded-full border-8 border-black`;
+const Avatar = tw.img`w-28 h-28 object-cover rounded-full border-4 border-black`;
 
 const EditButton = tw.button`absolute top-lg right-lg text-white bg-blue rounded-md py-2 px-4`;
 

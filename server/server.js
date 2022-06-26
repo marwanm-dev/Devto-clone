@@ -33,7 +33,7 @@ app.use(cors(corsOptions));
 app.use(express.urlencoded({ extended: false }));
 
 // built-in middleware for json
-app.use(express.json());
+app.use(express.json({ limit: '50mb' }));
 
 // Routes
 app.use('/', require('./routes/root'));

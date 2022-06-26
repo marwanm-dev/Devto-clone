@@ -131,7 +131,13 @@ const SignUp = () => {
               onChange={e => setFile(e.target.files[0])}
             />
             <ImagePreview src={pictureURL} alt='Please pick an image' />
-            <Button onClick={() => filePickerRef.current.click()}>Choose image</Button>
+            <Button
+              onClick={e => {
+                e.preventDefault();
+                filePickerRef.current.click();
+              }}>
+              Choose image
+            </Button>
           </InputContainer>
 
           {isError && <Error>Either Username or email is taken</Error>}

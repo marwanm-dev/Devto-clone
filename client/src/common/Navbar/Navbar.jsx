@@ -48,7 +48,7 @@ const Navbar = () => {
                   <IoSearch />
                 </SearchIcon>
               ) : (
-                <NewPost>Create Post</NewPost>
+                <NewPost to='post/new'>Create Post</NewPost>
               )}
               <NotificationIcon>
                 <RiNotification3Line />
@@ -138,9 +138,7 @@ const DevIcon = styled(Link).attrs({
 
 const RightSide = tw.div`flex items-center gap-sm relative`;
 
-const NewPost = styled(Link).attrs({
-  to: 'new',
-})`
+const NewPost = styled(Link)`
   ${tw`rounded-md border border-solid border-white py-2 px-3 text-blue bg-white border-blue hover:(text-white bg-blue border-blue)`}
 `;
 
@@ -157,7 +155,7 @@ const NotificationIcon = styled(Link).attrs({
 const Count = tw.div`bg-red text-white rounded-full font-bold text-xs px-1 absolute top-0 right-0`;
 
 const Avatar = styled.img`
-  ${tw`max-w-none w-10 rounded-full overflow-hidden cursor-pointer`}
+  ${tw`max-w-none w-12 h-12 transition-none hover:(border border border-light-gray) object-cover rounded-full overflow-hidden cursor-pointer`}
 `;
 
 const Login = styled(Link).attrs({

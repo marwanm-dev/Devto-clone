@@ -3,6 +3,8 @@ import Tags from '../../../common/Tags';
 import Comments from './Comments';
 import AuthorDetails from '../../../common/AuthorDetails';
 import { useNavigate } from 'react-router-dom';
+import ReactMarkdown from 'react-markdown';
+import SyntaxHighlight from '../../../common/SyntaxHighlight';
 
 const Post = ({ isLaptop }) => {
   const navigate = useNavigate();
@@ -24,20 +26,26 @@ const Post = ({ isLaptop }) => {
         <Title>Meme Monday!</Title>
         <Tags />
         <PostBody>
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Deserunt error natus doloremque
-          ut consequuntur facilis. Ab ducimus, inventore sint atque enim voluptatum nesciunt ea esse
-          accusamus in reprehenderit provident fugit rerum? Animi accusantium repellat, distinctio,
-          molestias repellendus totam sequi vitae eum excepturi id tempore eveniet in assumenda,
-          dicta perferendis omnis fuga numquam reprehenderit error minus officia quo. Quidem
-          doloribus voluptatem fugit perspiciatis pariatur, nulla reprehenderit laborum quos fugiat
-          explicabo ab at doloremque nam sit amet officiis ea expedita beatae delectus, sint eum,
-          assumenda voluptatibus culpa. Voluptatem hic, voluptates aspernatur adipisci modi magnam
-          exercitationem necessitatibus consequatur ullam quo sunt doloremque laudantium perferendis
-          magni accusamus libero suscipit maiores! Dolore, inventore itaque animi nam fuga nulla,
-          libero dolor, beatae quasi placeat impedit ex doloribus pariatur minus molestias
-          distinctio quisquam perferendis amet suscipit officia sed quam laboriosam! Quidem corrupti
-          neque earum voluptates odio, praesentium inventore alias pariatur fugiat voluptatibus
-          labore unde quaerat laborum. Fugit?
+          <ReactMarkdown components={SyntaxHighlight}>
+            Lorem ipsum, dolor sit __amet__ consectetur adipisicing elit. Reiciendis consequuntur
+            nisi fugit obcaecati mollitia molestias, et dolor ipsa similique aliquid velit in
+            perspiciatis labore, aperiam molestiae, possimus quibusdam quis unde esse veniam maiores
+            repellat! Reiciendis nostrum quasi alias non quia at. Excepturi totam reprehenderit
+            consectetur maxime cum architecto nisi ratione temporibus atque et? Eveniet minima vitae
+            sequi neque? Libero quisquam veritatis eligendi. Culpa, consequatur voluptatibus
+            aspernatur temporibus repellat ipsa deleniti a rem distinctio sunt quis? Quibusdam, id,
+            est labore accusantium sed suscipit quam ut eligendi nihil unde deserunt? Eaque,
+            dolorum! Excepturi sint maiores eum labore rem porro eaque vel adipisci ipsa hic debitis
+            minus quia, eveniet, sunt placeat sapiente, deleniti asperiores recusandae! Ullam,
+            mollitia sed? Sit cupiditate magnam sed odio? Inventore impedit error, aut architecto
+            odio sunt qui veniam recusandae at eligendi harum id incidunt culpa ullam aperiam
+            quaerat, aliquid corrupti nisi iure non rerum quo tempora. Veniam fugit optio hic dolor
+            minus maxime porro tempora voluptate voluptatem quibusdam vel molestias culpa, soluta
+            dolores excepturi et earum magni, voluptates repellendus? Delectus perspiciatis
+            sapiente, ea distinctio eum cum laboriosam in deleniti, eos tenetur laborum laudantium?
+            Distinctio, enim consequatur doloremque iusto rerum eos, itaque suscipit eius nesciunt
+            iste commodi, nostrum necessitatibus qui.
+          </ReactMarkdown>
         </PostBody>
         <CommentsContainer>
           <Heading>Discussion (7 comments)</Heading>
