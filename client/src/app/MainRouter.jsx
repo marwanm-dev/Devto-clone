@@ -55,15 +55,16 @@ const AnimatedRoutes = () => {
 
           <Route path='post'>
             <Route path='new' element={<NewPost />} />
-            <Route path=':username:titleUrl:postId' element={<PostPage />} />
-            {/* Requires to be logged in && be the author of this pos t (:username:titleUrl:postId) */}
+            <Route path=':username:title:postId' element={<PostPage />} />
+            {/* Requires to be logged in && be the author of this post (:username:title:postId) */}
             <Route element={<RequireAuth />}>
               <Route path='edit' element={<EditPost />} />
             </Route>
           </Route>
 
-          <Route path='tags' element={<Tags />}>
-            <Route path=':tagName' element={<Tag />} />
+          <Route path='tags'>
+            <Route index element={<Tags />} />
+            <Route path=':tagname' element={<Tag />} />
           </Route>
 
           <Route path='users'>

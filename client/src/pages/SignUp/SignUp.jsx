@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import RouteWrapper from '../../common/RouteWrapper';
 import { useSignUpMutation } from '../../core/features/auth/authApiSlice';
 import Auth0 from '../../common/Auth0';
+import useBase64 from '../../hooks/useBase64';
 
 const SignUp = () => {
   const navigate = useNavigate();
@@ -14,7 +15,6 @@ const SignUp = () => {
   const [pwd, setPwd] = useState('');
   const [email, setEmail] = useState('');
   const [file, setFile] = useState('');
-  const [pictureURL, setPictureURL] = useState('');
   const filePickerRef = useRef();
 
   const [validUser, setValidUser] = useState(false);
@@ -37,17 +37,7 @@ const SignUp = () => {
 
   useEffect(() => setValidPwd(PWD_REGEX.test(pwd)), [pwd]);
 
-  useEffect(() => {
-    if (!file) return;
-    if (typeof file === 'string') setPictureURL(`${file}`);
-    else {
-      const fileReader = new FileReader();
-      fileReader.onload = () => {
-        setPictureURL(fileReader.result);
-      };
-      fileReader.readAsDataURL(file);
-    }
-  }, [file]);
+  const pictureURL = useBase64(file);
 
   useEffect(
     () => setInputsAreValid(validUser && validEmail && validPwd),
@@ -69,7 +59,6 @@ const SignUp = () => {
         setUser('');
         setEmail('');
         setPwd('');
-        setPictureURL('');
 
         navigate('/auth/login');
       } catch (err) {
@@ -127,7 +116,6 @@ const SignUp = () => {
               type='file'
               ref={filePickerRef}
               style={{ display: 'none' }}
-              // Todo to get full path and save to server see (https://www.youtube.com/watch?v=4pmkQjsKJ-U)
               onChange={e => setFile(e.target.files[0])}
             />
             <ImagePreview src={pictureURL} alt='Please pick an image' />
@@ -148,6 +136,7 @@ const SignUp = () => {
     </RouteWrapper>
   );
 };
+
 const ImagePreview = tw.img`w-32 h-32 mx-auto border border-light-gray flex justify-center items-center text-center object-cover`;
 
 const Button = tw.button`bg-lighter-gray hover:bg-light-gray rounded-md text-center py-2 px-1 w-28 text-sm mx-auto`;

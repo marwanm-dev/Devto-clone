@@ -2,7 +2,7 @@ import tw from 'twin.macro';
 import Navbar from '../Navbar';
 import { Outlet } from 'react-router-dom';
 
-const Input = () => {
+const Layout = () => {
   return (
     <Wrapper>
       <Navbar />
@@ -13,4 +13,4 @@ const Input = () => {
 
 const Wrapper = tw.div`relative max-w-pg w-full flex justify-between mx-auto items-center mt-24 px-4`;
 
-export default Input;
+export default Layout;

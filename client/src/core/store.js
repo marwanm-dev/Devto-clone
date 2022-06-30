@@ -8,10 +8,6 @@ const combinedReducer = combineReducers({
 });
 
 const rootReducer = (state, action) => {
-  // Todo Do auth0 logins
-  // Todo do token expiration and refresh the access token on expiration
-  // Todo persist login
-  // Todo  upload profile img to cloudinary to retrieve it later
   if (action.type === 'api/subscriptions/unsubscribeQueryResult') {
     state = undefined;
   }

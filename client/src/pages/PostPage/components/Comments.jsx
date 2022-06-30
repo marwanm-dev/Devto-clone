@@ -1,4 +1,4 @@
-import tw, { styled } from 'twin.macro';
+import tw from 'twin.macro';
 import Comment from './Comment';
 
 const Comments = ({ comments }) => {

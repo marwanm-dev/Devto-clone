@@ -18,7 +18,7 @@ h3 {
   ${tw`text-base font-bold`}
 }
 h4 {
-  ${tw`text-sm font-bold`}
+  ${tw`text-sm font-medium`}
 }
 h5 {
   ${tw`text-base font-light`}

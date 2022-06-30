@@ -1,5 +1,5 @@
 import tw, { styled } from 'twin.macro';
-import Post from './Post';
+import Post from './components/Post';
 
 const PostsList = () => {
   const posts = [1, 2, 3];

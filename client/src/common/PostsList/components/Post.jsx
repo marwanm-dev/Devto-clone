@@ -1,8 +1,8 @@
 import tw, { styled } from 'twin.macro';
 import { AiOutlineHeart } from 'react-icons/ai';
 import { MdOutlineModeComment } from 'react-icons/md';
-import Tags from '../../../common/Tags';
 import { useNavigate } from 'react-router-dom';
+import Tags from '../../Tags';
 
 const Post = ({ isFirstPost }) => {
   const navigate = useNavigate();
@@ -11,29 +11,29 @@ const Post = ({ isFirstPost }) => {
     <Wrapper>
       {isFirstPost && (
         <Image
-          onClick={() => navigate('post/:username:titleUrl:postId')}
+          onClick={() => navigate('/post/:username:title:postId')}
           src='../../../assets/images/Screenshot_2021-02-21-20-01-06-24.jpg'
         />
       )}
       <Content>
-        <Header onClick={() => navigate('users/:username')}>
+        <Header onClick={() => navigate('/users/:username')}>
           <Author src='../../../assets/images/Screenshot_2021-02-21-20-01-06-24.jpg' />
           <AuthorMeta>
             <AuthorName>Ben Halpern</AuthorName>
             <CreatedAt>Jun 13</CreatedAt>
           </AuthorMeta>
         </Header>
-        <Title onClick={() => navigate('post/:username:titleUrl:postId')}>Meme Monday!</Title>
+        <Title onClick={() => navigate('/post/:username:title:postId')}>Meme Monday!</Title>
         <Tags />
         <Footer>
-          <Reactions>
-            <SumOfReactions onClick={() => navigate('post/:username:titleUrl:postId')}>
+          <Reactions onClick={() => navigate('/post/:username:title:postId')}>
+            <SumOfReactions>
               <HeartIcon>
                 <AiOutlineHeart />
               </HeartIcon>
               <Total>32 reactions</Total>
             </SumOfReactions>
-            <SumOfComments onClick={() => navigate('post/:username:titleUrl:postId/#comments')}>
+            <SumOfComments>
               <CommentIcon>
                 <MdOutlineModeComment />
               </CommentIcon>
@@ -49,7 +49,7 @@ const Post = ({ isFirstPost }) => {
     </Wrapper>
   );
 };
-//Todo OnSave if not authed onClick={() => setShowModal(true)}
+// Todo OnSave if not authed onClick={() => setShowModal(true)}
 const Image = styled.img`
   width: 100%;
   object-fit: cover;
