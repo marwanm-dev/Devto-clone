@@ -8,19 +8,21 @@ const authApiSlice = apiSlice.injectEndpoints({
         method: 'POST',
         body: { ...userCredentials },
       }),
-      invalidatesTags: ['User'],
+      invalidatesTags: ['Auth'],
     }),
     login: builder.mutation({
       query: userCredentials => ({
         url: '/auth',
         method: 'POST',
         body: { ...userCredentials },
+        credentials: 'include',
+        headers: { 'Content-Type': 'application/json' },
       }),
-      invalidatesTags: ['User'],
+      invalidatesTags: ['Auth'],
     }),
     logout: builder.query({
       query: () => '/logout',
-      providesTags: ['User'],
+      providesTags: ['Auth'],
     }),
   }),
 });

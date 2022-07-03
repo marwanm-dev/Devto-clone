@@ -27,24 +27,20 @@ const Post = ({ isLaptop }) => {
         <Tags />
         <PostBody>
           <ReactMarkdown components={SyntaxHighlight}>
-            Lorem ipsum, dolor sit __amet__ consectetur adipisicing elit. Reiciendis consequuntur
-            nisi fugit obcaecati mollitia molestias, et dolor ipsa similique aliquid velit in
-            perspiciatis labore, aperiam molestiae, possimus quibusdam quis unde esse veniam maiores
-            repellat! Reiciendis nostrum quasi alias non quia at. Excepturi totam reprehenderit
-            consectetur maxime cum architecto nisi ratione temporibus atque et? Eveniet minima vitae
-            sequi neque? Libero quisquam veritatis eligendi. Culpa, consequatur voluptatibus
-            aspernatur temporibus repellat ipsa deleniti a rem distinctio sunt quis? Quibusdam, id,
-            est labore accusantium sed suscipit quam ut eligendi nihil unde deserunt? Eaque,
-            dolorum! Excepturi sint maiores eum labore rem porro eaque vel adipisci ipsa hic debitis
-            minus quia, eveniet, sunt placeat sapiente, deleniti asperiores recusandae! Ullam,
-            mollitia sed? Sit cupiditate magnam sed odio? Inventore impedit error, aut architecto
-            odio sunt qui veniam recusandae at eligendi harum id incidunt culpa ullam aperiam
-            quaerat, aliquid corrupti nisi iure non rerum quo tempora. Veniam fugit optio hic dolor
-            minus maxime porro tempora voluptate voluptatem quibusdam vel molestias culpa, soluta
-            dolores excepturi et earum magni, voluptates repellendus? Delectus perspiciatis
-            sapiente, ea distinctio eum cum laboriosam in deleniti, eos tenetur laborum laudantium?
-            Distinctio, enim consequatur doloremque iusto rerum eos, itaque suscipit eius nesciunt
-            iste commodi, nostrum necessitatibus qui.
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Itaque ad ullam voluptatibus
+            quas numquam animi? Suscipit maxime consequuntur sunt dolore natus, veritatis dicta!
+            Repellendus ipsa minima molestiae voluptas hic illum, porro deleniti asperiores impedit
+            quas dolores laudantium blanditiis ea quisquam illo quibusdam debitis. Itaque eligendi
+            magnam esse, atque qui laudantium. Quae repudiandae nesciunt nam, soluta porro unde
+            accusantium amet. Est ducimus ea commodi soluta accusantium quod quas a impedit,
+            asperiores beatae similique error! Assumenda debitis enim ad dolor. Est ut praesentium
+            vel dolorem itaque ea dolorum veniam rem eligendi, magni cupiditate possimus ad
+            obcaecati sapiente corporis sunt quisquam quas a. Laudantium itaque repellendus qui
+            expedita laborum, dicta beatae eveniet, ratione tempore nam pariatur quas magnam aperiam
+            ab. Debitis hic omnis, voluptatum libero quasi neque ipsum, eaque quibusdam quae
+            perferendis laboriosam rerum at beatae iure voluptas maiores consectetur dolorem. Aut
+            praesentium at, obcaecati voluptatibus ut nostrum recusandae architecto minus explicabo
+            accusamus!
           </ReactMarkdown>
         </PostBody>
         <CommentsContainer>

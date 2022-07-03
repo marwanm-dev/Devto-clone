@@ -5,6 +5,7 @@ const authSlice = createSlice({
   initialState: {
     currentUser: {},
     token: null,
+    expirationDate: null,
   },
   reducers: {
     setCredentials: (state, action) => {
@@ -19,6 +20,7 @@ const authSlice = createSlice({
         joinDate,
         education,
         work,
+        expirationDate: Date.now() + 1000 * 15, // 15 secs
       };
       state.token = token;
     },
@@ -27,9 +29,10 @@ const authSlice = createSlice({
   extraReducers: {},
 });
 
-export const { setCredentials, logout } = authSlice.actions;
+export const { setCredentials, refreshToken, logout } = authSlice.actions;
 
 export const selectCurrentUser = state => state.auth.currentUser;
 export const selectCurrentToken = state => state.auth.token;
+export const selectTokenExpiration = state => state.auth.currentUser.expirationDate;
 
 export default authSlice.reducer;

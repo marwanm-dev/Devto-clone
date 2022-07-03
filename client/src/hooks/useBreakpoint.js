@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react';
 
 const useBreakpoint = breakpoint => {
-  const [isBreakpoint, setIsBreakpoint] = useState(false);
+  const [isBreakpoint, setIsBreakpoint] = useState(window.innerWidth <= breakpoint);
 
   const handleResize = () => setIsBreakpoint(window.innerWidth <= breakpoint);
+
   useEffect(() => {
     window.addEventListener('resize', handleResize);
     window.addEventListener('load', handleResize);

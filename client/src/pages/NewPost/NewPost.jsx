@@ -5,7 +5,7 @@ import SimpleMDE from 'react-simplemde-editor';
 import 'easymde/dist/easymde.min.css';
 import useBase64 from '../../hooks/useBase64';
 
-// Todo make reusable component for (Avatar, imageUpload, Input)
+// Todo make reusable components for (Avatar, imageUpload, Input)
 const NewPost = () => {
   const [title, setTitle] = useState('');
   const [file, setFile] = useState('');
@@ -15,7 +15,7 @@ const NewPost = () => {
   const previewURL = useBase64(file);
 
   const handleSubmit = () => {
-    // Submit with POST method to /post rest api route
+    // Todo Submit with POST method to /post rest api route
   };
 
   return (

@@ -46,7 +46,6 @@ const SignUp = () => {
 
   const handleSubmit = async e => {
     e.preventDefault();
-
     if (inputsAreValid && !isError) {
       try {
         await signUp({
@@ -97,7 +96,6 @@ const SignUp = () => {
             <Input required name='email' value={email} onChange={e => setEmail(e.target.value)} />
             {!validEmail && email && <Error>Email not valid</Error>}
           </InputContainer>
-
           <InputContainer>
             <Label htmlFor='password'>Password *</Label>
             <Input
@@ -118,7 +116,7 @@ const SignUp = () => {
               style={{ display: 'none' }}
               onChange={e => setFile(e.target.files[0])}
             />
-            <ImagePreview src={pictureURL} alt='Please pick an image' />
+            <ImagePreview src={pictureURL.toString()} alt='Please pick an image' />
             <Button
               onClick={e => {
                 e.preventDefault();
@@ -157,6 +155,6 @@ const Label = tw.label``;
 
 const Input = tw.input`outline-none rounded-lg border border-solid border-light-gray w-full py-2 px-3 focus:border-blue`;
 
-const Wrapper = tw.div`bg-white text-center max-w-[50%] mx-auto py-12 px-10 rounded-md`;
+const Wrapper = tw.div`bg-white text-center max-w-2xl mx-auto py-12 px-10 rounded-md`;
 
 export default SignUp;

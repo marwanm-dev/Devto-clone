@@ -12,7 +12,7 @@ import { useSelector } from 'react-redux';
 import { selectCurrentUser, selectCurrentToken } from '../../core/features/auth/authSlice';
 
 const Navbar = () => {
-  const user = useSelector(selectCurrentUser);
+  const currentUser = useSelector(selectCurrentUser);
   const token = useSelector(selectCurrentToken);
 
   const isMobile = useBreakpoint(theme`screens.mob.max`.replace('px', ''));
@@ -38,7 +38,7 @@ const Navbar = () => {
             <FaDev />
           </DevIcon>
           {isMobile || <Search />}
-          {mobileMenu && <MobileMenu toggleMobileMenu={toggleMobileMenu} />}
+          {isMobile && mobileMenu && <MobileMenu toggleMobileMenu={toggleMobileMenu} />}
         </LeftSide>
         <RightSide>
           {token ? (
@@ -54,16 +54,15 @@ const Navbar = () => {
                 <RiNotification3Line />
                 <Count>2</Count>
               </NotificationIcon>
-              <Avatar
-                src={user.picture || '../../assets/images/guest.png'}
-                onClick={toggleProfileMenu}
-              />
+              <Avatar src={currentUser.picture} onClick={toggleProfileMenu} />
               {profileMenu && (
                 <ProfileMenu>
                   <ListItem>
-                    <Link to={`users/${user.username}`}>
-                      <Username>{user.username}</Username>
-                      <UserGmail>@{user.email.slice(0, user.email.indexOf('@'))}</UserGmail>
+                    <Link to={`users/${currentUser.username}`}>
+                      <Username>{currentUser.username}</Username>
+                      <UserGmail>
+                        @{currentUser.email.slice(0, currentUser.email.indexOf('@'))}
+                      </UserGmail>
                     </Link>
                   </ListItem>
                   <ListItem>

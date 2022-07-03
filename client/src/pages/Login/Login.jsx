@@ -1,12 +1,13 @@
 import tw from 'twin.macro';
 import { useState, useEffect, useRef } from 'react';
+import jwt from 'jwt-decode';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import jwt from 'jwt-decode';
 import RouteWrapper from '../../common/RouteWrapper';
 import { useLoginMutation } from '../../core/features/auth/authApiSlice';
 import { setCredentials } from '../../core/features/auth/authSlice';
 import Auth0 from '../../common/Auth0';
+import axios from '../../api/axios';
 
 const Login = () => {
   const navigate = useNavigate();
@@ -27,6 +28,7 @@ const Login = () => {
     try {
       const payload = await login({ email, pwd }).unwrap();
 
+      console.log(payload);
       setEmail('');
       setPwd('');
 
@@ -42,6 +44,7 @@ const Login = () => {
           education: payload.education,
           work: payload.work,
           token: payload.token,
+          expirationDate: payload.expirationDate,
         })
       );
 
@@ -104,12 +107,12 @@ const Title = tw.h2`my-6`;
 
 const Paragraph = tw.p`my-4`;
 
-const InputContainer = tw.div`[&>*:first-child]:(block mb-2) text-left mb-8`;
+const InputContainer = tw.div`text-left mb-8`;
 
-const Label = tw.label``;
+const Label = tw.label`block mb-2`;
 
 const Input = tw.input`outline-none rounded-lg border border-solid border-light-gray w-full py-2 px-3 focus:border-blue`;
 
-const Wrapper = tw.div`bg-white text-center max-w-[50%] mx-auto py-12 px-10 rounded-md`;
+const Wrapper = tw.div`bg-white text-center max-w-2xl mx-auto py-12 px-10 rounded-md`;
 
 export default Login;

@@ -7,6 +7,7 @@
     "dependencies": {
         "bcrypt": "^5.0.1",
         "cloudinary": "^1.30.0",
+        "cookie-parser": "^1.4.6",
         "cors": "^2.8.5",
         "date-fns": "^2.28.0",
         "dotenv": "^10.0.0",

@@ -18,7 +18,7 @@ const handleLogin = async (req, res) => {
       },
       process.env.ACCESS_TOKEN_SECRET,
       {
-        expiresIn: '10s',
+        expiresIn: '3s',
       }
     );
     const refreshToken = jwt.sign(
@@ -47,6 +47,7 @@ const handleLogin = async (req, res) => {
       JoinDate: foundUser.JoinDate,
       education: foundUser.education,
       work: foundUser.work,
+      expirationDate: Date.now() + 1000 * 3, // 3 secs
     });
   } else {
     res.sendStatus(401);

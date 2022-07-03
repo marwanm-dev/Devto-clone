@@ -10,13 +10,13 @@ const handleRefreshToken = async (req, res) => {
   const foundUser = await User.findOne({ refreshToken }).exec();
   if (!foundUser) res.sendStatus(403); // Forbidden
 
-  jwt.verify(refreshToken, REFRESH_TOKEN_SECRET, (err, decoded) => {
+  jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, (err, decoded) => {
     if (err || foundUser.username !== decoded.username) return res.sendStatus(403);
     const accessToken = jwt.sign(
       { username: foundUser.username },
       process.env.ACCESS_TOKEN_SECRET,
       {
-        expiresIn: '10s',
+        expiresIn: '5s',
       }
     );
 

@@ -37,6 +37,6 @@ const CurrentTag = styled.div`
   ${tw`bg-lighter-gray py-6 px-4 relative overflow-hidden rounded-md flex items-center justify-between [&>*:not(:first-child )]:mt-sm mb-lg`}
 `;
 
-const Wrapper = tw.div`w-3/5 mx-auto`;
+const Wrapper = tw.div`w-3/5 lap:w-4/5 mx-auto`;
 
 export default Tag;

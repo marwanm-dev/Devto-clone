@@ -1,7 +1,10 @@
-import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
+import { useEffect } from 'react';
+import { BrowserRouter as Router, Routes, Route, useLocation, useNavigate } from 'react-router-dom';
 import { AnimatePresence } from 'framer-motion';
 import { Auth0Provider } from '@auth0/auth0-react';
-import { Provider } from 'react-redux';
+import { Provider, useSelector } from 'react-redux';
+import { PersistGate } from 'redux-persist/integration/react';
+import { persistor } from '../core/store';
 import store from '../core/store';
 
 // Pages
@@ -19,11 +22,12 @@ import EditProfile from '../pages/EditProfile';
 import Notifications from '../pages/Notifications';
 import Dashboard from '../pages/Dashboard';
 import ReadingList from '../pages/ReadingList';
-import Settings from '../pages/Settings';
 import NotFound from '../pages/NotFound';
 import Login from '../pages/Login';
 import Logout from '../pages/Logout';
 import SignUp from '../pages/SignUp';
+import Users from '../pages/Users';
+import User from '../pages/User';
 import CodeOfConduct from '../pages/CodeOfConduct';
 import PrivacyPolicy from '../pages/PrivacyPolicy';
 import TermsOfUse from '../pages/TermsOfUse';
@@ -32,8 +36,39 @@ import TermsOfUse from '../pages/TermsOfUse';
 import Layout from '../common/Layout';
 import RequireAuth from '../common/RequireAuth';
 
+import { selectCurrentToken, selectTokenExpiration } from '../core/features/auth/authSlice';
+
+import useRefreshToken from '../hooks/useRefreshToken';
+
+import axios from '../api/axios';
+
 const AnimatedRoutes = () => {
   const location = useLocation();
+  const expirationDate = useSelector(selectTokenExpiration);
+  const token = useSelector(selectCurrentToken);
+  const refresh = useRefreshToken();
+
+  useEffect(() => {
+    if (token) {
+      console.log(expirationDate, Date.now(), `isExpired: ${expirationDate < Date.now()}`);
+      if (expirationDate < Date.now()) {
+        console.log('Access token Expired! trying to refresh..');
+        const refresh = async () => {
+          const response = await axios.get('/refresh', {
+            headers: { 'Access-Control-Allow-Credentials': true },
+          });
+
+          // set new access token
+          console.log(`responseData: ${response.data}`);
+
+          // dispatch(setCredentials({}));
+
+          return response.data.accessToken;
+        };
+        refresh();
+      }
+    }
+  }, [location]);
 
   return (
     <AnimatePresence exitBeforeEnter>
@@ -67,12 +102,10 @@ const AnimatedRoutes = () => {
             <Route path=':tagname' element={<Tag />} />
           </Route>
 
-          <Route path='users'>
-            <Route path=':username' element={<Profile />}>
-              {/* Requires to be logged in && be the user that he's going to edit */}
-              <Route element={<RequireAuth />}>
-                <Route path='edit' element={<EditProfile />} />
-              </Route>
+          <Route path=':username' element={<Profile />}>
+            {/* //Todo Requires to be logged in && be the user that he's going to edit */}
+            <Route element={<RequireAuth />}>
+              <Route path='edit' element={<EditProfile />} />
             </Route>
           </Route>
 
@@ -85,10 +118,14 @@ const AnimatedRoutes = () => {
           </Route>
 
           <Route element={<RequireAuth />}>
+            <Route path='users'>
+              <Route index element={<Users />} />
+              <Route path=':userId' element={<User />} />
+            </Route>
+
             <Route path='notifications' element={<Notifications />} />
             <Route path='dashboard' element={<Dashboard />} />
             <Route path='readinglist' element={<ReadingList />} />
-            <Route path='settings' element={<Settings />} />
           </Route>
 
           <Route path='*' element={<NotFound />} />
@@ -106,9 +143,11 @@ const MainRouter = () => {
         clientId={process.env.REACT_APP_AUTH0_CLIENT_ID}
         redirectUri={window.location.origin}>
         <Provider store={store}>
-          <Routes>
-            <Route path='/*' element={<AnimatedRoutes />} />
-          </Routes>
+          <PersistGate loading={null} persistor={persistor}>
+            <Routes>
+              <Route path='/*' element={<AnimatedRoutes />} />
+            </Routes>
+          </PersistGate>
         </Provider>
       </Auth0Provider>
     </Router>
