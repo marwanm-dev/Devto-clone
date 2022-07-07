@@ -48,17 +48,17 @@ const Navbar = () => {
                   <IoSearch />
                 </SearchIcon>
               ) : (
-                <NewPost to='post/new'>Create Post</NewPost>
+                <NewPost to='post'>Create Post</NewPost>
               )}
               <NotificationIcon>
                 <RiNotification3Line />
                 <Count>2</Count>
               </NotificationIcon>
-              <Avatar src={currentUser.picture} onClick={toggleProfileMenu} />
+              <Avatar src={currentUser.picture?.url} onClick={toggleProfileMenu} />
               {profileMenu && (
                 <ProfileMenu>
                   <ListItem>
-                    <Link to={`users/${currentUser.username}`}>
+                    <Link to={`/${currentUser.username}`}>
                       <Username>{currentUser.username}</Username>
                       <UserGmail>
                         @{currentUser.email.slice(0, currentUser.email.indexOf('@'))}
@@ -69,7 +69,7 @@ const Navbar = () => {
                     <Link to='dashboard'>Dashboard</Link>
                   </ListItem>
                   <ListItem>
-                    <Link to='post/new'>Create Post</Link>
+                    <Link to='post'>Create Post</Link>
                   </ListItem>
                   <ListItem>
                     <Link to='readinglist'>Reading list</Link>

@@ -37,7 +37,7 @@ const SignUp = () => {
 
   useEffect(() => setValidPwd(PWD_REGEX.test(pwd)), [pwd]);
 
-  const pictureURL = useBase64(file);
+  const picture = useBase64(file);
 
   useEffect(
     () => setInputsAreValid(validUser && validEmail && validPwd),
@@ -52,7 +52,7 @@ const SignUp = () => {
           user,
           email,
           pwd,
-          picture: pictureURL,
+          picture,
         }).unwrap();
 
         setUser('');
@@ -116,7 +116,7 @@ const SignUp = () => {
               style={{ display: 'none' }}
               onChange={e => setFile(e.target.files[0])}
             />
-            <ImagePreview src={pictureURL.toString()} alt='Please pick an image' />
+            <ImagePreview src={picture.toString()} alt='Please pick an image' />
             <Button
               onClick={e => {
                 e.preventDefault();

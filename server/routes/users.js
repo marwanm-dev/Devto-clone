@@ -6,4 +6,6 @@ router.route('/').get(usersController.getAllUsers).delete(usersController.delete
 
 router.route('/:id').get(usersController.getUser);
 
+router.route('/:id/edit').patch(usersController.updateUser);
+
 module.exports = router;

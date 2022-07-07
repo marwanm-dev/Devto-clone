@@ -10,7 +10,6 @@ const dbConn = require('./config/dbConn');
 const { logger } = require('./middleware/logEvents');
 const errorHandler = require('./middleware/errorHandler');
 const credentials = require('./middleware/credentials');
-const verifyJWT = require('./middleware/verifyJWT');
 
 const { Server } = require('socket.io');
 const app = express();
@@ -37,7 +36,7 @@ app.use(credentials);
 app.use(cors(corsOptions));
 
 // built-in middleware to handle urlencoded form data
-app.use(express.urlencoded({ extended: false }));
+app.use(express.urlencoded({ extended: true }));
 
 // built-in middleware for json
 app.use(express.json({ limit: '50mb' }));
@@ -52,8 +51,7 @@ app.use('/logout', require('./routes/logout'));
 app.use('/refresh', require('./routes/refresh'));
 app.use('/posts', require('./routes/posts'));
 
-// Access token verification required
-// app.use(verifyJWT);
+// Access token verification required (By Frontend)
 app.use('/users', require('./routes/users'));
 
 mongoose.connection.once('open', () => {

@@ -1,18 +1,22 @@
 import tw from 'twin.macro';
 import RouteWrapper from '../../common/RouteWrapper';
-import { useLogoutQuery } from '../../core/features/auth/authApiSlice';
 import { logout } from '../../core/features/auth/authSlice';
+import { useLazyLogoutQuery } from '../../core/features/auth/authApiSlice';
 import { useNavigate } from 'react-router-dom';
 
 const Logout = () => {
   const navigate = useNavigate();
-  const { refetch } = useLogoutQuery();
+  const [trigger] = useLazyLogoutQuery();
 
-  const handleLogout = () => {
-    refetch();
-    logout();
+  const handleLogout = async () => {
+    try {
+      logout(); //! Only to activate a certain action type controlled in the store
+      trigger();
 
-    navigate('/');
+      navigate('/');
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   return (

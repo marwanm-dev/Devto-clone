@@ -19,19 +19,12 @@ const persistConfig = {
   version: 1,
   storage,
 };
-// Todo Always persisted.. but you need to refresh access token whenever its expired (semi-done) and if the refresh token expired must be logged out .. problem is that the cookie cannot be created!
-const combinedReducer = combineReducers({
+
+const rootReducer = combineReducers({
   [apiSlice.reducerPath]: apiSlice.reducer,
   auth: authReducer,
   posts: postsReducer,
 });
-
-const rootReducer = (state, action) => {
-  if (action.type === 'api/subscriptions/unsubscribeQueryResult') {
-    state = undefined;
-  }
-  return combinedReducer(state, action);
-};
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 

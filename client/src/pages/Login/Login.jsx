@@ -5,9 +5,8 @@ import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import RouteWrapper from '../../common/RouteWrapper';
 import { useLoginMutation } from '../../core/features/auth/authApiSlice';
-import { setCredentials } from '../../core/features/auth/authSlice';
+import { setRegisteredCredentials } from '../../core/features/auth/authSlice';
 import Auth0 from '../../common/Auth0';
-import axios from '../../api/axios';
 
 const Login = () => {
   const navigate = useNavigate();
@@ -24,27 +23,28 @@ const Login = () => {
 
   const handleSubmit = async e => {
     e.preventDefault();
-
     try {
       const payload = await login({ email, pwd }).unwrap();
 
-      console.log(payload);
       setEmail('');
       setPwd('');
 
       const decoded = jwt(payload.token);
       dispatch(
-        setCredentials({
+        setRegisteredCredentials({
+          id: payload.id,
           username: decoded.username,
           email,
           picture: payload.picture,
           bio: payload.bio,
           location: payload.location,
-          joinedAt: payload.joinedAt,
           education: payload.education,
           work: payload.work,
+          availableFor: payload.availableFor,
+          skills: payload.skills,
           token: payload.token,
           expirationDate: payload.expirationDate,
+          joinDate: payload.joinDate,
         })
       );
 

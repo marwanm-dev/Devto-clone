@@ -18,14 +18,14 @@ const handleLogin = async (req, res) => {
       },
       process.env.ACCESS_TOKEN_SECRET,
       {
-        expiresIn: '3s',
+        expiresIn: '30s',
       }
     );
     const refreshToken = jwt.sign(
       { username: foundUser.username },
       process.env.REFRESH_TOKEN_SECRET,
       {
-        expiresIn: '30s',
+        expiresIn: '5m',
       }
     );
 
@@ -40,14 +40,17 @@ const handleLogin = async (req, res) => {
     await foundUser.save();
 
     res.json({
-      token: accessToken,
+      id: foundUser._id,
       picture: foundUser.picture,
       bio: foundUser.bio,
       location: foundUser.location,
-      JoinDate: foundUser.JoinDate,
       education: foundUser.education,
       work: foundUser.work,
-      expirationDate: Date.now() + 1000 * 3, // 3 secs
+      availableFor: foundUser.availableFor,
+      skills: foundUser.skills,
+      token: accessToken,
+      expirationDate: Date.now() + 1000 * 30,
+      joinDate: foundUser.joinDate,
     });
   } else {
     res.sendStatus(401);

@@ -1,16 +1,18 @@
 import { useEffect, useState } from 'react';
 
 const useBase64 = file => {
-  const [url, setUrl] = useState(false);
+  const [url, setUrl] = useState('');
 
   useEffect(() => {
-    if (typeof file === 'string') setUrl(`${file}`);
-    else {
-      const fileReader = new FileReader();
-      fileReader.onload = () => {
-        setUrl(fileReader.result);
-      };
-      fileReader.readAsDataURL(file);
+    if (file) {
+      if (typeof file === 'string') setUrl(`${file}`);
+      else {
+        const fileReader = new FileReader();
+        fileReader.onload = () => {
+          setUrl(fileReader.result);
+        };
+        fileReader.readAsDataURL(file);
+      }
     }
   }, [file]);
 

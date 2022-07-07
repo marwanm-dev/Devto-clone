@@ -16,10 +16,10 @@ const Profile = () => {
     <RouteWrapper>
       <Wrapper>
         <Card>
-          <Avatar src={currentUser.picture} />
+          <Avatar src={currentUser.picture.url} />
           {/* If the authenticated user is the previewed user */}
           {username === currentUser.username ? (
-            <EditButton onClick={() => navigate('edit')}>Edit profile</EditButton>
+            <EditButton onClick={() => navigate('/customize')}>Edit profile</EditButton>
           ) : (
             <FollowButton>Follow</FollowButton>
           )}

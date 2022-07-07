@@ -8,6 +8,8 @@ import AuthorDetails from '../../common/AuthorDetails';
 const PostPage = () => {
   const isLaptop = useBreakpoint(theme`screens.lap.max`.replace('px', ''));
 
+  // Todo get current post from params and postsSlice
+
   return (
     <RouteWrapper>
       <Wrapper>

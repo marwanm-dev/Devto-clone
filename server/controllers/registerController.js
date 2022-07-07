@@ -15,18 +15,18 @@ const handleNewUser = async (req, res) => {
 
   try {
     const hashedPwd = await bcrypt.hash(pwd, 10);
-    const pictureUrl = await uploadToCloudinary(picture);
+    const { url, public_id: publicId } = await uploadToCloudinary(picture);
 
     await User.create({
       username: user,
       email: email,
-      picture: pictureUrl,
+      picture: { url, publicId },
       password: hashedPwd,
     });
 
     res.status(201).json(`New user named ${user} was created!`);
   } catch (err) {
-    res.sendStatus(500).json(err.message);
+    res.status(500).json(err.message);
   }
 };
 

@@ -1,4 +1,6 @@
 const User = require('../model/User');
+const cloudinary = require('../config/cloudinary');
+const { uploadToCloudinary } = require('../utils/cloudinary');
 
 const getAllUsers = async (req, res) => {
   const users = await User.find({});
@@ -8,28 +10,49 @@ const getAllUsers = async (req, res) => {
 };
 
 const deleteUser = async (req, res) => {
-  if (!req.body.id) return res.sendStatus(400).json({ message: 'User Id required' });
+  const id = req.params.id;
+  if (!id) return res.sendStatus(400).json({ message: 'User Id required' });
 
-  const user = User.find({ _id: req.body.id }).exec();
-  if (!user) return res.sendStatus(204).json({ message: `User ID ${req.body.id} not found` });
+  const user = User.find({ _id: id }).exec();
+  if (!user) return res.sendStatus(204).json({ message: `User ID ${id} not found` });
 
-  const result = await User.deleteOne({ _id: req.body.id }).exec();
-  console.log(result);
+  const result = await User.deleteOne({ _id: id }).exec();
 
   res.json(result);
 };
 
 const getUser = async (req, res) => {
-  if (!req.params.id) return res.sendStatus(400).json({ message: 'User Id required' });
+  const id = req.params.id;
+  if (!id) return res.sendStatus(400).json({ message: 'User Id required' });
 
-  const user = await User.findOne({ _id: req.params.id });
-  if (!user) return res.sendStatus(204).json({ message: `User ID ${req.params.id} not found` });
+  const user = await User.findOne({ _id: id }).exec();
+  if (!user) return res.sendStatus(204).json({ message: `User ID ${id} not found` });
 
   res.json(user);
+};
+
+const updateUser = async (req, res) => {
+  const id = req.params.id;
+  if (!id) return res.sendStatus(400).json({ message: 'User Id required' });
+
+  const user = await User.findOne({ _id: id }).exec();
+  if (!user) return res.sendStatus(204).json({ message: `User ID ${id} not found` });
+
+  const picturePublicId = req.body.picture.publicId;
+
+  cloudinary.uploader.destroy(picturePublicId);
+
+  const { url, public_id: publicId } = await uploadToCloudinary(req.body.picture.url);
+
+  req.body.picture = { url, publicId };
+
+  const result = await User.findOneAndUpdate({ _id: id }, { ...req.body }, { new: true });
+  res.json(result);
 };
 
 module.exports = {
   getAllUsers,
   deleteUser,
   getUser,
+  updateUser,
 };

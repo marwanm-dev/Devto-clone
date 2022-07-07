@@ -1,8 +1,10 @@
 import { useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route, useLocation, useNavigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
+import { Provider, useSelector } from 'react-redux';
 import { AnimatePresence } from 'framer-motion';
 import { Auth0Provider } from '@auth0/auth0-react';
-import { Provider, useSelector } from 'react-redux';
+
+// Store
 import { PersistGate } from 'redux-persist/integration/react';
 import { persistor } from '../core/store';
 import store from '../core/store';
@@ -26,8 +28,6 @@ import NotFound from '../pages/NotFound';
 import Login from '../pages/Login';
 import Logout from '../pages/Logout';
 import SignUp from '../pages/SignUp';
-import Users from '../pages/Users';
-import User from '../pages/User';
 import CodeOfConduct from '../pages/CodeOfConduct';
 import PrivacyPolicy from '../pages/PrivacyPolicy';
 import TermsOfUse from '../pages/TermsOfUse';
@@ -36,39 +36,24 @@ import TermsOfUse from '../pages/TermsOfUse';
 import Layout from '../common/Layout';
 import RequireAuth from '../common/RequireAuth';
 
-import { selectCurrentToken, selectTokenExpiration } from '../core/features/auth/authSlice';
-
+// Refreshing the token & logging out imports
 import useRefreshToken from '../hooks/useRefreshToken';
-
-import axios from '../api/axios';
+import { selectCurrentToken, selectExpirationDate } from '../core/features/auth/authSlice';
 
 const AnimatedRoutes = () => {
   const location = useLocation();
-  const expirationDate = useSelector(selectTokenExpiration);
+  const handleRefresh = useRefreshToken();
+
+  const expirationDate = useSelector(selectExpirationDate);
   const token = useSelector(selectCurrentToken);
-  const refresh = useRefreshToken();
+
+  const interval = expirationDate - Date.now();
 
   useEffect(() => {
-    if (token) {
-      console.log(expirationDate, Date.now(), `isExpired: ${expirationDate < Date.now()}`);
-      if (expirationDate < Date.now()) {
-        console.log('Access token Expired! trying to refresh..');
-        const refresh = async () => {
-          const response = await axios.get('/refresh', {
-            headers: { 'Access-Control-Allow-Credentials': true },
-          });
-
-          // set new access token
-          console.log(`responseData: ${response.data}`);
-
-          // dispatch(setCredentials({}));
-
-          return response.data.accessToken;
-        };
-        refresh();
-      }
-    }
-  }, [location]);
+    console.log(interval);
+    const i = setInterval(() => token && handleRefresh(), interval);
+    return () => clearInterval(i);
+  }, [expirationDate]);
 
   return (
     <AnimatePresence exitBeforeEnter>
@@ -89,11 +74,15 @@ const AnimatedRoutes = () => {
           <Route path='terms-of-use' element={<TermsOfUse />} />
 
           <Route path='post'>
-            <Route path='new' element={<NewPost />} />
-            <Route path=':username:title:postId' element={<PostPage />} />
-            {/* Requires to be logged in && be the author of this post (:username:title:postId) */}
             <Route element={<RequireAuth />}>
-              <Route path='edit' element={<EditPost />} />
+              <Route index element={<NewPost />} />
+            </Route>
+            <Route path=':username:title:postId'>
+              <Route index element={<PostPage />} />
+              {/* Requires to be logged in && be the author of this post (:username:title:postId) */}
+              <Route element={<RequireAuth />}>
+                <Route path='edit' element={<EditPost />} />
+              </Route>
             </Route>
           </Route>
 
@@ -102,11 +91,11 @@ const AnimatedRoutes = () => {
             <Route path=':tagname' element={<Tag />} />
           </Route>
 
-          <Route path=':username' element={<Profile />}>
-            {/* //Todo Requires to be logged in && be the user that he's going to edit */}
-            <Route element={<RequireAuth />}>
-              <Route path='edit' element={<EditProfile />} />
-            </Route>
+          {/* // Todo if this route was in the upper application vs lower application.. does that make a difference.. should i use /users/:username to be more specific and secure? */}
+          <Route path=':username' element={<Profile />} />
+
+          <Route element={<RequireAuth />}>
+            <Route path='customize' element={<EditProfile />} />
           </Route>
 
           <Route path='auth'>
@@ -118,10 +107,10 @@ const AnimatedRoutes = () => {
           </Route>
 
           <Route element={<RequireAuth />}>
-            <Route path='users'>
+            {/* <Route path='users'>
               <Route index element={<Users />} />
               <Route path=':userId' element={<User />} />
-            </Route>
+            </Route> */}
 
             <Route path='notifications' element={<Notifications />} />
             <Route path='dashboard' element={<Dashboard />} />

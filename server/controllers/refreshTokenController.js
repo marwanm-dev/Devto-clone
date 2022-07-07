@@ -11,16 +11,16 @@ const handleRefreshToken = async (req, res) => {
   if (!foundUser) res.sendStatus(403); // Forbidden
 
   jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, (err, decoded) => {
-    if (err || foundUser.username !== decoded.username) return res.sendStatus(403);
+    if (err || foundUser?.username !== decoded.username) return res.sendStatus(403);
     const accessToken = jwt.sign(
-      { username: foundUser.username },
+      { username: foundUser?.username },
       process.env.ACCESS_TOKEN_SECRET,
       {
-        expiresIn: '5s',
+        expiresIn: '30s',
       }
     );
 
-    res.json({ accessToken });
+    res.json({ accessToken, expirationDate: Date.now() + 1000 * 30 });
   });
 };
 

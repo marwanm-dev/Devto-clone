@@ -5,7 +5,6 @@ import SimpleMDE from 'react-simplemde-editor';
 import 'easymde/dist/easymde.min.css';
 import useBase64 from '../../hooks/useBase64';
 
-// Todo make reusable components for (Avatar, imageUpload, Input)
 const NewPost = () => {
   const [title, setTitle] = useState('');
   const [file, setFile] = useState('');
@@ -24,12 +23,11 @@ const NewPost = () => {
         <NewPostWrapper>
           <Heading>Create a new post</Heading>
           <InputWrapper>
-            <label htmlFor='title'>Title</label>
-            <input name='title' value={title} onChange={e => setTitle(e.target.value)} />
+            <Label htmlFor='title'>Title</Label>
+            <Input id='title' value={title} onChange={e => setTitle(e.target.value)} />
           </InputWrapper>
           <InputWrapper>
-            <input
-              name='image'
+            <Input
               type='file'
               ref={filePickerRef}
               onChange={e => setFile(e.target.files[0])}
@@ -42,8 +40,8 @@ const NewPost = () => {
             <SimpleMDE value={body} onChange={setBody} />
           </InputWrapper>
           <InputWrapper>
-            <label htmlFor='tags'>Tags</label>
-            <input name='tags' value={tags} onChange={e => setTags(e.target.value)} />
+            <Label htmlFor='tags'>Tags</Label>
+            <Input id='tags' value={tags} onChange={e => setTags(e.target.value)} />
           </InputWrapper>
           <Submit onClick={handleSubmit}>Submit</Submit>
         </NewPostWrapper>
@@ -55,6 +53,10 @@ const NewPost = () => {
 const Submit = tw.button`bg-lighter-gray hover:bg-light-gray rounded-md text-center py-2 px-1 w-full text-sm`;
 
 const ImagePreview = tw.img`w-32 h-32 mx-auto border border-light-gray flex justify-center items-center text-center object-cover`;
+
+const Input = tw.input`py-1 px-2 rounded-md outline-none border-2 border-solid border-lighter-gray focus:border-blue`;
+
+const Label = tw.label`font-bold text-dark-gray`;
 
 const InputWrapper = tw.div`flex flex-col gap-2`;
 

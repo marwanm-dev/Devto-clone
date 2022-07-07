@@ -8,31 +8,68 @@ const authSlice = createSlice({
     expirationDate: null,
   },
   reducers: {
-    setCredentials: (state, action) => {
-      const { username, picture, email, bio, location, joinDate, education, work, token } =
-        action.payload;
-      state.currentUser = {
-        username,
-        picture,
-        email,
-        bio,
-        location,
-        joinDate,
-        education,
-        work,
-        expirationDate: Date.now() + 1000 * 15, // 15 secs
-      };
-      state.token = token;
+    setRegisteredCredentials: (state, action) => {
+      if (action.payload) {
+        const {
+          id,
+          username,
+          picture,
+          email,
+          bio,
+          location,
+          joinDate,
+          education,
+          work,
+          availableFor,
+          skills,
+          expirationDate,
+          token,
+        } = action.payload;
+        state.currentUser = {
+          id,
+          username,
+          picture,
+          email,
+          bio,
+          location,
+          education,
+          work,
+          availableFor,
+          skills,
+          joinDate,
+        };
+        state.expirationDate = expirationDate;
+        state.token = token;
+      } else {
+        state.currentUser = {};
+        state.token = null;
+        state.expirationDate = null;
+      }
+    },
+    setUpdatedCredentials: (state, action) => {
+      state.currentUser = { ...state.currentUser, ...action.payload };
+    },
+    setToken: (state, action) => {
+      state.token = action.payload;
+    },
+    setExpirationDate: (state, action) => {
+      state.expirationDate = action.payload;
     },
     logout: (state, action) => {},
   },
-  extraReducers: {},
 });
 
-export const { setCredentials, refreshToken, logout } = authSlice.actions;
+export const {
+  setRegisteredCredentials,
+  setUpdatedCredentials,
+  setToken,
+  setExpirationDate,
+  logout,
+} = authSlice.actions;
 
+export const selectCurrentAuthState = state => state.auth;
 export const selectCurrentUser = state => state.auth.currentUser;
 export const selectCurrentToken = state => state.auth.token;
-export const selectTokenExpiration = state => state.auth.currentUser.expirationDate;
+export const selectExpirationDate = state => state.auth.expirationDate;
 
 export default authSlice.reducer;
