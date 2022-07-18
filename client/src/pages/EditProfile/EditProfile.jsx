@@ -2,13 +2,17 @@ import { useState, useRef } from 'react';
 import { useSelector } from 'react-redux';
 import tw from 'twin.macro';
 import 'easymde/dist/easymde.min.css';
+import { useNavigate } from 'react-router-dom';
+import LoadingSpinner from '../../common/LoadingSpinner';
+import Error from '../../common/Error';
 import RouteWrapper from '../../common/RouteWrapper';
 import useBase64 from '../../hooks/useBase64';
 import { selectCurrentUser } from '../../core/features/auth/authSlice';
-import { useUpdateUserMutation } from '../../core/features/auth/authApiSlice';
+import { useUpdateUserMutation } from '../../core/features/users/usersApiSlice';
 
 const EditProfile = () => {
   const currentUser = useSelector(selectCurrentUser);
+  const [name, setName] = useState(currentUser.name);
   const [username, setUsername] = useState(currentUser.username);
   const [file, setFile] = useState(currentUser.picture.url);
   const [bio, setBio] = useState(currentUser.bio || '');
@@ -18,14 +22,16 @@ const EditProfile = () => {
   const [availableFor, setAvailableFor] = useState(currentUser.availableFor || '');
   const [skills, setSkills] = useState(currentUser.skills || '');
   const filePickerRef = useRef();
+  const navigate = useNavigate();
 
   const previewURL = useBase64(file);
-  const [updateUser] = useUpdateUserMutation();
+  const [updateUser, { isLoading, isError }] = useUpdateUserMutation();
 
   const handleUpdate = async () => {
     try {
       await updateUser({
         id: currentUser.id,
+        name,
         username,
         picture: { url: previewURL, publicId: currentUser.picture.publicId },
         bio,
@@ -35,6 +41,8 @@ const EditProfile = () => {
         availableFor,
         skills,
       }).unwrap();
+
+      navigate('/');
     } catch (err) {
       console.log(err);
     }
@@ -43,59 +51,79 @@ const EditProfile = () => {
   return (
     <RouteWrapper>
       <Wrapper>
-        <EditProfileWrapper>
-          <Heading>Edit profile</Heading>
-          <InputWrapper>
-            <Label htmlFor='username'>Username</Label>
-            <Input id='username' value={username} onChange={e => setUsername(e.target.value)} />
-          </InputWrapper>
-          <InputWrapper>
-            <Input
-              type='file'
-              ref={filePickerRef}
-              onChange={e => setFile(e.target.files[0])}
-              style={{ display: 'none' }}
-            />
-            <ImagePreview src={previewURL.toString()} alt='Please pick an image' />
-            <Button onClick={() => filePickerRef.current.click()}>Choose image</Button>
-          </InputWrapper>
-          <InputWrapper>
-            <Label htmlFor='bio'>Bio</Label>
-            <Input id='bio' value={bio} onChange={e => setBio(e.target.value)} />
-          </InputWrapper>
-          <InputWrapper>
-            <Label htmlFor='location'>Location</Label>
-            <Input id='location' value={location} onChange={e => setLocation(e.target.value)} />
-          </InputWrapper>
-          <InputWrapper>
-            <Label htmlFor='education'>Education</Label>
-            <Input id='education' value={education} onChange={e => setEducation(e.target.value)} />
-          </InputWrapper>
-          <InputWrapper>
-            <Label htmlFor='work'>Work</Label>
-            <Input id='work' value={work} onChange={e => setWork(e.target.value)} />
-          </InputWrapper>
-          <InputWrapper>
-            <Label htmlFor='available-for'>Available for</Label>
-            <Input
-              id='available-for'
-              value={availableFor}
-              onChange={e => setAvailableFor(e.target.value)}
-            />
-          </InputWrapper>
-          <InputWrapper>
-            <Label htmlFor='skills'>Skills</Label>
-            <Input id='skills' value={skills} onChange={e => setSkills(e.target.value)} />
-          </InputWrapper>
+        {isLoading && <LoadingSpinner />}
+        {!isLoading && (
+          <EditProfileWrapper>
+            <Heading>Edit profile</Heading>
+            <InputWrapper>
+              <Label htmlFor='name'>Name</Label>
+              <Input id='name' value={name} onChange={e => setName(e.target.value)} />
+            </InputWrapper>
+            <InputWrapper>
+              <Label htmlFor='username'>Username</Label>
+              <Input id='username' value={username} onChange={e => setUsername(e.target.value)} />
+            </InputWrapper>
+            <InputWrapper>
+              <Input
+                type='file'
+                ref={filePickerRef}
+                onChange={e => setFile(e.target.files[0])}
+                style={{ display: 'none' }}
+              />
+              <ImagePreview src={previewURL.toString()} alt='Please pick an image' />
+              <Button onClick={() => filePickerRef.current.click()}>Choose image</Button>
+            </InputWrapper>
+            <InputWrapper>
+              <Label htmlFor='bio'>Bio</Label>
+              <Input id='bio' value={bio} onChange={e => setBio(e.target.value)} />
+            </InputWrapper>
+            <InputWrapper>
+              <Label htmlFor='location'>Location</Label>
+              <Input id='location' value={location} onChange={e => setLocation(e.target.value)} />
+            </InputWrapper>
+            <InputWrapper>
+              <Label htmlFor='education'>Education</Label>
+              <Input
+                id='education'
+                value={education}
+                onChange={e => setEducation(e.target.value)}
+              />
+            </InputWrapper>
+            <InputWrapper>
+              <Label htmlFor='work'>Work</Label>
+              <Input id='work' value={work} onChange={e => setWork(e.target.value)} />
+            </InputWrapper>
+            <InputWrapper>
+              <Label htmlFor='available-for'>Available for</Label>
+              <Input
+                id='available-for'
+                value={availableFor}
+                onChange={e => setAvailableFor(e.target.value)}
+              />
+            </InputWrapper>
+            <InputWrapper>
+              <Label htmlFor='skills'>Skills</Label>
+              <Input id='skills' value={skills} onChange={e => setSkills(e.target.value)} />
+            </InputWrapper>
 
-          <Submit onClick={handleUpdate}>Update profile</Submit>
-        </EditProfileWrapper>
+            {isError && <Error>Something went wrong.</Error>}
+
+            <Submit onClick={handleUpdate}>Update profile</Submit>
+            <DeleteButton onClick={() => navigate('/auth/confirm/delete-account')}>
+              Delete Account
+            </DeleteButton>
+          </EditProfileWrapper>
+        )}
       </Wrapper>
     </RouteWrapper>
   );
 };
 
-const Submit = tw.button`bg-lighter-gray hover:bg-light-gray rounded-md text-center py-2 px-1 w-full text-sm`;
+const Submit = tw.button`bg-white text-blue border border-solid border-blue font-bold hover:(bg-blue text-white border-white) rounded-md text-center py-2 px-1 w-full text-sm mt-2`;
+
+const DeleteButton = tw(
+  Submit
+)`text-red bg-white border border-solid border-red hover:(bg-red border-white text-white)`;
 
 const ImagePreview = tw.img`w-32 h-32 mx-auto border border-light-gray flex justify-center items-center text-center object-cover`;
 

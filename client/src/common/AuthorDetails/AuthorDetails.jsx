@@ -1,26 +1,32 @@
-import { Link } from 'react-router-dom';
-import tw, { styled, theme } from 'twin.macro';
+import tw from 'twin.macro';
 import { useNavigate } from 'react-router-dom';
+import { selectCurrentUser } from '../../core/features/auth/authSlice';
+import { useSelector } from 'react-redux';
 
-const AuthorDetails = () => {
+const AuthorDetails = ({ isLaptop, author }) => {
   const navigate = useNavigate();
+  const currentUser = useSelector(selectCurrentUser);
 
   return (
-    <Wrapper scrollY={scrollY}>
-      <Header onClick={() => navigate('/users/username')}>
-        <Avatar src='../../../assets/images/Screenshot_2021-02-21-20-01-06-24.jpg' />
-        <Name>marodevv</Name>
+    <Wrapper isLaptop={isLaptop} scrollY={scrollY}>
+      <Header onClick={() => navigate(`/${author.name}`)}>
+        <Avatar src={author?.picture?.url} />
+        <Name>{author.username}</Name>
       </Header>
-      <FollowButton>Follow</FollowButton>
-      <Bio>
-        Typical bacon scholar. Subtly charming food junkie. Extreme social media guru. Coffee Maven
-      </Bio>
+      {author.username === currentUser.username ? (
+        <EditButton onClick={() => navigate('/customize')}>Edit details</EditButton>
+      ) : (
+        <FollowButton>Follow</FollowButton>
+      )}
+      <Bio>{author.bio}</Bio>
       <Heading>Skills/languages</Heading>
-      <Skills>React, Node, GraphQL</Skills>
+      <Skills>{author.skills}</Skills>
       <Heading>Location</Heading>
-      <Location>Egypt, Cairo</Location>
+      <Location>{author.Location}</Location>
       <Heading>Work</Heading>
-      <Work>Fullstack developer</Work>
+      <Work>{author.work}</Work>
+      <Heading>Join date</Heading>
+      <JoinDate>{author.joinDate}</JoinDate>
     </Wrapper>
   );
 };
@@ -33,6 +39,8 @@ const Name = tw.h2`cursor-pointer hover:text-blue`;
 
 const FollowButton = tw.button`w-full py-2 bg-blue text-white text-center rounded-md my-md`;
 
+const EditButton = tw(FollowButton)``;
+
 const Bio = tw.p`text-dark-gray`;
 
 const Heading = tw.h3`text-darker-gray mt-sm`;
@@ -43,6 +51,8 @@ const Location = tw.p`text-dark-gray`;
 
 const Work = tw.p`text-dark-gray`;
 
-const Wrapper = tw.div`max-w-xs h-full py-6 px-4 bg-white lap:(max-w-full border-t border-light-gray)`;
+const JoinDate = tw.p`text-dark-gray`;
+
+const Wrapper = tw.div`h-full w-1/3 py-6 px-4 bg-white lap:(w-full border-t border-light-gray)`;
 
 export default AuthorDetails;

@@ -24,9 +24,8 @@ import EditProfile from '../pages/EditProfile';
 import Notifications from '../pages/Notifications';
 import Dashboard from '../pages/Dashboard';
 import ReadingList from '../pages/ReadingList';
-import NotFound from '../pages/NotFound';
 import Login from '../pages/Login';
-import Logout from '../pages/Logout';
+import Confirmation from '../pages/Confirmation';
 import SignUp from '../pages/SignUp';
 import CodeOfConduct from '../pages/CodeOfConduct';
 import PrivacyPolicy from '../pages/PrivacyPolicy';
@@ -35,6 +34,7 @@ import TermsOfUse from '../pages/TermsOfUse';
 // Components
 import Layout from '../common/Layout';
 import RequireAuth from '../common/RequireAuth';
+import NotFound from '../common/NotFound';
 
 // Refreshing the token & logging out imports
 import useRefreshToken from '../hooks/useRefreshToken';
@@ -50,7 +50,6 @@ const AnimatedRoutes = () => {
   const interval = expirationDate - Date.now();
 
   useEffect(() => {
-    console.log(interval);
     const i = setInterval(() => token && handleRefresh(), interval);
     return () => clearInterval(i);
   }, [expirationDate]);
@@ -73,26 +72,27 @@ const AnimatedRoutes = () => {
 
           <Route path='terms-of-use' element={<TermsOfUse />} />
 
-          <Route path='post'>
-            <Route element={<RequireAuth />}>
-              <Route index element={<NewPost />} />
-            </Route>
-            <Route path=':username:title:postId'>
-              <Route index element={<PostPage />} />
-              {/* Requires to be logged in && be the author of this post (:username:title:postId) */}
-              <Route element={<RequireAuth />}>
-                <Route path='edit' element={<EditPost />} />
-              </Route>
-            </Route>
+          <Route element={<RequireAuth />}>
+            <Route path='post' element={<NewPost />} />
           </Route>
 
           <Route path='tags'>
             <Route index element={<Tags />} />
             <Route path=':tagname' element={<Tag />} />
+            <Route path='*' element={<NotFound />} />
           </Route>
 
-          {/* // Todo if this route was in the upper application vs lower application.. does that make a difference.. should i use /users/:username to be more specific and secure? */}
-          <Route path=':username' element={<Profile />} />
+          <Route path=':username'>
+            <Route index element={<Profile />} />
+            <Route path=':postUrl'>
+              <Route index element={<PostPage />} />
+              <Route element={<RequireAuth />}>
+                <Route path='edit' element={<EditPost />} />
+              </Route>
+              <Route path='*' element={<NotFound />} />
+            </Route>
+            <Route path='*' element={<NotFound />} />
+          </Route>
 
           <Route element={<RequireAuth />}>
             <Route path='customize' element={<EditProfile />} />
@@ -102,16 +102,12 @@ const AnimatedRoutes = () => {
             <Route path='login' element={<Login />} />
             <Route path='new' element={<SignUp />} />
             <Route element={<RequireAuth />}>
-              <Route path='logout' element={<Logout />} />
+              <Route path='confirm/:confirmType' element={<Confirmation />} />
             </Route>
+            <Route path='*' element={<NotFound />} />
           </Route>
 
           <Route element={<RequireAuth />}>
-            {/* <Route path='users'>
-              <Route index element={<Users />} />
-              <Route path=':userId' element={<User />} />
-            </Route> */}
-
             <Route path='notifications' element={<Notifications />} />
             <Route path='dashboard' element={<Dashboard />} />
             <Route path='readinglist' element={<ReadingList />} />

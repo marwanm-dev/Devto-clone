@@ -1,73 +1,80 @@
 import tw, { styled } from 'twin.macro';
-import RouteWrapper from '../../common/RouteWrapper';
+import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
-import { selectCurrentUser } from '../../core/features/auth/authSlice';
 import { useNavigate, useParams } from 'react-router-dom';
 import { HiLocationMarker } from 'react-icons/hi';
 import { FaBirthdayCake, FaRegComment, FaHashtag } from 'react-icons/fa';
 import { CgNotes } from 'react-icons/cg';
+import RouteWrapper from '../../common/RouteWrapper';
+import { useGetUserQuery } from '../../core/features/users/usersApiSlice';
+import { selectCurrentUser } from '../../core/features/auth/authSlice';
+import NotFound from '../../common/NotFound/NotFound';
 
 const Profile = () => {
   const navigate = useNavigate();
   const currentUser = useSelector(selectCurrentUser);
   const { username } = useParams();
+  const { data: previewedUser } = useGetUserQuery(username, { refetchOnMountOrArgChange: true });
 
   return (
     <RouteWrapper>
-      <Wrapper>
-        <Card>
-          <Avatar src={currentUser.picture.url} />
-          {/* If the authenticated user is the previewed user */}
-          {username === currentUser.username ? (
-            <EditButton onClick={() => navigate('/customize')}>Edit profile</EditButton>
-          ) : (
-            <FollowButton>Follow</FollowButton>
-          )}
-          <Username>{username}</Username>
-          <Bio>{currentUser.bio || 'No bio'}</Bio>
-          <Other>
-            <LocationWrapper>
-              <HiLocationMarker />
-              <Location>{currentUser.location || 'Not determined'}</Location>
-            </LocationWrapper>
-            <JoinDateWrapper>
-              <FaBirthdayCake />
-              <JoinDate>Joined on {currentUser.joinDate || 'Not determined'}</JoinDate>
-            </JoinDateWrapper>
-          </Other>
-          <Footer>
-            <EducationWrapper>
-              <Title>Education</Title>
-              <Education>{currentUser.education || 'Not determined'}</Education>
-            </EducationWrapper>
-            <WorkWrapper>
-              <Title>Work</Title>
-              <Work>{currentUser.work || 'Not determined'}</Work>
-            </WorkWrapper>
-          </Footer>
-        </Card>
-        <AvailableForWrapper>
-          <Heading>Available for</Heading>
-          <AvailableFor>{currentUser.availableFor || 'Not determined'}</AvailableFor>
-        </AvailableForWrapper>
-        <Stats>
-          <StatWrapper>
-            <CgNotes />
-            <Count>{currentUser?.posts?.length || 0}</Count>
-            <Name>Posts published</Name>
-          </StatWrapper>
-          <StatWrapper>
-            <FaRegComment />
-            <Count>{currentUser?.comments?.length || 0}</Count>
-            <Name>Comments written</Name>
-          </StatWrapper>
-          <StatWrapper>
-            <FaHashtag />
-            <Count>{currentUser?.followedTags?.length || 0}</Count>
-            <Name>Tags followed</Name>
-          </StatWrapper>
-        </Stats>
-      </Wrapper>
+      {previewedUser ? (
+        <Wrapper>
+          <Card>
+            <Avatar src={previewedUser.picture.url} />
+            {previewedUser.username === currentUser.username ? (
+              <EditButton onClick={() => navigate('/customize')}>Edit profile</EditButton>
+            ) : (
+              <FollowButton>Follow</FollowButton>
+            )}
+            <Name>{previewedUser.name}</Name>
+            <Bio>{previewedUser.bio || 'No bio'}</Bio>
+            <Other>
+              <LocationWrapper>
+                <HiLocationMarker />
+                <Location>{previewedUser.location || 'Not determined'}</Location>
+              </LocationWrapper>
+              <JoinDateWrapper>
+                <FaBirthdayCake />
+                <JoinDate>Joined on {previewedUser.joinDate || 'Not determined'}</JoinDate>
+              </JoinDateWrapper>
+            </Other>
+            <Footer>
+              <EducationWrapper>
+                <Title>Education</Title>
+                <Education>{previewedUser.education || 'Not determined'}</Education>
+              </EducationWrapper>
+              <WorkWrapper>
+                <Title>Work</Title>
+                <Work>{previewedUser.work || 'Not determined'}</Work>
+              </WorkWrapper>
+            </Footer>
+          </Card>
+          <AvailableForWrapper>
+            <Heading>Available for</Heading>
+            <AvailableFor>{previewedUser.availableFor || 'Not determined'}</AvailableFor>
+          </AvailableForWrapper>
+          <Stats>
+            <StatWrapper>
+              <CgNotes />
+              <Count>{previewedUser?.posts?.length || 0}</Count>
+              <StatName>Posts published</StatName>
+            </StatWrapper>
+            <StatWrapper>
+              <FaRegComment />
+              <Count>{previewedUser?.comments?.length || 0}</Count>
+              <StatName>Comments written</StatName>
+            </StatWrapper>
+            <StatWrapper>
+              <FaHashtag />
+              <Count>{previewedUser?.tags?.length || 0}</Count>
+              <StatName>Tags followed</StatName>
+            </StatWrapper>
+          </Stats>
+        </Wrapper>
+      ) : (
+        <NotFound />
+      )}
     </RouteWrapper>
   );
 };
@@ -84,7 +91,7 @@ const EditButton = tw.button`absolute top-lg right-lg text-white bg-blue rounded
 
 const FollowButton = tw(EditButton)``;
 
-const Username = tw.h2``;
+const Name = tw.h2``;
 
 const Bio = tw.p`text-lg max-w-2xl text-center`;
 
@@ -116,7 +123,7 @@ const StatWrapper = tw.div`flex items-center gap-2`;
 
 const Count = tw.p``;
 
-const Name = tw.p``;
+const StatName = tw.p``;
 
 const AvailableForWrapper = tw(Stats)``;
 

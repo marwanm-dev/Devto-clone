@@ -6,47 +6,32 @@ import { useNavigate } from 'react-router-dom';
 import ReactMarkdown from 'react-markdown';
 import SyntaxHighlight from '../../../common/SyntaxHighlight';
 
-const Post = ({ isLaptop }) => {
+const Post = ({ post, isLaptop }) => {
   const navigate = useNavigate();
 
   return (
     <Wrapper>
-      <Image src='../../../assets/images/Screenshot_2021-02-21-20-01-06-24.jpg' />
+      <Image src={post.image.url} />
       <Content>
         <Header>
           <Author
-            src='../../../assets/images/Screenshot_2021-02-21-20-01-06-24.jpg'
-            onClick={() => navigate('/users/:username')}
+            src={post.author.picture.url}
+            onClick={() => navigate(`/${post.author.username}`)}
           />
           <AuthorMeta>
-            <AuthorName>Ben Halpern</AuthorName>
-            <CreatedAt>Jun 13</CreatedAt>
+            <AuthorName>{post.author.username}</AuthorName>
+            <CreatedAt>{post.publishedDate}</CreatedAt>
           </AuthorMeta>
         </Header>
-        <Title>Meme Monday!</Title>
-        <Tags />
+        <Title>{post.title}</Title>
+        <Tags tags={post.tags} />
         <PostBody>
-          <ReactMarkdown components={SyntaxHighlight}>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Itaque ad ullam voluptatibus
-            quas numquam animi? Suscipit maxime consequuntur sunt dolore natus, veritatis dicta!
-            Repellendus ipsa minima molestiae voluptas hic illum, porro deleniti asperiores impedit
-            quas dolores laudantium blanditiis ea quisquam illo quibusdam debitis. Itaque eligendi
-            magnam esse, atque qui laudantium. Quae repudiandae nesciunt nam, soluta porro unde
-            accusantium amet. Est ducimus ea commodi soluta accusantium quod quas a impedit,
-            asperiores beatae similique error! Assumenda debitis enim ad dolor. Est ut praesentium
-            vel dolorem itaque ea dolorum veniam rem eligendi, magni cupiditate possimus ad
-            obcaecati sapiente corporis sunt quisquam quas a. Laudantium itaque repellendus qui
-            expedita laborum, dicta beatae eveniet, ratione tempore nam pariatur quas magnam aperiam
-            ab. Debitis hic omnis, voluptatum libero quasi neque ipsum, eaque quibusdam quae
-            perferendis laboriosam rerum at beatae iure voluptas maiores consectetur dolorem. Aut
-            praesentium at, obcaecati voluptatibus ut nostrum recusandae architecto minus explicabo
-            accusamus!
-          </ReactMarkdown>
+          <ReactMarkdown children={post.body} components={SyntaxHighlight} />
         </PostBody>
         <CommentsContainer>
           <Heading>Discussion (7 comments)</Heading>
           <AddToDiscussion>
-            <Avatar src='../../../assets/images/Screenshot_2021-02-21-20-01-06-24.jpg' />
+            <Avatar src={post.author.picture.url} />
             <AddComment>
               <Input />
               <Submit>Submit</Submit>
@@ -93,7 +78,7 @@ const Post = ({ isLaptop }) => {
           />
         </CommentsContainer>
       </Content>
-      {isLaptop && <AuthorDetails />}
+      {isLaptop && <AuthorDetails author={post.author} />}
     </Wrapper>
   );
 };
@@ -101,13 +86,14 @@ const Post = ({ isLaptop }) => {
 const Image = styled.img`
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  margin: 0 auto;
+  object-fit: contain;
   cursor: pointer;
 `;
 
 const Header = tw.div`flex justify-between items-center w-max gap-sm mt-sm`;
 
-const Author = tw.img`w-10 rounded-full cursor-pointer`;
+const Author = tw.img`w-10 h-10 rounded-full cursor-pointer`;
 const AuthorMeta = tw.div``;
 const AuthorName = tw.h4`text-darker-gray pr-1 pt-1 rounded-md hover:bg-lighter-gray cursor-pointer`;
 const CreatedAt = tw.p`text-darker-gray`;
@@ -127,7 +113,7 @@ const Heading = tw.h2``;
 
 const AddToDiscussion = tw.div`flex justify-start items-start gap-sm`;
 
-const Avatar = tw.img`w-10 rounded-full cursor-pointer`;
+const Avatar = tw.img`w-10 h-10 rounded-full cursor-pointer`;
 
 const AddComment = tw.div`w-full`;
 

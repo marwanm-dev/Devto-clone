@@ -54,12 +54,12 @@ const Navbar = () => {
                 <RiNotification3Line />
                 <Count>2</Count>
               </NotificationIcon>
-              <Avatar src={currentUser.picture?.url} onClick={toggleProfileMenu} />
+              <Avatar src={currentUser.picture.url} onClick={toggleProfileMenu} />
               {profileMenu && (
                 <ProfileMenu>
                   <ListItem>
                     <Link to={`/${currentUser.username}`}>
-                      <Username>{currentUser.username}</Username>
+                      <Name>{currentUser.name}</Name>
                       <UserGmail>
                         @{currentUser.email.slice(0, currentUser.email.indexOf('@'))}
                       </UserGmail>
@@ -75,10 +75,10 @@ const Navbar = () => {
                     <Link to='readinglist'>Reading list</Link>
                   </ListItem>
                   <ListItem>
-                    <Link to='settings'>Settings</Link>
+                    <Link to='customize'>Settings</Link>
                   </ListItem>
                   <ListItem>
-                    <Link to='auth/logout'>Sign Out</Link>
+                    <Link to='/auth/confirm/logout-account'>Sign Out</Link>
                   </ListItem>
                 </ProfileMenu>
               )}
@@ -202,7 +202,7 @@ const ListItem = styled.li`
   }
 `;
 
-const Username = tw.h3``;
+const Name = tw.h3``;
 
 const UserGmail = tw.h4`text-gray`;
 

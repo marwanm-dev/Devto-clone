@@ -3,9 +3,15 @@ const bcrypt = require('bcrypt');
 const { uploadToCloudinary } = require('../utils/cloudinary');
 
 const handleNewUser = async (req, res) => {
-  const { user, email, pwd, picture } = req.body;
+  const { name, user, email, pwd, picture } = req.body;
+  let url, publicId;
 
-  if (!user || !email || !pwd) return res.status(400).json('Something is missing');
+  if (!name || !user || !email || !pwd) return res.status(400).json('Something is missing');
+
+  if (!picture) {
+    url = process.env.CLOUDINARY_DEFAULT_URL;
+    publicId = process.env.CLOUDINARY_DEFAULT_PUBLIC_ID;
+  }
 
   const duplicateUser = await User.findOne({ username: user }).exec();
   if (duplicateUser) return res.sendStatus(409).json('Username taken'); // Conflict
@@ -15,12 +21,21 @@ const handleNewUser = async (req, res) => {
 
   try {
     const hashedPwd = await bcrypt.hash(pwd, 10);
-    const { url, public_id: publicId } = await uploadToCloudinary(picture);
+
+    if (picture) {
+      const uploadedResponse = await uploadToCloudinary(picture, 'Profiles');
+      url = uploadedResponse.url;
+      publicId = uploadedResponse.public_id;
+    }
 
     await User.create({
+      name,
       username: user,
-      email: email,
-      picture: { url, publicId },
+      email,
+      picture: {
+        url,
+        publicId,
+      },
       password: hashedPwd,
     });
 

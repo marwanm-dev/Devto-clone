@@ -2,33 +2,27 @@ const User = require('../model/User');
 const cloudinary = require('../config/cloudinary');
 const { uploadToCloudinary } = require('../utils/cloudinary');
 
-const getAllUsers = async (req, res) => {
-  const users = await User.find({});
-  if (!users) res.sendStatus(204).json({ message: 'No Users Found' });
+const getUser = async (req, res) => {
+  const username = req.params.username;
+  if (!username) return res.sendStatus(400).json({ message: 'User name required' });
 
-  res.json(users);
+  const user = await User.findOne({ username }).exec();
+  if (!user) return res.sendStatus(204).json({ message: `User ${username} not found` });
+
+  res.json(user);
 };
 
 const deleteUser = async (req, res) => {
   const id = req.params.id;
   if (!id) return res.sendStatus(400).json({ message: 'User Id required' });
 
-  const user = User.find({ _id: id }).exec();
-  if (!user) return res.sendStatus(204).json({ message: `User ID ${id} not found` });
-
-  const result = await User.deleteOne({ _id: id }).exec();
-
-  res.json(result);
-};
-
-const getUser = async (req, res) => {
-  const id = req.params.id;
-  if (!id) return res.sendStatus(400).json({ message: 'User Id required' });
-
   const user = await User.findOne({ _id: id }).exec();
   if (!user) return res.sendStatus(204).json({ message: `User ID ${id} not found` });
 
-  res.json(user);
+  if (user.picture.publicId !== process.env.CLOUDINARY_DEFAULT_PUBLIC_ID)
+    cloudinary.uploader.destroy(user.picture.publicId);
+
+  await User.deleteOne({ _id: id }).exec();
 };
 
 const updateUser = async (req, res) => {
@@ -38,21 +32,18 @@ const updateUser = async (req, res) => {
   const user = await User.findOne({ _id: id }).exec();
   if (!user) return res.sendStatus(204).json({ message: `User ID ${id} not found` });
 
-  const picturePublicId = req.body.picture.publicId;
+  const { url, public_id: publicId } = await uploadToCloudinary(req.body.picture.url, 'Profiles');
 
-  cloudinary.uploader.destroy(picturePublicId);
-
-  const { url, public_id: publicId } = await uploadToCloudinary(req.body.picture.url);
+  if (user.picture.publicId !== process.env.CLOUDINARY_DEFAULT_PUBLIC_ID)
+    cloudinary.uploader.destroy(user.picture.publicId);
 
   req.body.picture = { url, publicId };
 
-  const result = await User.findOneAndUpdate({ _id: id }, { ...req.body }, { new: true });
-  res.json(result);
+  await User.findOneAndUpdate({ _id: id }, { ...req.body }, { new: true });
 };
 
 module.exports = {
-  getAllUsers,
-  deleteUser,
   getUser,
+  deleteUser,
   updateUser,
 };

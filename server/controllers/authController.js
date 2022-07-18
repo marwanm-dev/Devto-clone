@@ -25,7 +25,7 @@ const handleLogin = async (req, res) => {
       { username: foundUser.username },
       process.env.REFRESH_TOKEN_SECRET,
       {
-        expiresIn: '5m',
+        expiresIn: '30m',
       }
     );
 
@@ -41,6 +41,7 @@ const handleLogin = async (req, res) => {
 
     res.json({
       id: foundUser._id,
+      name: foundUser.name,
       picture: foundUser.picture,
       bio: foundUser.bio,
       location: foundUser.location,

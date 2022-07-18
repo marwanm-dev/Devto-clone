@@ -4,6 +4,8 @@ import jwt from 'jwt-decode';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import RouteWrapper from '../../common/RouteWrapper';
+import LoadingSpinner from '../../common/LoadingSpinner';
+import Error from '../../common/Error';
 import { useLoginMutation } from '../../core/features/auth/authApiSlice';
 import { setRegisteredCredentials } from '../../core/features/auth/authSlice';
 import Auth0 from '../../common/Auth0';
@@ -17,22 +19,28 @@ const Login = () => {
 
   const emailRef = useRef(null);
 
-  const [login, { isError }] = useLoginMutation();
+  const [login, { isLoading, isError, isSuccess, reset }] = useLoginMutation();
 
   useEffect(() => emailRef.current.focus(), []);
+
+  useEffect(() => {
+    reset();
+    isSuccess && navigate('/');
+  }, [email, pwd]);
 
   const handleSubmit = async e => {
     e.preventDefault();
     try {
       const payload = await login({ email, pwd }).unwrap();
+      const decoded = jwt(payload.token);
 
       setEmail('');
       setPwd('');
 
-      const decoded = jwt(payload.token);
       dispatch(
         setRegisteredCredentials({
           id: payload.id,
+          name: payload.name,
           username: decoded.username,
           email,
           picture: payload.picture,
@@ -47,8 +55,6 @@ const Login = () => {
           joinDate: payload.joinDate,
         })
       );
-
-      !isError && navigate('/');
     } catch (err) {
       console.log(err);
     }
@@ -56,50 +62,51 @@ const Login = () => {
 
   return (
     <RouteWrapper>
-      <Wrapper>
-        <Heading>Welcome to DEV Community</Heading>
-        <Paragraph>DEV Community is a community of 748,239 amazing developers</Paragraph>
+      {isLoading && <LoadingSpinner />}
+      {!isLoading && (
+        <Wrapper>
+          <Heading>Welcome to DEV Community</Heading>
+          <Paragraph>DEV Community is a community of 748,239 amazing developers</Paragraph>
 
-        <Auth0 />
+          <Auth0 />
 
-        <Paragraph>Or</Paragraph>
+          <Paragraph>Or</Paragraph>
 
-        <Title>Login using an Existing account</Title>
-        <form onSubmit={handleSubmit}>
-          <InputContainer>
-            <Label htmlFor='email'>Email *</Label>
-            <Input
-              ref={emailRef}
-              name='email'
-              value={email}
-              onChange={e => setEmail(e.target.value)}
-              required
-            />
-          </InputContainer>
+          <Title>Login using an Existing account</Title>
+          <form onSubmit={handleSubmit}>
+            <InputContainer>
+              <Label htmlFor='email'>Email *</Label>
+              <Input
+                ref={emailRef}
+                name='email'
+                value={email}
+                onChange={e => setEmail(e.target.value)}
+                required
+              />
+            </InputContainer>
 
-          <InputContainer>
-            <Label htmlFor='password'>Password *</Label>
-            <Input
-              type='password'
-              name='password'
-              value={pwd}
-              onChange={e => setPwd(e.target.value)}
-              required
-            />
-          </InputContainer>
+            <InputContainer>
+              <Label htmlFor='password'>Password *</Label>
+              <Input
+                type='password'
+                name='password'
+                value={pwd}
+                onChange={e => setPwd(e.target.value)}
+                required
+              />
+            </InputContainer>
 
-          {isError && <Error>Check your email and password</Error>}
+            {isError && <Error>Check your email and password</Error>}
 
-          <Submit>Log in</Submit>
-        </form>
-      </Wrapper>
+            <Submit>Log in</Submit>
+          </form>
+        </Wrapper>
+      )}
     </RouteWrapper>
   );
 };
 
-const Error = tw.h4`text-red mb-4`;
-
-const Submit = tw.button`bg-blue text-white py-2  w-full rounded-lg`;
+const Submit = tw.button`bg-blue text-white py-2 mt-8 w-full rounded-lg`;
 
 const Heading = tw.h1`font-bold my-6`;
 

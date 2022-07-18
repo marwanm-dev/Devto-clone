@@ -9,13 +9,13 @@ body {
   ${tw`font-default`}
 }
 h1 {
-  ${tw`text-4xl font-black`}
+  ${tw`text-5xl font-black`}
 }
 h2 {
-  ${tw`text-xl font-semibold`}
+  ${tw`text-2xl font-semibold`}
 }
 h3 {
-  ${tw`text-base font-bold`}
+  ${tw`text-lg font-bold`}
 }
 h4 {
   ${tw`text-sm font-medium`}

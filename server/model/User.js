@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const UserSchema = new Schema({
+  name: { type: String, required: true },
   username: { type: String, required: true },
   email: { type: String, required: true },
   password: { type: String, required: true },
@@ -22,7 +23,7 @@ const UserSchema = new Schema({
   work: { type: String, default: '' },
   availableFor: { type: String, default: '' },
   skills: { type: String, default: '' },
-  // Todo posts, comments, followedTags, followedUsers
+  posts: [{ type: mongoose.Types.ObjectId, ref: 'Post' }],
   refreshToken: { type: String, default: '' },
 });
 

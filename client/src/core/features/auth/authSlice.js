@@ -12,6 +12,7 @@ const authSlice = createSlice({
       if (action.payload) {
         const {
           id,
+          name,
           username,
           picture,
           email,
@@ -27,6 +28,7 @@ const authSlice = createSlice({
         } = action.payload;
         state.currentUser = {
           id,
+          name,
           username,
           picture,
           email,
@@ -55,17 +57,11 @@ const authSlice = createSlice({
     setExpirationDate: (state, action) => {
       state.expirationDate = action.payload;
     },
-    logout: (state, action) => {},
   },
 });
 
-export const {
-  setRegisteredCredentials,
-  setUpdatedCredentials,
-  setToken,
-  setExpirationDate,
-  logout,
-} = authSlice.actions;
+export const { setRegisteredCredentials, setUpdatedCredentials, setToken, setExpirationDate } =
+  authSlice.actions;
 
 export const selectCurrentAuthState = state => state.auth;
 export const selectCurrentUser = state => state.auth.currentUser;

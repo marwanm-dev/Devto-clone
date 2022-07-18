@@ -1,14 +1,17 @@
 import tw from 'twin.macro';
 import { useNavigate } from 'react-router-dom';
+import { nanoid } from '@reduxjs/toolkit';
 
-const Tags = () => {
+const Tags = ({ tags }) => {
   const navigate = useNavigate();
 
   return (
     <Wrapper>
-      <Tag onClick={() => navigate('/tags/tagName')}>#discuss</Tag>
-      <Tag onClick={() => navigate('/tags/tagName')}>#news</Tag>
-      <Tag onClick={() => navigate('/tags/tagName')}>#jokes</Tag>
+      {tags.map(tag => (
+        <Tag key={nanoid()} onClick={() => navigate(`/tags/${tag}`)}>
+          #{tag}
+        </Tag>
+      ))}
     </Wrapper>
   );
 };
