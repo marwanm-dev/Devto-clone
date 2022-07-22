@@ -9,7 +9,7 @@ import Error from '../../common/Error';
 import useBase64 from '../../hooks/useBase64';
 import { useCreatePostMutation } from '../../core/features/posts/postsApiSlice';
 import 'easymde/dist/easymde.min.css';
-import { selectCurrentUser } from '../../core/features/auth/authSlice';
+import { selectCurrentToken, selectCurrentUser } from '../../core/features/auth/authSlice';
 
 const NewPost = () => {
   const [title, setTitle] = useState('');
@@ -20,10 +20,11 @@ const NewPost = () => {
   const [inputsFilled, setInputsFilled] = useState(false);
   const filePickerRef = useRef();
   const titleRef = useRef();
-  const previewURL = useBase64(file);
   const [createPost, { isLoading, isError }] = useCreatePostMutation();
   const navigate = useNavigate();
   const { username } = useSelector(selectCurrentUser);
+  const token = useSelector(selectCurrentToken);
+  const previewURL = useBase64(file);
 
   useEffect(() => titleRef.current.focus(), []);
 
@@ -36,12 +37,12 @@ const NewPost = () => {
     if (inputsFilled) {
       try {
         await createPost({
+          token,
           title,
+          file: previewURL,
           body,
-          file,
           tags,
           authorUsername: username,
-          picture: previewURL,
         }).unwrap();
 
         setTitle('');

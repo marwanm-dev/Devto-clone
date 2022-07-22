@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import { Provider, useSelector } from 'react-redux';
 import { AnimatePresence } from 'framer-motion';
@@ -33,48 +33,23 @@ import TermsOfUse from '../pages/TermsOfUse';
 
 // Components
 import Layout from '../common/Layout';
-import RequireAuth from '../common/RequireAuth';
 import NotFound from '../common/NotFound';
-
-// Refreshing the token & logging out imports
-import useRefreshToken from '../hooks/useRefreshToken';
-import { selectCurrentToken, selectExpirationDate } from '../core/features/auth/authSlice';
 
 const AnimatedRoutes = () => {
   const location = useLocation();
-  const handleRefresh = useRefreshToken();
-
-  const expirationDate = useSelector(selectExpirationDate);
-  const token = useSelector(selectCurrentToken);
-
-  const interval = expirationDate - Date.now();
-
-  useEffect(() => {
-    const i = setInterval(() => token && handleRefresh(), interval);
-    return () => clearInterval(i);
-  }, [expirationDate]);
 
   return (
     <AnimatePresence exitBeforeEnter>
       <Routes location={location} key={location.pathname}>
         <Route path='/' element={<Layout />}>
           <Route index element={<Home />} />
-
           <Route path='faq' element={<FAQ />} />
-
           <Route path='about' element={<About />} />
-
           <Route path='contact' element={<Contact />} />
-
           <Route path='code-of-conduct' element={<CodeOfConduct />} />
-
           <Route path='privacy-policy' element={<PrivacyPolicy />} />
-
           <Route path='terms-of-use' element={<TermsOfUse />} />
-
-          <Route element={<RequireAuth />}>
-            <Route path='post' element={<NewPost />} />
-          </Route>
+          <Route path='post' element={<NewPost />} />
 
           <Route path='tags'>
             <Route index element={<Tags />} />
@@ -84,35 +59,28 @@ const AnimatedRoutes = () => {
 
           <Route path=':username'>
             <Route index element={<Profile />} />
+
             <Route path=':postUrl'>
               <Route index element={<PostPage />} />
-              <Route element={<RequireAuth />}>
-                <Route path='edit' element={<EditPost />} />
-              </Route>
+              <Route path='edit' element={<EditPost />} />
               <Route path='*' element={<NotFound />} />
             </Route>
+
             <Route path='*' element={<NotFound />} />
           </Route>
 
-          <Route element={<RequireAuth />}>
-            <Route path='customize' element={<EditProfile />} />
-          </Route>
+          <Route path='customize' element={<EditProfile />} />
 
           <Route path='auth'>
             <Route path='login' element={<Login />} />
             <Route path='new' element={<SignUp />} />
-            <Route element={<RequireAuth />}>
-              <Route path='confirm/:confirmType' element={<Confirmation />} />
-            </Route>
+            <Route path='confirm/:confirmType' element={<Confirmation />} />
             <Route path='*' element={<NotFound />} />
           </Route>
 
-          <Route element={<RequireAuth />}>
-            <Route path='notifications' element={<Notifications />} />
-            <Route path='dashboard' element={<Dashboard />} />
-            <Route path='readinglist' element={<ReadingList />} />
-          </Route>
-
+          <Route path='notifications' element={<Notifications />} />
+          <Route path='dashboard' element={<Dashboard />} />
+          <Route path='readinglist' element={<ReadingList />} />
           <Route path='*' element={<NotFound />} />
         </Route>
       </Routes>

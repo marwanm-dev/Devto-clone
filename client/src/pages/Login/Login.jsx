@@ -51,7 +51,6 @@ const Login = () => {
           availableFor: payload.availableFor,
           skills: payload.skills,
           token: payload.token,
-          expirationDate: payload.expirationDate,
           joinDate: payload.joinDate,
         })
       );

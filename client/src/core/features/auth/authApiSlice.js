@@ -1,5 +1,5 @@
 import apiSlice from '../api/apiSlice';
-import { setToken, setExpirationDate, setRegisteredCredentials } from './authSlice';
+import { logout } from './authSlice';
 import { persistor } from '../../store';
 
 const authApiSlice = apiSlice.injectEndpoints({
@@ -11,20 +11,8 @@ const authApiSlice = apiSlice.injectEndpoints({
       }),
       async onQueryStarted(args, { dispatch, queryFulfilled }) {
         await queryFulfilled;
-        dispatch(setRegisteredCredentials());
+        dispatch(logout());
         persistor.purge();
-      },
-    }),
-    refresh: builder.query({
-      query: () => ({
-        url: '/refresh',
-        credentials: 'include',
-      }),
-      async onQueryStarted(args, { dispatch, queryFulfilled }) {
-        const result = await queryFulfilled;
-        const data = await result.data;
-        dispatch(setToken(data?.accessToken));
-        dispatch(setExpirationDate(data?.expirationDate));
       },
     }),
     signUp: builder.mutation({
@@ -46,5 +34,4 @@ const authApiSlice = apiSlice.injectEndpoints({
   overrideExisting: true,
 });
 
-export const { useLazyLogoutQuery, useLazyRefreshQuery, useSignUpMutation, useLoginMutation } =
-  authApiSlice;
+export const { useLazyLogoutQuery, useSignUpMutation, useLoginMutation } = authApiSlice;

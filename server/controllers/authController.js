@@ -18,14 +18,14 @@ const handleLogin = async (req, res) => {
       },
       process.env.ACCESS_TOKEN_SECRET,
       {
-        expiresIn: '30s',
+        expiresIn: '15s',
       }
     );
     const refreshToken = jwt.sign(
       { username: foundUser.username },
       process.env.REFRESH_TOKEN_SECRET,
       {
-        expiresIn: '30m',
+        expiresIn: '5m',
       }
     );
 
@@ -50,7 +50,6 @@ const handleLogin = async (req, res) => {
       availableFor: foundUser.availableFor,
       skills: foundUser.skills,
       token: accessToken,
-      expirationDate: Date.now() + 1000 * 30,
       joinDate: foundUser.joinDate,
     });
   } else {

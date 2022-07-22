@@ -16,11 +16,11 @@ const handleRefreshToken = async (req, res) => {
       { username: foundUser?.username },
       process.env.ACCESS_TOKEN_SECRET,
       {
-        expiresIn: '30s',
+        expiresIn: '15s',
       }
     );
 
-    res.json({ accessToken, expirationDate: Date.now() + 1000 * 30 });
+    res.json(accessToken);
   });
 };
 

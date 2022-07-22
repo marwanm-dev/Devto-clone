@@ -3,7 +3,6 @@ const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
 const cookieParser = require('cookie-parser');
-
 const corsOptions = require('./config/corsOptions');
 const dbConn = require('./config/dbConn');
 
@@ -49,10 +48,8 @@ app.use('/register', require('./routes/register'));
 app.use('/auth', require('./routes/auth'));
 app.use('/logout', require('./routes/logout'));
 app.use('/refresh', require('./routes/refresh'));
-app.use('/posts', require('./routes/posts'));
-
-// Access token verification required (By Frontend)
 app.use('/users', require('./routes/users'));
+app.use('/posts', require('./routes/posts'));
 
 mongoose.connection.once('open', () => {
   console.log(`Connected to MongoDB, The Server Running on http://localhost:${PORT}`);

@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { Navigate, useNavigate, useParams, useLocation } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { useNavigate, useParams } from 'react-router-dom';
 import tw from 'twin.macro';
 import SimpleMDE from 'react-simplemde-editor';
 import RouteWrapper from '../../common/RouteWrapper';
@@ -11,45 +11,34 @@ import useBase64 from '../../hooks/useBase64';
 import 'easymde/dist/easymde.min.css';
 import { useUpdatePostMutation } from '../../core/features/posts/postsApiSlice';
 import { useDeletePostMutation } from '../../core/features/posts/postsApiSlice';
-import { getPost } from '../../core/features/posts/postsSlice';
-import { selectCurrentUser } from '../../core/features/auth/authSlice';
+import { selectCurrentUser, selectCurrentToken } from '../../core/features/auth/authSlice';
+import { useGetPostQuery } from '../../core/features/posts/postsApiSlice';
 
 const EditPost = () => {
   const currentUser = useSelector(selectCurrentUser);
+  const token = useSelector(selectCurrentToken);
 
-  const [title, setTitle] = useState('');
-  const [file, setFile] = useState('');
-  const [body, setBody] = useState('');
-  const [tags, setTags] = useState('');
-  const [id, setId] = useState('');
-  const [publicId, setPublicId] = useState('');
+  const { username, postUrl } = useParams();
+
+  const { data: post } = useGetPostQuery(`${username}/${postUrl}`);
+  const [updatePost, { isLoading: updateIsLoading, isError }] = useUpdatePostMutation();
+  const [deletePost, { isLoading: deletionIsLoading }] = useDeletePostMutation();
+
+  const [id, setId] = useState(post?._id);
+  const [publicId, setPublicId] = useState(post?.image?.publicId);
+  const [title, setTitle] = useState(post?.title);
+  const [file, setFile] = useState(post?.image?.url);
+  const [body, setBody] = useState(post?.body);
+  const [tags, setTags] = useState(post?.tags.toString());
   const [isTagsFocused, setIsTagsFocused] = useState(false);
   const [inputsFilled, setInputsFilled] = useState(false);
+
   const filePickerRef = useRef();
   const titleRef = useRef();
   const previewURL = useBase64(file);
   const navigate = useNavigate();
-  const location = useLocation();
-  const dispatch = useDispatch();
-  const { username, postUrl } = useParams();
-  const [updatePost, { isLoading: updateIsLoading, isError }] = useUpdatePostMutation();
-  const [deletePost, { isLoading: deletionIsLoading }] = useDeletePostMutation();
 
   useEffect(() => titleRef.current?.focus(), []);
-
-  useEffect(() => {
-    const fetchPost = async () => {
-      const { payload: post } = await dispatch(getPost(`${username}/${postUrl}`));
-      setId(post._id);
-      setPublicId(post.image?.publicId);
-      setTitle(post.title);
-      setFile(post.image?.url);
-      setBody(post.body);
-      setTags(post.tags);
-    };
-
-    fetchPost();
-  }, []);
 
   useEffect(() => {
     if (title && file && body && tags) setInputsFilled(true);
@@ -59,6 +48,7 @@ const EditPost = () => {
   const handleDeletion = async () => {
     try {
       await deletePost({
+        token,
         url: `${username}/${postUrl}`,
         id,
         publicId,
@@ -75,6 +65,7 @@ const EditPost = () => {
       try {
         await updatePost({
           meta: {
+            token,
             url: `${username}/${postUrl}`,
             id,
           },

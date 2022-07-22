@@ -5,15 +5,15 @@ const { uploadToCloudinary } = require('../utils/cloudinary');
 const { getPostParams } = require('../helpers/strings');
 
 const createPost = async (req, res) => {
-  const { title, picture, body, tags, authorUsername } = req.body;
+  const { title, file, body, tags, authorUsername } = req.body;
 
-  const { url, public_id: publicId } = await uploadToCloudinary(picture, 'Posts');
+  const { url, public_id: publicId } = await uploadToCloudinary(file, 'Posts');
   const author = await User.findOne({ username: authorUsername }).exec();
 
   const formattedTags = tags
     .trim()
     .split(',')
-    .map(w => w.trim().replace(' ', '-'));
+    .map(w => w.trim().replace(/ /g, '-'));
 
   const post = await Post.create({
     title,
@@ -70,8 +70,21 @@ const updatePost = async (req, res) => {
   await cloudinary.uploader.destroy(req.body.image.publicId);
 
   req.body.image = { url, publicId };
+  req.body.tags = req.body.tags
+    .trim()
+    .split(',')
+    .map(w => w.trim().replace(/ /g, '-'));
+  req.body.publishedDate = new Date().toLocaleDateString('en-us', {
+    year: 'numeric',
+    month: 'short',
+    week: 'numeric',
+    day: 'numeric',
+    hour: 'numeric',
+    minute: 'numeric',
+    second: 'numeric',
+  });
 
-  await Post.findOneAndUpdate(
+  const updatedPost = await Post.findOneAndUpdate(
     {
       author: authorId,
       title: postTitle,
@@ -83,7 +96,7 @@ const updatePost = async (req, res) => {
     .populate('author')
     .exec();
 
-  res.sendStatus(204);
+  res.json(updatedPost);
 };
 
 const deletePost = async (req, res) => {

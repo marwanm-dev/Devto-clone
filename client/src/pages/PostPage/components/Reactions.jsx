@@ -41,9 +41,7 @@ const Reactions = ({ previewedUsername, likes, unicorns, bookmarks }) => {
   );
 };
 
-const EditButton = tw.button`w-full rounded-md text-sm border border-solid p-1 bg-gray text-white hover:(text-gray bg-white border-gray)`;
-
-const DeleteButton = tw(EditButton)``;
+const EditButton = tw.button`w-full rounded-md text-sm border border-solid p-1 bg-dark-gray text-white hover:(text-dark-gray bg-white border-dark-gray)`;
 
 const Wrapper = styled.div`
   ${({ scrollDirection }) =>
@@ -59,9 +57,6 @@ const ReactionContainer = tw.div`text-center flex items-center flex-col mb-md mo
 const HeartIcon = tw.div`p-2 cursor-pointer rounded-full hover:(bg-[rgb(243, 224, 224)] text-[rgb(220, 38, 38)])`;
 const UnicornIcon = tw(HeartIcon)`hover:(bg-[rgb(220, 235, 231)] text-[rgb(5, 150, 105)])`;
 const BookmarkIcon = tw(HeartIcon)`hover:(bg-[rgb(228, 227, 244)] text-[rgb(116, 108, 233)])`;
-const DotsContainer = tw(
-  ReactionContainer
-)`[& svg]:(mx-auto) rounded-md bg-white p-sm justify-between gap-sm mob:(flex-row)`;
 
 const TotalReactions = tw.p`text-center text-dark-gray`;
 
