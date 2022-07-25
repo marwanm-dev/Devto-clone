@@ -1,39 +1,54 @@
-import tw, { styled, theme } from 'twin.macro';
-import { AiOutlineHeart } from 'react-icons/ai';
-import { GiUnicorn } from 'react-icons/gi';
-import { BsBookmark } from 'react-icons/bs';
+import tw, { styled } from 'twin.macro';
+import { useEffect } from 'react';
 import useScroll from '../../../hooks/useScroll';
 import { useNavigate } from 'react-router-dom';
-import { useSelector } from 'react-redux';
-import { selectCurrentUser } from '../../../core/features/auth/authSlice';
+import { useSelector, useDispatch } from 'react-redux';
+import { selectCurrentUser, setAuthModal } from '../../../core/features/auth/authSlice';
+import LikePost from './LikePost';
+import UnicornPost from './UnicornPost';
+import BookmarkPost from './BookmarkPost';
+import usePostReaction from '../hooks/usePostReaction';
 
-const Reactions = ({ previewedUsername, likes, unicorns, bookmarks }) => {
+const Reactions = ({ post }) => {
   const { scrollDirection } = useScroll();
   const { username } = useSelector(selectCurrentUser);
   const navigate = useNavigate();
 
+  const { _id, author, likes, unicorns, bookmarks } = post;
+  const likesArr = [...likes];
+  const unicornsArr = [...unicorns];
+  const bookmarksArr = [...bookmarks];
+  const { state, handleReaction } = usePostReaction(
+    _id,
+    author,
+    likesArr,
+    unicornsArr,
+    bookmarksArr
+  );
+  const { isLiked, isUnicorned, isBookmarked } = state;
+
   return (
     <Wrapper scrollDirection={scrollDirection}>
       <Content>
-        <ReactionContainer>
-          <HeartIcon>
-            <AiOutlineHeart />
-          </HeartIcon>
-          <TotalReactions>{likes}</TotalReactions>
-        </ReactionContainer>
-        <ReactionContainer>
-          <UnicornIcon>
-            <GiUnicorn />
-          </UnicornIcon>
-          <TotalReactions>{unicorns}</TotalReactions>
-        </ReactionContainer>
-        <ReactionContainer>
-          <BookmarkIcon>
-            <BsBookmark />
-          </BookmarkIcon>
-          <TotalReactions>{bookmarks}</TotalReactions>
-        </ReactionContainer>
-        {previewedUsername === username && (
+        <LikePost
+          likes={likesArr}
+          isLiked={isLiked}
+          handleReaction={handleReaction}
+          setAuthModal={setAuthModal}
+        />
+        <UnicornPost
+          unicorns={unicornsArr}
+          isUnicorned={isUnicorned}
+          handleReaction={handleReaction}
+          setAuthModal={setAuthModal}
+        />
+        <BookmarkPost
+          bookmarks={bookmarksArr}
+          isBookmarked={isBookmarked}
+          handleReaction={handleReaction}
+          setAuthModal={setAuthModal}
+        />
+        {author.username === username && (
           <EditButton onClick={() => navigate('edit')}>Edit</EditButton>
         )}
       </Content>
@@ -41,7 +56,7 @@ const Reactions = ({ previewedUsername, likes, unicorns, bookmarks }) => {
   );
 };
 
-const EditButton = tw.button`w-full rounded-md text-sm border border-solid p-1 bg-dark-gray text-white hover:(text-dark-gray bg-white border-dark-gray)`;
+const EditButton = tw.button`w-full rounded-md text-sm border border-solid p-1 bg-dark-gray text-white hover:(text-dark-gray bg-white border-dark-gray) mob:w-lg`;
 
 const Wrapper = styled.div`
   ${({ scrollDirection }) =>
@@ -51,13 +66,5 @@ const Wrapper = styled.div`
 `;
 
 const Content = tw.div`fixed mob:(static flex items-center justify-between w-full)`;
-
-const ReactionContainer = tw.div`text-center flex items-center flex-col mb-md mob:(mb-sm flex items-center)`;
-
-const HeartIcon = tw.div`p-2 cursor-pointer rounded-full hover:(bg-[rgb(243, 224, 224)] text-[rgb(220, 38, 38)])`;
-const UnicornIcon = tw(HeartIcon)`hover:(bg-[rgb(220, 235, 231)] text-[rgb(5, 150, 105)])`;
-const BookmarkIcon = tw(HeartIcon)`hover:(bg-[rgb(228, 227, 244)] text-[rgb(116, 108, 233)])`;
-
-const TotalReactions = tw.p`text-center text-dark-gray`;
 
 export default Reactions;

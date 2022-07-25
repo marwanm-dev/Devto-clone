@@ -14,6 +14,12 @@ module.exports = {
         'darker-gray': 'rgb(82, 82, 82)',
         black: 'rgb(23, 23, 23)',
         red: 'rgb(220, 38, 38)',
+        'heart-bg': 'rgb(243, 224, 224)',
+        'heart-text': 'rgb(220, 38, 38)',
+        'unicorn-bg': 'rgb(220, 235, 231)',
+        'unicorn-text': 'rgb(5, 150, 105)',
+        'bookmark-bg': 'rgb(228, 227, 244)',
+        'bookmark-text': 'rgb(116, 108, 233)',
       },
       maxWidth: {
         pg: '1280px',

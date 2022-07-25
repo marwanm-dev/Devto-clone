@@ -10,6 +10,7 @@ import Search from './components/Search';
 import MobileMenu from './components/MobileMenu';
 import { useSelector } from 'react-redux';
 import { selectCurrentUser, selectCurrentToken } from '../../core/features/auth/authSlice';
+import { preventScroll } from '../../helpers/body';
 
 const Navbar = () => {
   const currentUser = useSelector(selectCurrentUser);
@@ -21,9 +22,7 @@ const Navbar = () => {
   const [mobileSearch, toggleMobileSearch] = useToggle(false);
   const [mobileMenu, toggleMobileMenu] = useToggle(false);
 
-  mobileMenu
-    ? (document.body.style.overflowY = 'hidden')
-    : (document.body.style.overflowY = 'scroll');
+  preventScroll(mobileMenu);
 
   return (
     <Wrapper>
@@ -104,7 +103,7 @@ const Navbar = () => {
 
 const Wrapper = styled.nav`
   box-shadow: 0 4px 2px -3px rgba(0, 0, 0, 0.2);
-  ${tw`w-full bg-white fixed left-0 top-0 z-50 py-2 px-pg`}
+  ${tw`w-full bg-white fixed left-0 top-0 z-30 py-2 px-pg`}
 `;
 
 const Top = tw.div`w-full max-w-pg mx-auto flex justify-between items-center gap-sm py-2`;

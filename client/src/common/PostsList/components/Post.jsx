@@ -3,7 +3,7 @@ import { AiOutlineHeart } from 'react-icons/ai';
 import { MdOutlineModeComment } from 'react-icons/md';
 import { useNavigate } from 'react-router-dom';
 import Tags from '../../Tags';
-import { createPostUrl } from '../../../helpers/strings';
+import { createPostUrl } from '../../../helpers/string';
 
 const Post = ({ post, isFirstPost }) => {
   const navigate = useNavigate();
@@ -24,7 +24,7 @@ const Post = ({ post, isFirstPost }) => {
             <Author src={post.author.picture.url} />
             <AuthorMeta>
               <AuthorName>{post.author.username}</AuthorName>
-              <CreatedAt>{post.publishedDate}</CreatedAt>
+              <CreatedAt>{post.date}</CreatedAt>
             </AuthorMeta>
           </Header>
           <Title
@@ -43,7 +43,9 @@ const Post = ({ post, isFirstPost }) => {
                 <HeartIcon>
                   <AiOutlineHeart />
                 </HeartIcon>
-                <Total>{post.likes + post.unicorns + post.bookmarks} reactions</Total>
+                <Total>
+                  {post.likes.length + post.unicorns.length + post.bookmarks.length} reactions
+                </Total>
               </SumOfReactions>
               <SumOfComments>
                 <CommentIcon>

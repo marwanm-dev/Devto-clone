@@ -1,10 +1,12 @@
 import tw, { styled } from 'twin.macro';
 import { IoIosClose } from 'react-icons/io';
 import Resources from '../../Resources';
+import Backdrop from '../../Backdrop';
 
 const MobileMenu = ({ toggleMobileMenu }) => {
   return (
     <>
+      <Backdrop onClick={toggleMobileMenu} />
       <Wrapper>
         <Menu>
           <Heading>DEV Community</Heading>
@@ -14,7 +16,6 @@ const MobileMenu = ({ toggleMobileMenu }) => {
         </Menu>
         <Resources />
       </Wrapper>
-      <Overlay onClick={toggleMobileMenu}></Overlay>
     </>
   );
 };

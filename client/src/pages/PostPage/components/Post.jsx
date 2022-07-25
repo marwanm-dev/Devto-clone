@@ -20,7 +20,7 @@ const Post = ({ post, isLaptop }) => {
           />
           <AuthorMeta>
             <AuthorName>{post.author.username}</AuthorName>
-            <CreatedAt>{post.publishedDate}</CreatedAt>
+            <CreatedAt>{post.date}</CreatedAt>
           </AuthorMeta>
         </Header>
         <Title>{post.title}</Title>

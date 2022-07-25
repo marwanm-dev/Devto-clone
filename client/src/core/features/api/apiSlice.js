@@ -32,6 +32,7 @@ const baseQueryWithReauth = async (args, api, extraOptions) => {
       await baseQuery('/logout', api, extraOptions);
       api.dispatch(logout());
       persistor.purge();
+      window.location.href = '/';
     }
   }
 
@@ -42,7 +43,7 @@ const apiSlice = createApi({
   reducerPath: 'api',
   baseQuery: baseQueryWithReauth,
   endpoints: builder => ({}),
-  tagTypes: ['Posts'],
+  tagTypes: ['Post'],
 });
 
 export default apiSlice;

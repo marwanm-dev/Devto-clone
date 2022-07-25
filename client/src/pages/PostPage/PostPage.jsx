@@ -14,7 +14,10 @@ const PostPage = () => {
   const isLaptop = useBreakpoint(theme`screens.lap.max`.replace('px', ''));
 
   const { username, postUrl } = useParams();
-  const { data: post, isLoading } = useGetPostQuery(`${username}/${postUrl}`);
+  const { data: post, isLoading } = useGetPostQuery(
+    { url: `${username}/${postUrl}` },
+    { refetchOnMountOrArgChange: true }
+  );
 
   return (
     <RouteWrapper>
@@ -22,12 +25,7 @@ const PostPage = () => {
       {!isLoading &&
         (post ? (
           <Wrapper>
-            <Reactions
-              previewedUsername={username}
-              likes={post.likes}
-              unicorns={post.unicorns}
-              bookmarks={post.bookmarks}
-            />
+            <Reactions post={post} />
             <Post post={post} isLaptop={isLaptop} />
             {!isLaptop && <AuthorDetails isLaptop={isLaptop} author={post.author} />}
           </Wrapper>

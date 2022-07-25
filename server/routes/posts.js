@@ -11,4 +11,6 @@ router
   .patch(verifyJWT, postsController.updatePost)
   .delete(verifyJWT, postsController.deletePost);
 
+router.route('/:username/:postUrl/:action').patch(postsController.postReaction);
+
 module.exports = router;

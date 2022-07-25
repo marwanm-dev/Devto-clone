@@ -2,7 +2,7 @@ const Post = require('../model/Post');
 const User = require('../model/User');
 const cloudinary = require('../config/cloudinary');
 const { uploadToCloudinary } = require('../utils/cloudinary');
-const { getPostParams } = require('../helpers/strings');
+const { getPostParams, unCapitalizeFirstLetter } = require('../helpers/string');
 
 const createPost = async (req, res) => {
   const { title, file, body, tags, authorUsername } = req.body;
@@ -20,19 +20,7 @@ const createPost = async (req, res) => {
     image: { url, publicId },
     body,
     author: author._id,
-    likes: 31,
-    unicorns: 62,
-    bookmarks: 93,
     tags: formattedTags,
-    publishedDate: new Date().toLocaleDateString('en-us', {
-      year: 'numeric',
-      month: 'short',
-      week: 'numeric',
-      day: 'numeric',
-      hour: 'numeric',
-      minute: 'numeric',
-      second: 'numeric',
-    }),
   });
 
   res.status(200).json(post);
@@ -74,7 +62,7 @@ const updatePost = async (req, res) => {
     .trim()
     .split(',')
     .map(w => w.trim().replace(/ /g, '-'));
-  req.body.publishedDate = new Date().toLocaleDateString('en-us', {
+  req.body.date = new Date().toLocaleDateString('en-us', {
     year: 'numeric',
     month: 'short',
     week: 'numeric',
@@ -96,7 +84,9 @@ const updatePost = async (req, res) => {
     .populate('author')
     .exec();
 
-  res.json(updatedPost);
+  res.status(200).json({
+    updatedPost: updatedPost.toObject({ getters: true }),
+  });
 };
 
 const deletePost = async (req, res) => {
@@ -111,9 +101,31 @@ const deletePost = async (req, res) => {
     _id: postId,
   }).exec();
 
-  !foundPost && res.sendStatus(204);
+  if (!foundPost) res.status(204);
 
-  res.sendStatus(200);
+  res.status(200).json({
+    foundPost: foundPost.toObject({ getters: true }),
+  });
 };
 
-module.exports = { createPost, getPosts, getPost, updatePost, deletePost };
+const postReaction = async (req, res) => {
+  const { userId } = req.body;
+  const { action, postUrl } = req.params;
+  const { postTitle, postId } = getPostParams(postUrl);
+  const isUndoing = action.includes('remove');
+  const actionKey = isUndoing
+    ? unCapitalizeFirstLetter(action.replace('remove', '')) + 's'
+    : action + 's';
+
+  const updatedPost = await Post.findByIdAndUpdate(
+    postId,
+    isUndoing ? { $pull: { [actionKey]: userId } } : { $addToSet: { [actionKey]: userId } },
+    { new: true }
+  );
+
+  res.status(200).json({
+    updatedPost: updatedPost.toObject({ getters: true }),
+  });
+};
+
+module.exports = { createPost, getPosts, getPost, updatePost, deletePost, postReaction };

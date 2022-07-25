@@ -1,5 +1,5 @@
 import apiSlice from '../api/apiSlice';
-import { setUpdatedCredentials } from '../auth/authSlice';
+import { setCredentials } from '../auth/authSlice';
 
 const usersApiSlice = apiSlice.injectEndpoints({
   endpoints: builder => ({
@@ -13,29 +13,14 @@ const usersApiSlice = apiSlice.injectEndpoints({
       }),
     }),
     updateUser: builder.mutation({
-      query: info => ({
-        url: `/users/${info.id}`,
+      query: body => ({
+        url: `/users/${body.id}`,
+        body,
         method: 'PATCH',
-        body: { ...info },
       }),
-      async onQueryStarted(args, { dispatch, queryFulfilled }) {
-        const result = await queryFulfilled;
-        const data = await result.data;
-        const { name, username, picture, bio, location, education, work, availableFor, skills } =
-          data;
-        dispatch(
-          setUpdatedCredentials({
-            name,
-            username,
-            picture,
-            bio,
-            location,
-            education,
-            work,
-            availableFor,
-            skills,
-          })
-        );
+      async onQueryStarted(body, { dispatch, queryFulfilled }) {
+        await queryFulfilled;
+        dispatch(setCredentials(body));
       },
     }),
   }),

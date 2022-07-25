@@ -5,58 +5,33 @@ const authSlice = createSlice({
   initialState: {
     currentUser: {},
     token: null,
+    authModal: false,
   },
   reducers: {
-    setRegisteredCredentials: (state, action) => {
-      const {
-        id,
-        name,
-        username,
-        picture,
-        email,
-        bio,
-        location,
-        joinDate,
-        education,
-        work,
-        availableFor,
-        skills,
-        token,
-      } = action.payload;
+    setCredentials: (state, action) => {
       state.currentUser = {
-        id,
-        name,
-        username,
-        picture,
-        email,
-        bio,
-        location,
-        education,
-        work,
-        availableFor,
-        skills,
-        joinDate,
+        ...state.currentUser,
+        ...action.payload,
       };
-      state.token = token;
-    },
-    setUpdatedCredentials: (state, action) => {
-      state.currentUser = { ...state.currentUser, ...action.payload };
     },
     setToken: (state, action) => {
       state.token = action.payload;
     },
+    setAuthModal: (state, action) => {
+      state.authModal = action.payload;
+    },
     logout: (state, action) => {
       state.currentUser = {};
       state.token = null;
+      state.authModal = false;
     },
   },
 });
 
-export const { setRegisteredCredentials, setUpdatedCredentials, setToken, logout } =
-  authSlice.actions;
+export const { setCredentials, setToken, setAuthModal, logout } = authSlice.actions;
 
-export const selectCurrentAuthState = state => state.auth;
 export const selectCurrentUser = state => state.auth.currentUser;
 export const selectCurrentToken = state => state.auth.token;
+export const selectAuthModal = state => state.auth.authModal;
 
 export default authSlice.reducer;

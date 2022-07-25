@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux';
 import RouteWrapper from '../../common/RouteWrapper';
 import { useLazyLogoutQuery } from '../../core/features/auth/authApiSlice';
 import { useDeleteUserMutation } from '../../core/features/users/usersApiSlice';
-import { capitalizeFirstLetter } from '../../helpers/strings';
+import { capitalizeFirstLetter } from '../../helpers/string';
 import { selectCurrentUser } from '../../core/features/auth/authSlice';
 
 const Confirmation = () => {

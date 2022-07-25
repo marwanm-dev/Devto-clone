@@ -11,16 +11,15 @@ import useBase64 from '../../hooks/useBase64';
 import 'easymde/dist/easymde.min.css';
 import { useUpdatePostMutation } from '../../core/features/posts/postsApiSlice';
 import { useDeletePostMutation } from '../../core/features/posts/postsApiSlice';
-import { selectCurrentUser, selectCurrentToken } from '../../core/features/auth/authSlice';
+import { selectCurrentUser } from '../../core/features/auth/authSlice';
 import { useGetPostQuery } from '../../core/features/posts/postsApiSlice';
 
 const EditPost = () => {
   const currentUser = useSelector(selectCurrentUser);
-  const token = useSelector(selectCurrentToken);
 
   const { username, postUrl } = useParams();
 
-  const { data: post } = useGetPostQuery(`${username}/${postUrl}`);
+  const { data: post } = useGetPostQuery({ url: `${username}/${postUrl}` });
   const [updatePost, { isLoading: updateIsLoading, isError }] = useUpdatePostMutation();
   const [deletePost, { isLoading: deletionIsLoading }] = useDeletePostMutation();
 
@@ -48,7 +47,6 @@ const EditPost = () => {
   const handleDeletion = async () => {
     try {
       await deletePost({
-        token,
         url: `${username}/${postUrl}`,
         id,
         publicId,
@@ -65,7 +63,6 @@ const EditPost = () => {
       try {
         await updatePost({
           meta: {
-            token,
             url: `${username}/${postUrl}`,
             id,
           },
@@ -105,7 +102,7 @@ const EditPost = () => {
                   ref={titleRef}
                   id='title'
                   value={title}
-                  onBlur={e => setTitle(prev => prev.trim())}
+                  onBlur={() => setTitle(prev => prev.trim())}
                   onChange={e => setTitle(e.target.value)}
                   required
                 />

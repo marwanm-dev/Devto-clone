@@ -14,7 +14,7 @@ const EditProfile = () => {
   const currentUser = useSelector(selectCurrentUser);
   const [name, setName] = useState(currentUser.name);
   const [username, setUsername] = useState(currentUser.username);
-  const [file, setFile] = useState(currentUser.picture.url);
+  const [file, setFile] = useState(currentUser.picture?.url);
   const [bio, setBio] = useState(currentUser.bio || '');
   const [location, setLocation] = useState(currentUser.location || '');
   const [education, setEducation] = useState(currentUser.education || '');

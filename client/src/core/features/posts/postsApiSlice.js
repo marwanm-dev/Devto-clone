@@ -3,44 +3,91 @@ import apiSlice from '../api/apiSlice';
 const postsApiSlice = apiSlice.injectEndpoints({
   endpoints: builder => ({
     getPosts: builder.query({
-      query: () => `/posts`,
-      providesTags: (result, err, args) => [
-        { type: 'Posts', id: 'LIST' },
-        ...result.map(({ _id }) => ({ type: 'Posts', id: _id })),
-      ],
+      query: args => '/posts',
+      transformResponse: response => response.sort((a, b) => (a.date < b.date ? 1 : -1)),
+      providesTags: (result, err, args) =>
+        result
+          ? [{ type: 'Post', id: 'LIST' }, ...result.map(({ _id }) => ({ type: 'Post', id: _id }))]
+          : [{ type: 'Post', id: 'LIST' }],
     }),
     getPost: builder.query({
-      query: url => ({
+      query: ({ url }) => ({
         url: `/posts/${url}`,
       }),
-      providesTags: (result, err, args) => [{ type: 'Posts', id: result?._id }],
+      providesTags: (result, err, args) =>
+        result ? [{ type: 'Post', id: result?._id }] : [{ type: 'Post', id: 'LIST' }],
     }),
     createPost: builder.mutation({
-      query: ({ token, ...data }) => ({
+      query: ({ ...data }) => ({
         url: `/posts`,
         method: 'POST',
-        headers: { Authorization: `Bearer ${token}` },
         body: { ...data },
       }),
-      invalidatesTags: (result, err, args) => [{ type: 'Posts', id: result._id }],
+      invalidatesTags: (result, err, args) =>
+        result ? [{ type: 'Post', id: result._id }] : [{ type: 'Post', id: 'LIST' }],
     }),
     updatePost: builder.mutation({
       query: ({ meta, data }) => ({
         url: `/posts/${meta.url}`,
         method: 'PATCH',
-        headers: { Authorization: `Bearer ${meta.token}` },
-        body: { ...data },
+        body: data,
       }),
-      invalidatesTags: (result, err, args) => [{ type: 'Posts', id: args.meta.id }],
+      invalidatesTags: (result, err, args) => [{ type: 'Post', id: args.meta.id }],
+      async onQueryStarted({ meta, ...patch }, { dispatch, queryFulfilled }) {
+        const patchResult = dispatch(
+          postsApiSlice.util.updateQueryData('getPost', { meta, ...patch }, draft => {
+            Object.assign(draft, patch);
+          })
+        );
+        try {
+          await queryFulfilled;
+        } catch {
+          patchResult.undo();
+          dispatch(
+            postsApiSlice.util.invalidateTags([
+              { type: 'Post', id: postId },
+              { type: 'Post', id: 'LIST' },
+            ])
+          );
+        }
+      },
     }),
     deletePost: builder.mutation({
-      query: ({ token, url, publicId }) => ({
+      query: ({ url, publicId }) => ({
         url: `/posts/${url}`,
         method: 'DELETE',
-        headers: { Authorization: `Bearer ${token}` },
         body: { publicId },
       }),
-      invalidatesTags: (result, err, args) => [{ type: 'Posts', id: args.id }],
+      invalidatesTags: (result, err, args) => [{ type: 'Post', id: args.id }],
+    }),
+    postReaction: builder.mutation({
+      query: ({ url, action, userId }) => ({
+        url: `/posts/${url}/${action}`,
+        method: 'PATCH',
+        body: { userId },
+      }),
+      invalidatesTags: (result, err, args) => [{ type: 'Post', id: args.postId }],
+      async onQueryStarted(
+        { url, action, userId, postId, ...patch },
+        { dispatch, queryFulfilled }
+      ) {
+        const patchResult = dispatch(
+          postsApiSlice.util.updateQueryData('getPost', { url, action, userId }, draft => {
+            Object.assign(draft, patch);
+          })
+        );
+        try {
+          await queryFulfilled;
+        } catch {
+          patchResult.undo();
+          dispatch(
+            postsApiSlice.util.invalidateTags([
+              { type: 'Post', id: postId },
+              { type: 'Post', id: 'LIST' },
+            ])
+          );
+        }
+      },
     }),
   }),
   overrideExisting: true,
@@ -52,4 +99,5 @@ export const {
   useCreatePostMutation,
   useUpdatePostMutation,
   useDeletePostMutation,
+  usePostReactionMutation,
 } = postsApiSlice;

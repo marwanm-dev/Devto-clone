@@ -4,4 +4,8 @@ const getPostParams = postUrl => {
   return { postTitle, postId };
 };
 
-module.exports = { getPostParams };
+const unCapitalizeFirstLetter = string => {
+  return string.charAt(0).toLowerCase() + string.slice(1);
+};
+
+module.exports = { getPostParams, unCapitalizeFirstLetter };

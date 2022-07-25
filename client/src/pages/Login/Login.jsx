@@ -7,7 +7,7 @@ import RouteWrapper from '../../common/RouteWrapper';
 import LoadingSpinner from '../../common/LoadingSpinner';
 import Error from '../../common/Error';
 import { useLoginMutation } from '../../core/features/auth/authApiSlice';
-import { setRegisteredCredentials } from '../../core/features/auth/authSlice';
+import { setCredentials, setToken } from '../../core/features/auth/authSlice';
 import Auth0 from '../../common/Auth0';
 
 const Login = () => {
@@ -38,7 +38,7 @@ const Login = () => {
       setPwd('');
 
       dispatch(
-        setRegisteredCredentials({
+        setCredentials({
           id: payload.id,
           name: payload.name,
           username: decoded.username,
@@ -50,10 +50,10 @@ const Login = () => {
           work: payload.work,
           availableFor: payload.availableFor,
           skills: payload.skills,
-          token: payload.token,
           joinDate: payload.joinDate,
         })
       );
+      dispatch(setToken(payload.token));
     } catch (err) {
       console.log(err);
     }
