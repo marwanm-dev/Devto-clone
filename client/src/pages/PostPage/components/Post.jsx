@@ -28,55 +28,7 @@ const Post = ({ post, isLaptop }) => {
         <PostBody>
           <ReactMarkdown children={post.body} components={SyntaxHighlight} />
         </PostBody>
-        <CommentsContainer>
-          <Heading>Discussion (7 comments)</Heading>
-          <AddToDiscussion>
-            <Avatar src={post.author.picture.url} />
-            <AddComment>
-              <Input />
-              <Submit>Submit</Submit>
-            </AddComment>
-          </AddToDiscussion>
-          <Comments
-            comments={[
-              {
-                picture: '../../../assets/images/Screenshot_2021-02-21-20-01-06-24.jpg',
-                author: 'John smith',
-                createdAt: 'Jun 13',
-                body: 'yahooasdadsadadsadasdsadsad sdd 13 fz zxc ssfddf qf1fo!!',
-                isTheAuthenticatedUser: true,
-                likes: 3,
-                replies: [],
-              },
-              {
-                picture: '../../../assets/images/Screenshot_2021-02-21-20-01-06-24.jpg',
-                author: 'marodevv',
-                createdAt: 'May 22, 2021',
-                body: 'yahooo!!',
-                isTheAuthenticatedUser: false,
-                likes: 3,
-                replies: [
-                  {
-                    picture: '../../../assets/images/Screenshot_2021-02-21-20-01-06-24.jpg',
-                    author: 'marodevv',
-                    createdAt: 'May 22, 2021',
-                    body: 'reply1!!',
-                    isTheAuthenticatedUser: true,
-                    likes: 3,
-                  },
-                  {
-                    picture: '../../../assets/images/Screenshot_2021-02-21-20-01-06-24.jpg',
-                    author: 'marodevv',
-                    createdAt: 'May 22, 2021',
-                    body: 'reply2!!',
-                    isTheAuthenticatedUser: false,
-                    likes: 3,
-                  },
-                ],
-              },
-            ]}
-          />
-        </CommentsContainer>
+        <CommentsContainer>{post.comments && <Comments postId={post._id} />}</CommentsContainer>
       </Content>
       {isLaptop && <AuthorDetails author={post.author} />}
     </Wrapper>
@@ -108,22 +60,6 @@ const CommentsContainer = styled.div`
   }
   ${tw`mt-md`}
 `;
-
-const Heading = tw.h2``;
-
-const AddToDiscussion = tw.div`flex justify-start items-start gap-sm`;
-
-const Avatar = tw.img`w-10 h-10 rounded-full cursor-pointer`;
-
-const AddComment = tw.div`w-full`;
-
-const Input = styled.input.attrs({
-  placeholder: ' Add to Discussion',
-})`
-  ${tw`outline-none w-full px-3 py-5 bg-white rounded-md focus:border-blue border border-solid border-light-gray`}
-`;
-
-const Submit = tw.button`w-20 text-white bg-blue py-2 px-1 rounded-md mt-sm`;
 
 const Content = tw.div`px-lg my-lg mob:(px-0)`;
 

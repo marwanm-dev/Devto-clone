@@ -1,12 +1,55 @@
-import tw from 'twin.macro';
+import { useState } from 'react';
+import { useSelector } from 'react-redux';
+import tw, { styled } from 'twin.macro';
+import LoadingSpinner from '../../../common/LoadingSpinner';
+import {
+  selectCurrentToken,
+  selectCurrentUser,
+  setAuthModal,
+} from '../../../core/features/auth/authSlice';
+import {
+  useGetCommentsQuery,
+  usePostCommentMutation,
+} from '../../../core/features/comments/commentsApiSlice';
 import Comment from './Comment';
 
-const Comments = ({ comments }) => {
+const Comments = ({ postId }) => {
+  const { data: comments, isLoading } = useGetCommentsQuery(postId, {
+    refetchOnMountOrArgChange: true,
+  });
+  const [body, setBody] = useState('');
+  const [postComment] = usePostCommentMutation();
+  const currentUser = useSelector(selectCurrentUser);
+  const token = useSelector(selectCurrentToken);
+
+  const handleNewComment = () => {
+    if (!token) setAuthModal(true);
+    if (body) {
+      try {
+        postComment({ body, author: currentUser.id, parentPost: postId });
+
+        setBody('');
+      } catch (err) {
+        console.log(err);
+      }
+    }
+  };
+
   return (
     <Wrapper>
       <CommentContainer>
-        {comments &&
-          comments.map((comment, i) => <Comment key={i} comment={comment} isReply={false} />)}
+        <Heading>Discussion ({comments.length} comments)</Heading>
+        {token && (
+          <AddToDiscussion>
+            <Avatar src={currentUser.picture.url} />
+            <AddComment>
+              <Input value={body} onChange={e => setBody(e.target.value)} />
+              <Submit onClick={handleNewComment}>Submit</Submit>
+            </AddComment>
+          </AddToDiscussion>
+        )}
+        {isLoading && <LoadingSpinner />}
+        {!isLoading && comments.map(comment => <Comment key={comment._id} comment={comment} />)}
       </CommentContainer>
     </Wrapper>
   );
@@ -15,5 +58,21 @@ const Comments = ({ comments }) => {
 const Wrapper = tw.div`flex flex-col gap-sm`;
 
 const CommentContainer = tw.div`flex flex-col`;
+
+const Heading = tw.h2`mb-md`;
+
+const AddToDiscussion = tw.div`flex justify-start items-start gap-sm`;
+
+const Avatar = tw.img`w-10 h-10 rounded-full cursor-pointer`;
+
+const AddComment = tw.div`w-full`;
+
+const Input = styled.input.attrs({
+  placeholder: ' Add to Discussion',
+})`
+  ${tw`outline-none w-full px-3 py-5 bg-white rounded-md focus:border-blue border border-solid border-light-gray`}
+`;
+
+const Submit = tw.button`text-white bg-blue py-2 px-3 rounded-md mt-1`;
 
 export default Comments;

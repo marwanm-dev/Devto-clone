@@ -3,15 +3,11 @@ import Post from './components/Post';
 import LoadingSpinner from '../LoadingSpinner';
 import { nanoid } from '@reduxjs/toolkit';
 import { useGetPostsQuery } from '../../core/features/posts/postsApiSlice';
-import { useEffect } from 'react';
 
 const PostsList = () => {
-  const { data: posts, isLoading } = useGetPostsQuery(
-    {},
-    {
-      refetchOnMountOrArgChange: true,
-    }
-  );
+  const { data: posts, isLoading } = useGetPostsQuery([], {
+    refetchOnMountOrArgChange: true,
+  });
 
   return (
     <Wrapper>

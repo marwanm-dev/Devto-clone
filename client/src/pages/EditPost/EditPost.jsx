@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import tw from 'twin.macro';
 import SimpleMDE from 'react-simplemde-editor';
@@ -11,12 +11,17 @@ import useBase64 from '../../hooks/useBase64';
 import 'easymde/dist/easymde.min.css';
 import { useUpdatePostMutation } from '../../core/features/posts/postsApiSlice';
 import { useDeletePostMutation } from '../../core/features/posts/postsApiSlice';
-import { selectCurrentUser } from '../../core/features/auth/authSlice';
+import {
+  selectCurrentUser,
+  selectCurrentToken,
+  setAuthModal,
+} from '../../core/features/auth/authSlice';
 import { useGetPostQuery } from '../../core/features/posts/postsApiSlice';
 
 const EditPost = () => {
   const currentUser = useSelector(selectCurrentUser);
-
+  const token = useSelector(selectCurrentToken);
+  const dispatch = useDispatch();
   const { username, postUrl } = useParams();
 
   const { data: post } = useGetPostQuery({ url: `${username}/${postUrl}` });
@@ -45,45 +50,53 @@ const EditPost = () => {
   }, [title, file, body, tags]);
 
   const handleDeletion = async () => {
-    try {
-      await deletePost({
-        url: `${username}/${postUrl}`,
-        id,
-        publicId,
-      });
-
-      navigate('/');
-    } catch (err) {
-      console.log(err);
-    }
-  };
-
-  const handleSubmit = async () => {
-    if (inputsFilled) {
+    if (token) {
       try {
-        await updatePost({
-          meta: {
-            url: `${username}/${postUrl}`,
-            id,
-          },
-          data: {
-            title,
-            body,
-            file,
-            tags,
-            authorUsername: username,
-            image: { url: previewURL, publicId },
-          },
-        }).unwrap();
-
-        setTitle('');
-        setFile('');
-        setBody('');
-        setTags('');
+        await deletePost({
+          url: `${username}/${postUrl}`,
+          id,
+          publicId,
+        });
 
         navigate('/');
       } catch (err) {
         console.log(err);
+      }
+    } else {
+      dispatch(setAuthModal(true));
+    }
+  };
+
+  const handleUpdate = async () => {
+    if (inputsFilled) {
+      if (token) {
+        try {
+          await updatePost({
+            meta: {
+              url: `${username}/${postUrl}`,
+              id,
+            },
+            data: {
+              title,
+              body,
+              file,
+              tags,
+              authorUsername: username,
+              image: { url: previewURL, publicId },
+            },
+          }).unwrap();
+
+          setTitle('');
+          setFile('');
+          setBody('');
+          setTags('');
+
+          navigate('/');
+        } catch (err) {
+          console.log(err);
+        }
+      } else {
+        dispatch(setAuthModal(true));
       }
     }
   };
@@ -137,7 +150,7 @@ const EditPost = () => {
                   required
                 />
               </InputWrapper>
-              <Submit onClick={handleSubmit}>Submit</Submit>
+              <Submit onClick={handleUpdate}>Submit</Submit>
               {isError && <Error>Something went wrong.</Error>}
               {!inputsFilled && <Error>All inputs must be filled.</Error>}
               <DeletePost onClick={handleDeletion}>Delete post</DeletePost>

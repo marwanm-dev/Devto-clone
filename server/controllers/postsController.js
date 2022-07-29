@@ -21,7 +21,19 @@ const createPost = async (req, res) => {
     body,
     author: author._id,
     tags: formattedTags,
+    date: new Date().toLocaleDateString('en-us', {
+      year: 'numeric',
+      month: 'short',
+      week: 'numeric',
+      day: 'numeric',
+      hour: 'numeric',
+      minute: 'numeric',
+    }),
   });
+
+  author.posts.push(post._id);
+
+  await author.save();
 
   res.status(200).json(post);
 };
@@ -37,6 +49,7 @@ const getPost = async (req, res) => {
     _id: postId,
   })
     .populate('author')
+    .populate('comments')
     .exec();
 
   res.status(200).json(foundPost);
@@ -84,28 +97,28 @@ const updatePost = async (req, res) => {
     .populate('author')
     .exec();
 
-  res.status(200).json({
-    updatedPost: updatedPost.toObject({ getters: true }),
-  });
+  res.status(200).json(updatedPost);
 };
 
 const deletePost = async (req, res) => {
-  const authorId = await User.findOne({ username: req.params.username }).exec();
+  const author = await User.findOne({ username: req.params.username }).exec();
   const { postTitle, postId } = getPostParams(req.params.postUrl);
 
   await cloudinary.uploader.destroy(req.body.publicId);
 
   const foundPost = await Post.findOneAndDelete({
-    author: authorId,
+    author: author._id,
     title: postTitle,
     _id: postId,
-  }).exec();
+  });
+  console.log(author.posts);
+  author.posts.pull(foundPost);
+  await author.save();
+  console.log(author.posts);
 
   if (!foundPost) res.status(204);
 
-  res.status(200).json({
-    foundPost: foundPost.toObject({ getters: true }),
-  });
+  res.status(200).json(foundPost);
 };
 
 const postReaction = async (req, res) => {
@@ -116,16 +129,15 @@ const postReaction = async (req, res) => {
   const actionKey = isUndoing
     ? unCapitalizeFirstLetter(action.replace('remove', '')) + 's'
     : action + 's';
+  const authorId = await User.findOne({ username: req.params.username }).exec();
 
-  const updatedPost = await Post.findByIdAndUpdate(
-    postId,
+  const updatedPost = await Post.findOneAndUpdate(
+    { author: authorId, title: postTitle, _id: postId },
     isUndoing ? { $pull: { [actionKey]: userId } } : { $addToSet: { [actionKey]: userId } },
     { new: true }
   );
 
-  res.status(200).json({
-    updatedPost: updatedPost.toObject({ getters: true }),
-  });
+  res.status(200).json(updatedPost);
 };
 
 module.exports = { createPost, getPosts, getPost, updatePost, deletePost, postReaction };

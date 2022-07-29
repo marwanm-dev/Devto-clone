@@ -72,8 +72,8 @@ const postsApiSlice = apiSlice.injectEndpoints({
         { dispatch, queryFulfilled }
       ) {
         const patchResult = dispatch(
-          postsApiSlice.util.updateQueryData('getPost', { url, action, userId }, draft => {
-            Object.assign(draft, patch);
+          postsApiSlice.util.updateQueryData('getPost', { url, action, userId }, draftPost => {
+            Object.assign(draftPost, patch);
           })
         );
         try {

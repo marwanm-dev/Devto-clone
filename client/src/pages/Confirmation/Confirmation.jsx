@@ -1,11 +1,15 @@
 import tw from 'twin.macro';
 import { useNavigate, useParams } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import RouteWrapper from '../../common/RouteWrapper';
 import { useLazyLogoutQuery } from '../../core/features/auth/authApiSlice';
 import { useDeleteUserMutation } from '../../core/features/users/usersApiSlice';
 import { capitalizeFirstLetter } from '../../helpers/string';
-import { selectCurrentUser } from '../../core/features/auth/authSlice';
+import {
+  selectCurrentUser,
+  selectCurrentToken,
+  setAuthModal,
+} from '../../core/features/auth/authSlice';
 
 const Confirmation = () => {
   const navigate = useNavigate();
@@ -13,15 +17,21 @@ const Confirmation = () => {
   const [trigger] = useLazyLogoutQuery();
   const [deleteUser] = useDeleteUserMutation();
   const { id } = useSelector(selectCurrentUser);
+  const token = useSelector(selectCurrentToken);
+  const dispatch = useDispatch();
 
   const handleConfirmation = async () => {
-    try {
-      confirmType.includes('delete') && (await deleteUser({ id }).unwrap());
-      trigger();
+    if (token) {
+      try {
+        confirmType.includes('delete') && (await deleteUser({ id }).unwrap());
+        trigger();
 
-      navigate('/');
-    } catch (err) {
-      console.log(err);
+        navigate('/');
+      } catch (err) {
+        console.log(err);
+      }
+    } else {
+      dispatch(setAuthModal);
     }
   };
 

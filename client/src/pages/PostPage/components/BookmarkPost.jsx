@@ -1,16 +1,17 @@
 import tw, { styled } from 'twin.macro';
 import { BsBookmark, BsBookmarkFill } from 'react-icons/bs';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { selectCurrentToken } from '../../../core/features/auth/authSlice';
 
 const BookmarkPost = ({ bookmarks, isBookmarked, handleReaction, setAuthModal }) => {
+  const dispatch = useDispatch();
   const token = useSelector(selectCurrentToken);
   const action = isBookmarked ? 'removeBookmark' : 'bookmark';
   const effect = isBookmarked ? 'negative' : 'positive';
 
   const handleClick = () => {
-    if (!token) setAuthModal(true);
-    handleReaction(action, effect, bookmarks, 'isBookmarked');
+    if (!token) dispatch(setAuthModal(true));
+    else handleReaction(action, effect, bookmarks, 'isBookmarked');
   };
 
   return (

@@ -1,22 +1,24 @@
 import tw, { styled } from 'twin.macro';
 import { GiUnicorn } from 'react-icons/gi';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { selectCurrentToken } from '../../../core/features/auth/authSlice';
 
 const UnicornPost = ({ unicorns, isUnicorned, handleReaction, setAuthModal }) => {
+  const dispatch = useDispatch();
+
   const token = useSelector(selectCurrentToken);
   const action = isUnicorned ? 'removeUnicorn' : 'unicorn';
   const effect = isUnicorned ? 'negative' : 'positive';
 
   const handleClick = () => {
-    if (!token) setAuthModal(true);
-    handleReaction(action, effect, unicorns, 'isUnicorned');
+    if (!token) dispatch(setAuthModal(true));
+    else handleReaction(action, effect, unicorns, 'isUnicorned');
   };
 
   return (
     <ReactionContainer>
       <UnicornIcon isUnicorned={isUnicorned} onClick={handleClick}>
-        {isUnicorned ? <GiUnicorn /> : <GiUnicorn />}
+        <GiUnicorn />
       </UnicornIcon>
       <TotalReactions>{unicorns && unicorns.length}</TotalReactions>
     </ReactionContainer>

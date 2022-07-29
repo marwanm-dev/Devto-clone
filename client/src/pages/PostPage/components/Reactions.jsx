@@ -1,8 +1,7 @@
 import tw, { styled } from 'twin.macro';
-import { useEffect } from 'react';
 import useScroll from '../../../hooks/useScroll';
 import { useNavigate } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { selectCurrentUser, setAuthModal } from '../../../core/features/auth/authSlice';
 import LikePost from './LikePost';
 import UnicornPost from './UnicornPost';

@@ -51,7 +51,7 @@ const Post = ({ post, isFirstPost }) => {
                 <CommentIcon>
                   <MdOutlineModeComment />
                 </CommentIcon>
-                <Total>67 comments</Total>
+                <Total>{post.comments.length} comments</Total>
               </SumOfComments>
             </Reactions>
             <Other>

@@ -50,6 +50,9 @@ app.use('/logout', require('./routes/logout'));
 app.use('/refresh', require('./routes/refresh'));
 app.use('/users', require('./routes/users'));
 app.use('/posts', require('./routes/posts'));
+app.use('/comments', require('./routes/comments'));
+
+//* Users/Posts/Comments all CRUD operations need a verifyJWT middleware except Read operation
 
 mongoose.connection.once('open', () => {
   console.log(`Connected to MongoDB, The Server Running on http://localhost:${PORT}`);

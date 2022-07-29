@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { setToken } from '../auth/authSlice';
+import { setAuthModal, setToken } from '../auth/authSlice';
 import { logout } from '../auth/authSlice';
 import { persistor } from '../../store';
 
@@ -32,7 +32,8 @@ const baseQueryWithReauth = async (args, api, extraOptions) => {
       await baseQuery('/logout', api, extraOptions);
       api.dispatch(logout());
       persistor.purge();
-      window.location.href = '/';
+
+      api.dispatch(setAuthModal(true));
     }
   }
 
@@ -43,7 +44,7 @@ const apiSlice = createApi({
   reducerPath: 'api',
   baseQuery: baseQueryWithReauth,
   endpoints: builder => ({}),
-  tagTypes: ['Post'],
+  tagTypes: ['Post', 'Comment'],
 });
 
 export default apiSlice;

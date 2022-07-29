@@ -9,7 +9,7 @@ const usePostReaction = (postId, author, likes, unicorns, bookmarks) => {
   const currentUser = useSelector(selectCurrentUser);
   const { username, postUrl } = useParams();
 
-  const [postReaction, { isLoading, isError }] = usePostReactionMutation();
+  const [postReaction] = usePostReactionMutation();
 
   const [state, setState] = useState({
     isLiked: checkInArray(likes, currentUser.id),
@@ -17,14 +17,9 @@ const usePostReaction = (postId, author, likes, unicorns, bookmarks) => {
     isBookmarked: checkInArray(bookmarks, currentUser.id),
   });
 
-  useEffect(() => {
-    console.log(state);
-  }, [state]);
-
   const updateReactionArr = (arr, effect) => {
     if (effect === 'negative') arr.splice(arr.indexOf(author._id), 1);
     else arr.push(author._id);
-    console.log(arr);
   };
 
   const handleReaction = async (action, effect, arr, stateKey) => {

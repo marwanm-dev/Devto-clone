@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import tw from 'twin.macro';
 import SimpleMDE from 'react-simplemde-editor';
 import RouteWrapper from '../../common/RouteWrapper';
@@ -9,7 +9,11 @@ import Error from '../../common/Error';
 import useBase64 from '../../hooks/useBase64';
 import { useCreatePostMutation } from '../../core/features/posts/postsApiSlice';
 import 'easymde/dist/easymde.min.css';
-import { selectCurrentUser } from '../../core/features/auth/authSlice';
+import {
+  selectCurrentUser,
+  selectCurrentToken,
+  setAuthModal,
+} from '../../core/features/auth/authSlice';
 
 const NewPost = () => {
   const [title, setTitle] = useState('');
@@ -23,6 +27,8 @@ const NewPost = () => {
   const [createPost, { isLoading, isError }] = useCreatePostMutation();
   const navigate = useNavigate();
   const { username } = useSelector(selectCurrentUser);
+  const token = useSelector(selectCurrentToken);
+  const dispatch = useDispatch();
   const previewURL = useBase64(file);
 
   useEffect(() => titleRef.current.focus(), []);
@@ -34,23 +40,27 @@ const NewPost = () => {
 
   const handleSubmit = async () => {
     if (inputsFilled) {
-      try {
-        await createPost({
-          title,
-          file: previewURL,
-          body,
-          tags,
-          authorUsername: username,
-        }).unwrap();
+      if (token) {
+        try {
+          await createPost({
+            title,
+            file: previewURL,
+            body,
+            tags,
+            authorUsername: username,
+          }).unwrap();
 
-        setTitle('');
-        setFile('');
-        setBody('');
-        setTags('');
+          setTitle('');
+          setFile('');
+          setBody('');
+          setTags('');
 
-        navigate('/');
-      } catch (err) {
-        console.log(err);
+          navigate('/');
+        } catch (err) {
+          console.log(err);
+        }
+      } else {
+        dispatch(setAuthModal(true));
       }
     }
   };

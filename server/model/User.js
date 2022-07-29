@@ -24,6 +24,7 @@ const UserSchema = new Schema({
   availableFor: { type: String, default: '' },
   skills: { type: String, default: '' },
   posts: [{ type: mongoose.Types.ObjectId, ref: 'Post' }],
+  comments: [{ type: mongoose.Types.ObjectId, ref: 'Comment' }],
   refreshToken: { type: String, default: '' },
 });
 

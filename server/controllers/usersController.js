@@ -1,4 +1,5 @@
 const User = require('../model/User');
+const Post = require('../model/Post');
 const cloudinary = require('../config/cloudinary');
 const { uploadToCloudinary } = require('../utils/cloudinary');
 
@@ -23,6 +24,9 @@ const deleteUser = async (req, res) => {
     cloudinary.uploader.destroy(user.picture.publicId);
 
   const deletedUser = await User.deleteOne({ _id: id }).exec();
+
+  await Post.findAndDelete({ author: _id });
+
   res.status(200).json(deletedUser);
 };
 

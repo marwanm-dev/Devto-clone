@@ -7,11 +7,17 @@ import LoadingSpinner from '../../common/LoadingSpinner';
 import Error from '../../common/Error';
 import RouteWrapper from '../../common/RouteWrapper';
 import useBase64 from '../../hooks/useBase64';
-import { selectCurrentUser } from '../../core/features/auth/authSlice';
+import {
+  selectCurrentToken,
+  selectCurrentUser,
+  setAuthModal,
+} from '../../core/features/auth/authSlice';
 import { useUpdateUserMutation } from '../../core/features/users/usersApiSlice';
 
 const EditProfile = () => {
   const currentUser = useSelector(selectCurrentUser);
+  const token = useSelector(selectCurrentToken);
+  const dispatch = useDispatch();
   const [name, setName] = useState(currentUser.name);
   const [username, setUsername] = useState(currentUser.username);
   const [file, setFile] = useState(currentUser.picture?.url);
@@ -28,23 +34,27 @@ const EditProfile = () => {
   const [updateUser, { isLoading, isError }] = useUpdateUserMutation();
 
   const handleUpdate = async () => {
-    try {
-      await updateUser({
-        id: currentUser.id,
-        name,
-        username,
-        picture: { url: previewURL, publicId: currentUser.picture.publicId },
-        bio,
-        location,
-        education,
-        work,
-        availableFor,
-        skills,
-      }).unwrap();
+    if (token) {
+      try {
+        await updateUser({
+          id: currentUser.id,
+          name,
+          username,
+          picture: { url: previewURL, publicId: currentUser.picture.publicId },
+          bio,
+          location,
+          education,
+          work,
+          availableFor,
+          skills,
+        }).unwrap();
 
-      navigate('/');
-    } catch (err) {
-      console.log(err);
+        navigate('/');
+      } catch (err) {
+        console.log(err);
+      }
+    } else {
+      dispatch(setAuthModal(true));
     }
   };
 

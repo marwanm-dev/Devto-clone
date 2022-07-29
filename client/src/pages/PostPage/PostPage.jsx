@@ -1,5 +1,4 @@
 import tw, { theme } from 'twin.macro';
-import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import RouteWrapper from '../../common/RouteWrapper';
 import NotFound from '../../common/NotFound';
