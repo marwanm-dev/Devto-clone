@@ -3,10 +3,10 @@ const Schema = mongoose.Schema;
 
 const CommentSchema = new Schema({
   body: { type: String, required: true },
-  parentPost: { type: mongoose.Types.ObjectId, required: true, ref: 'Post' },
+  parentPost: { type: mongoose.Types.ObjectId, ref: 'Post' },
+  parentComment: { type: mongoose.Types.ObjectId, ref: 'Comment', default: null },
   author: { type: mongoose.Types.ObjectId, required: true, ref: 'User' },
   likes: [{ type: mongoose.Types.ObjectId, ref: 'User' }],
-  parentComment: { type: mongoose.Types.ObjectId, ref: 'Comment' },
   date: String,
 });
 

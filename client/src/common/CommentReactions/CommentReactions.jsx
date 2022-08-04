@@ -1,29 +1,38 @@
-import tw, { styled } from 'twin.macro';
+import { useEffect, useState } from 'react';
 import { FaRegComment } from 'react-icons/fa';
-import { useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import tw, { styled } from 'twin.macro';
 import {
-  setAuthModal,
   selectCurrentToken,
   selectCurrentUser,
+  setAuthModal,
 } from '../../core/features/auth/authSlice';
-import LikeComment from './components/LikeComment';
-import { checkInArray } from '../../helpers/array';
 import {
   useCommentReactionMutation,
   usePostCommentMutation,
 } from '../../core/features/comments/commentsApiSlice';
+import { checkInArray } from '../../helpers/array';
+import LikeComment from './components/LikeComment';
 import ReplyComment from './components/ReplyComment';
 
-const CommentReactions = ({ likes, parentPost, id }) => {
-  const likesArr = [...likes];
+const CommentReactions = ({
+  likes,
+  parentPost,
+  parentComment,
+  id,
+  replyBody,
+  isReplying,
+  submittedReply,
+  toggleIsReplying,
+}) => {
+  const likesArr = likes && [...likes];
   const dispatch = useDispatch();
   const token = useSelector(selectCurrentToken);
   const currentUser = useSelector(selectCurrentUser);
   const userId = currentUser?.id;
   const [commentReaction] = useCommentReactionMutation();
   const [isLiked, setIsLiked] = useState(checkInArray(likesArr, userId));
-  // Todo const [postComment] = usePostCommentMutation();
+  const [postComment] = usePostCommentMutation();
 
   const handleLike = () => {
     if (!token) dispatch(setAuthModal(true));
@@ -32,20 +41,37 @@ const CommentReactions = ({ likes, parentPost, id }) => {
       if (action === 'removeLike') likesArr.splice(likesArr.indexOf(userId), 1);
       else likesArr.push(userId);
       setIsLiked(prev => !prev);
-      commentReaction({ id, action, parentPost, userId });
+      commentReaction({
+        id,
+        action,
+        parentPost,
+        userId,
+      });
     }
   };
 
   const handleReply = () => {
     if (!token) dispatch(setAuthModal(true));
     else {
+      postComment({
+        body: replyBody,
+        author: userId,
+        parentPost,
+        parentComment,
+      });
     }
   };
+
+  useEffect(() => {
+    if (submittedReply) {
+      handleReply();
+    }
+  }, [submittedReply]);
 
   return (
     <Wrapper>
       <LikeComment handleLike={handleLike} likes={likesArr} isLiked={isLiked} />
-      <ReplyComment handleReply={handleReply} />
+      <ReplyComment isReplying={isReplying} toggleIsReplying={toggleIsReplying} />
     </Wrapper>
   );
 };

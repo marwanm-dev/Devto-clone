@@ -1,10 +1,12 @@
 import tw, { styled } from 'twin.macro';
 import Comment from './Comment';
 
-const Replies = ({ replies }) => {
+const Replies = ({ replies, parentComment }) => {
   return (
     <Wrapper>
-      {replies && replies.map((reply, i) => <Comment key={i} comment={reply} isReply={true} />)}
+      {replies.map((reply, i) => (
+        <Comment key={i} comment={reply} replies={null} parentCommentIfReply={parentComment} />
+      ))}
     </Wrapper>
   );
 };

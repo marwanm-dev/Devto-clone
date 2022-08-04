@@ -10,11 +10,12 @@ const getCommentsByPost = async (req, res) => {
 };
 
 const postComment = async (req, res) => {
-  const { body, author, parentPost } = req.body;
+  const { body, author, parentPost, parentComment } = req.body;
 
   const comment = await Comment.create({
     body,
-    parentPost: parentPost,
+    parentPost,
+    parentComment,
     author,
     date: new Date().toLocaleDateString('en-us', {
       year: 'numeric',
@@ -56,16 +57,32 @@ const updateComment = async (req, res) => {
 };
 
 const deleteComment = async (req, res) => {
-  const { commentId } = req.params;
+  const { commentId: commentIdToDelete } = req.params;
 
-  const comment = await Comment.findByIdAndDelete(commentId)
-    .populate('author')
-    .populate('parentPost');
+  const comment = await Comment.findByIdAndDelete(commentIdToDelete);
 
-  comment.author.comments.pull(comment);
-  comment.parentPost.comments.pull(comment);
-  await comment.author.save();
-  await comment.parentPost.save();
+  const post = await Post.findById(comment.parentPost).exec();
+  post.comments.pull(commentIdToDelete);
+  await post.save();
+
+  const user = await User.findById(comment.author).exec();
+  user.comments.pull(commentIdToDelete);
+  await user.save();
+
+  const replies = await Comment.find({ parentComment: comment._id });
+
+  replies.forEach(reply => {
+    (async () => {
+      post.comments.pull(reply._id);
+      await post.save();
+
+      const user = await User.findById(reply.author).exec();
+      user.comments.pull(reply._id);
+      await user.save();
+    })();
+  });
+
+  await Comment.deleteMany({ parentComment: comment._id });
 
   res.status(200).json(comment);
 };
@@ -87,4 +104,10 @@ const commentReaction = async (req, res) => {
   res.status(200).json(updatedComment);
 };
 
-module.exports = { getCommentsByPost, postComment, updateComment, deleteComment, commentReaction };
+module.exports = {
+  getCommentsByPost,
+  postComment,
+  updateComment,
+  deleteComment,
+  commentReaction,
+};

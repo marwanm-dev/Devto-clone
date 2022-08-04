@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import tw, { styled } from 'twin.macro';
 import LoadingSpinner from '../../../common/LoadingSpinner';
@@ -17,10 +17,19 @@ const Comments = ({ postId }) => {
   const { data: comments, isLoading } = useGetCommentsQuery(postId, {
     refetchOnMountOrArgChange: true,
   });
+  const rootComments =
+    comments && comments.filter(comment => !comment.parentComment).sort((a, b) => b.date > a.date);
+  const replies =
+    comments && comments.filter(comment => comment.parentComment).sort((a, b) => b.date < a.date);
+
   const [body, setBody] = useState('');
   const [postComment] = usePostCommentMutation();
   const currentUser = useSelector(selectCurrentUser);
   const token = useSelector(selectCurrentToken);
+
+  useEffect(() => {
+    console.log(comments);
+  }, [comments]);
 
   const handleNewComment = () => {
     if (!token) setAuthModal(true);
@@ -38,7 +47,7 @@ const Comments = ({ postId }) => {
   return (
     <Wrapper>
       <CommentContainer>
-        <Heading>Discussion ({comments.length} comments)</Heading>
+        <Heading>Discussion ({comments?.length} comments)</Heading>
         {token && (
           <AddToDiscussion>
             <Avatar src={currentUser.picture.url} />
@@ -49,7 +58,14 @@ const Comments = ({ postId }) => {
           </AddToDiscussion>
         )}
         {isLoading && <LoadingSpinner />}
-        {!isLoading && comments.map(comment => <Comment key={comment._id} comment={comment} />)}
+        {!isLoading &&
+          rootComments.map(comment => (
+            <Comment
+              key={comment._id}
+              comment={comment}
+              replies={replies.filter(reply => reply.parentComment === comment._id)}
+            />
+          ))}
       </CommentContainer>
     </Wrapper>
   );

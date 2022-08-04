@@ -1,10 +1,12 @@
-import tw from 'twin.macro';
+import { useState } from 'react';
+import { FaRegComment } from 'react-icons/fa';
+import tw, { styled } from 'twin.macro';
 
-const ReplyComment = ({ handleReply }) => {
+const ReplyComment = ({ isReplying, toggleIsReplying }) => {
   return (
-    <ReactionContainer onClick={handleReply}>
+    <ReactionContainer onClick={toggleIsReplying}>
       <FaRegComment />
-      <Text>Reply</Text>
+      <Text>{isReplying ? 'Cancel' : 'Reply'}</Text>
     </ReactionContainer>
   );
 };

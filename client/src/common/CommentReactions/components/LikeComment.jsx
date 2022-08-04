@@ -1,5 +1,5 @@
+import { AiFillHeart, AiOutlineHeart } from 'react-icons/ai';
 import tw, { styled } from 'twin.macro';
-import { AiOutlineHeart, AiFillHeart } from 'react-icons/ai';
 
 const LikeComment = ({ handleLike, likes, isLiked }) => {
   return (
@@ -15,7 +15,7 @@ const HeartIcon = styled.div`
 `;
 
 const ReactionContainer = styled.div`
-  ${tw`cursor-pointer rounded-md py-1 px-2 hover:bg-lighter-gray flex items-center gap-2 text-2xl`}
+  ${tw`rounded-md py-1 px-2 flex items-center gap-2 text-2xl cursor-pointer hover:bg-lighter-gray`}
   ${({ isLiked }) => isLiked && tw`bg-heart-bg hover:bg-heart-bg`}
 `;
 

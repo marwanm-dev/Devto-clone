@@ -4,7 +4,6 @@ const commentsApiSlice = apiSlice.injectEndpoints({
   endpoints: builder => ({
     getComments: builder.query({
       query: postId => `/comments/${postId}`,
-      transformResponse: response => response.sort((a, b) => (a.date < b.date ? 1 : -1)),
       providesTags: (result, err, args) =>
         result
           ? [

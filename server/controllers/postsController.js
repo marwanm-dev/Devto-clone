@@ -1,5 +1,6 @@
 const Post = require('../model/Post');
 const User = require('../model/User');
+const Comment = require('../model/Comment');
 const cloudinary = require('../config/cloudinary');
 const { uploadToCloudinary } = require('../utils/cloudinary');
 const { getPostParams, unCapitalizeFirstLetter } = require('../helpers/string');
@@ -106,17 +107,24 @@ const deletePost = async (req, res) => {
 
   await cloudinary.uploader.destroy(req.body.publicId);
 
-  const foundPost = await Post.findOneAndDelete({
+  const foundPost = await Post.findOne({
     author: author._id,
     title: postTitle,
     _id: postId,
   });
-  console.log(author.posts);
-  author.posts.pull(foundPost);
-  await author.save();
-  console.log(author.posts);
 
-  if (!foundPost) res.status(204);
+  if (!foundPost) return res.sendStatus(204);
+
+  const comments = await Comment.find({ parentPost: postId }).populate('author');
+
+  comments.forEach(({ author }) =>
+    (async () => author.comments.forEach(comment => author.comments.pull(comment)))()
+  );
+  author.posts.pull(postId);
+  await author.save();
+
+  await Comment.deleteMany({ parentPost: postId });
+  await Post.deleteOne(foundPost);
 
   res.status(200).json(foundPost);
 };

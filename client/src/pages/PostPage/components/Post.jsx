@@ -1,10 +1,10 @@
+import ReactMarkdown from 'react-markdown';
+import { useNavigate } from 'react-router-dom';
 import tw, { styled } from 'twin.macro';
+import AuthorDetails from '../../../common/AuthorDetails';
+import SyntaxHighlight from '../../../common/SyntaxHighlight';
 import Tags from '../../../common/Tags';
 import Comments from './Comments';
-import AuthorDetails from '../../../common/AuthorDetails';
-import { useNavigate } from 'react-router-dom';
-import ReactMarkdown from 'react-markdown';
-import SyntaxHighlight from '../../../common/SyntaxHighlight';
 
 const Post = ({ post, isLaptop }) => {
   const navigate = useNavigate();

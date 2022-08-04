@@ -1,13 +1,13 @@
-import tw, { theme } from 'twin.macro';
 import { useParams } from 'react-router-dom';
-import RouteWrapper from '../../common/RouteWrapper';
-import NotFound from '../../common/NotFound';
-import useBreakpoint from '../../hooks/useBreakpoint';
-import Reactions from './components/Reactions';
-import Post from './components/Post';
+import tw, { theme } from 'twin.macro';
 import AuthorDetails from '../../common/AuthorDetails';
 import LoadingSpinner from '../../common/LoadingSpinner';
+import NotFound from '../../common/NotFound';
+import RouteWrapper from '../../common/RouteWrapper';
 import { useGetPostQuery } from '../../core/features/posts/postsApiSlice';
+import useBreakpoint from '../../hooks/useBreakpoint';
+import Post from './components/Post';
+import Reactions from './components/Reactions';
 
 const PostPage = () => {
   const isLaptop = useBreakpoint(theme`screens.lap.max`.replace('px', ''));

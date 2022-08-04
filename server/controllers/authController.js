@@ -4,10 +4,10 @@ const jwt = require('jsonwebtoken');
 
 const handleLogin = async (req, res) => {
   const { email, pwd } = req.body;
-  if (!email || !pwd) return res.sendStatus('Something is missing');
+  if (!email || !pwd) return res.status('Something is missing');
 
   const foundUser = await User.findOne({ email }).exec();
-  if (!foundUser) return res.sendStatus(401).json({ message: 'Unauthorized' });
+  if (!foundUser) return res.status(401).json({ message: 'Unauthorized' });
 
   const match = await bcrypt.compare(pwd, foundUser.password);
 

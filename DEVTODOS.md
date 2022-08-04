@@ -4,4 +4,8 @@ _NEEDS FIX_
 
 _NEEDS FINISHING_
 
-Posts reactions system (integration with socket.io)
+Searching system
+
+Tags system (front(colored)/back(schema + controller))
+
+Notifications system (front/back(socket.io + schema + controller))
