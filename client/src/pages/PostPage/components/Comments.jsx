@@ -27,10 +27,6 @@ const Comments = ({ postId }) => {
   const currentUser = useSelector(selectCurrentUser);
   const token = useSelector(selectCurrentToken);
 
-  useEffect(() => {
-    console.log(comments);
-  }, [comments]);
-
   const handleNewComment = () => {
     if (!token) setAuthModal(true);
     if (body) {

@@ -63,26 +63,26 @@ const deleteComment = async (req, res) => {
 
   const post = await Post.findById(comment.parentPost).exec();
   post.comments.pull(commentIdToDelete);
-  await post.save();
 
   const user = await User.findById(comment.author).exec();
   user.comments.pull(commentIdToDelete);
-  await user.save();
 
   const replies = await Comment.find({ parentComment: comment._id });
 
-  replies.forEach(reply => {
-    (async () => {
-      post.comments.pull(reply._id);
-      await post.save();
+  if (replies) {
+    replies.forEach(reply => {
+      (async () => {
+        post.comments.pull(reply._id);
 
-      const user = await User.findById(reply.author).exec();
-      user.comments.pull(reply._id);
-      await user.save();
-    })();
-  });
+        const user = await User.findById(reply.author).exec();
+        user.comments.pull(reply._id);
+      })();
+    });
+    await Comment.deleteMany({ parentComment: comment._id });
+  }
 
-  await Comment.deleteMany({ parentComment: comment._id });
+  await post.save();
+  await user.save();
 
   res.status(200).json(comment);
 };

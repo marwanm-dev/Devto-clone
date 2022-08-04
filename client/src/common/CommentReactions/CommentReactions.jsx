@@ -23,6 +23,7 @@ const CommentReactions = ({
   replyBody,
   isReplying,
   submittedReply,
+  setSubmittedReply,
   toggleIsReplying,
 }) => {
   const likesArr = likes && [...likes];
@@ -65,6 +66,7 @@ const CommentReactions = ({
   useEffect(() => {
     if (submittedReply) {
       handleReply();
+      setSubmittedReply(false);
     }
   }, [submittedReply]);
 

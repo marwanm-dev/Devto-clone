@@ -1,15 +1,13 @@
 import tw, { styled } from 'twin.macro';
-import useInput from '../../../hooks/useInput';
+import useSearchInput from '../../../hooks/useSearchInput';
 
 const Search = () => {
-  const { searchAttrs } = useInput('search', '');
+  const { searchAttrs } = useSearchInput();
 
   return <Input {...searchAttrs} />;
 };
 
-const Input = styled.input.attrs({
-  placeholder: 'Search...',
-})`
+const Input = styled.input`
   ${tw`border border-solid text-black border-gray max-w-search w-full p-2 rounded-md outline-none focus:(border-blue)`}
 `;
 

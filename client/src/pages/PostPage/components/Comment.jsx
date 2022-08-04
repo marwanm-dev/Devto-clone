@@ -13,6 +13,7 @@ const Comment = ({ comment, replies, parentCommentIfReply = null }) => {
   const [isFocused, setIsFocused] = useState(false);
   const [textareaHeight, setTextareaHeight] = useState();
   const textareaRef = useRef(null);
+  const replyRef = useRef(null);
   const [isReplying, toggleIsReplying] = useToggle(false);
   const [submittedReply, setSubmittedReply] = useState(false);
   const [replyBody, setReplyBody] = useState('');
@@ -32,6 +33,10 @@ const Comment = ({ comment, replies, parentCommentIfReply = null }) => {
   useEffect(() => {
     if (isFocused) textareaRef.current.focus();
   }, [isFocused]);
+
+  useEffect(() => {
+    if (isReplying) replyRef.current.focus();
+  }, [isReplying]);
 
   useEffect(() => {
     handleTextareaHeight();
@@ -67,6 +72,7 @@ const Comment = ({ comment, replies, parentCommentIfReply = null }) => {
             toggleIsReplying={toggleIsReplying}
             replyBody={replyBody}
             isReplying={isReplying}
+            setSubmittedReply={setSubmittedReply}
             submittedReply={submittedReply}
           />
           {comment.author?.username === currentUser.username && (
@@ -82,7 +88,11 @@ const Comment = ({ comment, replies, parentCommentIfReply = null }) => {
         {isReplying && (
           <AddToDiscussion>
             <AddReply>
-              <Input value={replyBody} onChange={e => setReplyBody(e.target.value)} />
+              <Input
+                ref={replyRef}
+                value={replyBody}
+                onChange={e => setReplyBody(e.target.value)}
+              />
               <Submit onClick={() => setSubmittedReply(true)}>Submit</Submit>
             </AddReply>
           </AddToDiscussion>

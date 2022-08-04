@@ -57,7 +57,7 @@ const getPost = async (req, res) => {
 };
 
 const getPosts = async (req, res) => {
-  const posts = await Post.find({}).populate('author');
+  const posts = await Post.find({}).sort({ date: -1 }).populate('author');
   if (!posts) res.status(204).json('No posts found');
 
   res.status(200).json(posts);
@@ -83,7 +83,6 @@ const updatePost = async (req, res) => {
     day: 'numeric',
     hour: 'numeric',
     minute: 'numeric',
-    second: 'numeric',
   });
 
   const updatedPost = await Post.findOneAndUpdate(
@@ -118,7 +117,10 @@ const deletePost = async (req, res) => {
   const comments = await Comment.find({ parentPost: postId }).populate('author');
 
   comments.forEach(({ author }) =>
-    (async () => author.comments.forEach(comment => author.comments.pull(comment)))()
+    (async () => {
+      author.comments.forEach(comment => author.comments.pull(comment));
+      await author.save();
+    })()
   );
   author.posts.pull(postId);
   await author.save();

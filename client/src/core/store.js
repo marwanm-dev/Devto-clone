@@ -1,17 +1,18 @@
-import { configureStore, combineReducers } from '@reduxjs/toolkit';
+import { combineReducers, configureStore } from '@reduxjs/toolkit';
 import {
-  persistStore,
-  persistReducer,
   FLUSH,
-  REHYDRATE,
   PAUSE,
   PERSIST,
+  persistReducer,
+  persistStore,
   PURGE,
   REGISTER,
+  REHYDRATE,
 } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
 import apiSlice from './features/api/apiSlice';
 import authReducer from './features/auth/authSlice';
+import searchReducer from './features/search/searchSlice';
 
 const persistConfig = {
   key: 'root',
@@ -22,6 +23,7 @@ const persistConfig = {
 const rootReducer = combineReducers({
   [apiSlice.reducerPath]: apiSlice.reducer,
   auth: authReducer,
+  search: searchReducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
