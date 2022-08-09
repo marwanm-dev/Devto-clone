@@ -1,34 +1,44 @@
 import { nanoid } from '@reduxjs/toolkit';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useParams } from 'react-router-dom';
 import tw from 'twin.macro';
 import { useGetPostsQuery } from '../../core/features/posts/postsApiSlice';
-import { reset, selectSearchValue, setPlaceholder } from '../../core/features/search/searchSlice';
+import { selectSearchValue } from '../../core/features/search/searchSlice';
+import usePlaceholder from '../../hooks/usePlaceholder';
 import LoadingSpinner from '../LoadingSpinner';
 import Post from './components/Post';
 
-const PostsList = () => {
+const PostsList = ({ tagname = null }) => {
   const dispatch = useDispatch();
   const searchValue = useSelector(selectSearchValue);
-  const { data: posts, isLoading } = useGetPostsQuery([], { refetchOnMountOrArgChange: true });
-  const filteredPosts =
-    posts && searchValue ? posts.filter(post => post.title.includes(searchValue)) : posts;
+  const { data: posts, isLoading } = useGetPostsQuery([null], {
+    refetchOnMountOrArgChange: true,
+  });
+  const [filteredPosts, setFilteredPosts] = useState(posts);
+  usePlaceholder('posts by title');
 
   useEffect(() => {
-    dispatch(setPlaceholder('Search posts by title..'));
-    dispatch(reset());
-  }, []);
-
-  useEffect(() => {
-    console.log(searchValue);
-  }, [searchValue]);
+    setFilteredPosts(
+      searchValue && !tagname
+        ? posts?.filter(post => post.title.includes(searchValue))
+        : !searchValue && tagname
+        ? posts?.filter(post => post.tags.some(tag => tag.name === tagname))
+        : posts
+    );
+  }, [searchValue, tagname]);
 
   return (
     <Wrapper>
       {isLoading && <LoadingSpinner />}
       {!isLoading && filteredPosts?.length > 0 ? (
         filteredPosts.map((post, i) => (
-          <Post post={post} isFirstPost={i === 0 ? true : false} key={nanoid()} />
+          <Post
+            post={post}
+            isFirstPost={i === 0 ? true : false}
+            filteredTag={tagname}
+            key={nanoid()}
+          />
         ))
       ) : (
         <p>No posts to display</p>
@@ -36,7 +46,6 @@ const PostsList = () => {
     </Wrapper>
   );
 };
-
 const Wrapper = tw.div`w-full`;
 
 export default PostsList;

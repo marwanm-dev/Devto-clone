@@ -1,34 +1,33 @@
-import { useEffect, useState } from 'react';
-import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
-import { Provider, useSelector } from 'react-redux';
-import { AnimatePresence } from 'framer-motion';
 import { Auth0Provider } from '@auth0/auth0-react';
+import { AnimatePresence } from 'framer-motion';
+import { useEffect, useState } from 'react';
+import { Provider, useSelector } from 'react-redux';
+import { BrowserRouter as Router, Route, Routes, useLocation } from 'react-router-dom';
 
 // Store
 import { PersistGate } from 'redux-persist/integration/react';
-import { persistor } from '../core/store';
-import store from '../core/store';
+import store, { persistor } from '../core/store';
 
 // Pages
-import Home from '../pages/Home';
-import PostPage from '../pages/PostPage';
-import NewPost from '../pages/NewPost';
-import EditPost from '../pages/EditPost';
-import Tags from '../pages/Tags';
-import Tag from '../pages/Tag';
-import FAQ from '../pages/FAQ';
 import About from '../pages/About';
-import Contact from '../pages/Contact';
-import Profile from '../pages/Profile';
-import EditProfile from '../pages/EditProfile';
-import Notifications from '../pages/Notifications';
-import Dashboard from '../pages/Dashboard';
-import ReadingList from '../pages/ReadingList';
-import Login from '../pages/Login';
-import Confirmation from '../pages/Confirmation';
-import SignUp from '../pages/SignUp';
 import CodeOfConduct from '../pages/CodeOfConduct';
+import Confirmation from '../pages/Confirmation';
+import Contact from '../pages/Contact';
+import Dashboard from '../pages/Dashboard';
+import EditPost from '../pages/EditPost';
+import EditProfile from '../pages/EditProfile';
+import FAQ from '../pages/FAQ';
+import Home from '../pages/Home';
+import Login from '../pages/Login';
+import NewPost from '../pages/NewPost';
+import Notifications from '../pages/Notifications';
+import PostPage from '../pages/PostPage';
 import PrivacyPolicy from '../pages/PrivacyPolicy';
+import Profile from '../pages/Profile';
+import ReadingList from '../pages/ReadingList';
+import SignUp from '../pages/SignUp';
+import Tag from '../pages/Tag';
+import Tags from '../pages/Tags';
 import TermsOfUse from '../pages/TermsOfUse';
 
 // Components
@@ -53,7 +52,7 @@ const AnimatedRoutes = () => {
 
           <Route path='tags'>
             <Route index element={<Tags />} />
-            <Route path=':tagname' element={<Tag />} />
+            <Route path=':name' element={<Tag />} />
             <Route path='*' element={<NotFound />} />
           </Route>
 

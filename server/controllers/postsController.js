@@ -1,9 +1,11 @@
 const Post = require('../model/Post');
 const User = require('../model/User');
+const Tag = require('../model/Tag');
 const Comment = require('../model/Comment');
 const cloudinary = require('../config/cloudinary');
 const { uploadToCloudinary } = require('../utils/cloudinary');
 const { getPostParams, unCapitalizeFirstLetter } = require('../helpers/string');
+const { createTags, updateTags, deleteTags } = require('./tagsController');
 
 const createPost = async (req, res) => {
   const { title, file, body, tags, authorUsername } = req.body;
@@ -16,12 +18,11 @@ const createPost = async (req, res) => {
     .split(',')
     .map(w => w.trim().replace(/ /g, '-'));
 
-  const post = await Post.create({
+  const createdPost = await Post.create({
     title,
     image: { url, publicId },
     body,
     author: author._id,
-    tags: formattedTags,
     date: new Date().toLocaleDateString('en-us', {
       year: 'numeric',
       month: 'short',
@@ -32,11 +33,13 @@ const createPost = async (req, res) => {
     }),
   });
 
-  author.posts.push(post._id);
+  await createTags(formattedTags, createdPost);
+
+  author.posts.push(createdPost._id);
 
   await author.save();
 
-  res.status(200).json(post);
+  res.status(200).json(createdPost);
 };
 
 const getPost = async (req, res) => {
@@ -51,13 +54,14 @@ const getPost = async (req, res) => {
   })
     .populate('author')
     .populate('comments')
+    .populate('tags')
     .exec();
 
   res.status(200).json(foundPost);
 };
 
 const getPosts = async (req, res) => {
-  const posts = await Post.find({}).sort({ date: -1 }).populate('author');
+  const posts = await Post.find({}).sort({ date: -1 }).populate('author').populate('tags');
   if (!posts) res.status(204).json('No posts found');
 
   res.status(200).json(posts);
@@ -72,10 +76,12 @@ const updatePost = async (req, res) => {
   await cloudinary.uploader.destroy(req.body.image.publicId);
 
   req.body.image = { url, publicId };
-  req.body.tags = req.body.tags
+  const formattedTags = req.body.tags
     .trim()
     .split(',')
     .map(w => w.trim().replace(/ /g, '-'));
+  req.body.tags = [];
+
   req.body.date = new Date().toLocaleDateString('en-us', {
     year: 'numeric',
     month: 'short',
@@ -91,11 +97,13 @@ const updatePost = async (req, res) => {
       title: postTitle,
       _id: postId,
     },
-    { ...req.body },
-    { new: true }
+    { ...req.body }
   )
     .populate('author')
+    .populate('tags')
     .exec();
+
+  await updateTags(formattedTags, updatedPost);
 
   res.status(200).json(updatedPost);
 };
@@ -110,7 +118,9 @@ const deletePost = async (req, res) => {
     author: author._id,
     title: postTitle,
     _id: postId,
-  });
+  })
+    .populate('tags')
+    .exec();
 
   if (!foundPost) return res.sendStatus(204);
 
@@ -119,14 +129,20 @@ const deletePost = async (req, res) => {
   comments.forEach(({ author }) =>
     (async () => {
       author.comments.forEach(comment => author.comments.pull(comment));
-      await author.save();
     })()
   );
   author.posts.pull(postId);
   await author.save();
 
   await Comment.deleteMany({ parentPost: postId });
-  await Post.deleteOne(foundPost);
+
+  await deleteTags(
+    foundPost.tags.map(({ name }) => name),
+    foundPost,
+    true
+  );
+
+  await Post.deleteOne({ _id: foundPost._id });
 
   res.status(200).json(foundPost);
 };

@@ -1,14 +1,25 @@
+import { nanoid } from '@reduxjs/toolkit';
+import { Link, useNavigate } from 'react-router-dom';
 import tw, { styled } from 'twin.macro';
-import { Link } from 'react-router-dom';
 
-const Tag = () => {
+const Tag = ({ tag }) => {
+  const navigate = useNavigate();
+
   return (
     <Wrapper>
-      <Link to='tags/:tagName'>
-        <TagName>#news</TagName>
+      <Link to={`tags/${tag.name}`}>
+        <TagName>#{tag.name}</TagName>
       </Link>
-      <PostAttached>What's new in ES2022? 🤔</PostAttached>
-      <PostAttached>What are your favorite features in ES2022?</PostAttached>
+      {tag.posts.slice(0, 5).map(post => (
+        <PostWrapper
+          key={nanoid()}
+          onClick={() =>
+            navigate(`/${post.author.username}/${post.title.replace(/\ /g, '+')}-${post._id}`)
+          }>
+          <Title>{post.title}</Title>
+          <NumOfComments>{post.comments.length} comments</NumOfComments>
+        </PostWrapper>
+      ))}
     </Wrapper>
   );
 };
@@ -16,12 +27,16 @@ const Tag = () => {
 const Wrapper = styled.div`
   ${tw`rounded-md`}
   *:not(a) {
-    ${tw`p-3 border-lighter-gray border-b hover:text-blue cursor-pointer`}
+    ${tw`p-3 hover:text-blue cursor-pointer`}
   }
 `;
 
-const TagName = tw.h2`pb-10 bg-lightest-gray border-b`;
+const TagName = tw.h2`pb-10 bg-lightest-gray border-lighter-gray border-b`;
 
-const PostAttached = tw.h4`py-3 bg-lightest-gray hover:bg-white`;
+const Title = tw.h4`bg-lightest-gray hover:bg-white`;
+
+const PostWrapper = tw.div`py-3 bg-lightest-gray hover:bg-white border-lighter-gray border-b`;
+
+const NumOfComments = tw.h4`p-0 bg-lightest-gray hover:bg-white`;
 
 export default Tag;

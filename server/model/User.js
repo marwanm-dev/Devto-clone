@@ -25,6 +25,12 @@ const UserSchema = new Schema({
   skills: { type: String, default: '' },
   posts: [{ type: mongoose.Types.ObjectId, ref: 'Post' }],
   comments: [{ type: mongoose.Types.ObjectId, ref: 'Comment' }],
+  /*
+  following: [{ type: mongoose.Types.ObjectId, ref: 'User' }],
+  followers: [{ type: mongoose.Types.ObjectId, ref: 'User' }],
+  followedTags: [{ type: mongoose.Types.ObjectId, ref: 'Tag' }],
+  bookmarks: [{ type: mongoose.Types.ObjectId, ref: 'Post' }],
+  */
   refreshToken: { type: String, default: '' },
 });
 

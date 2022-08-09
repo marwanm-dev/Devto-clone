@@ -51,6 +51,7 @@ app.use('/refresh', require('./routes/refresh'));
 app.use('/users', require('./routes/users'));
 app.use('/posts', require('./routes/posts'));
 app.use('/comments', require('./routes/comments'));
+app.use('/tags', require('./routes/tags'));
 
 //* Users/Posts/Comments all CRUD operations need a verifyJWT middleware except Read operation
 

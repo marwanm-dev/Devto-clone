@@ -1,31 +1,52 @@
-import tw, { styled } from 'twin.macro';
-import RouteWrapper from '../../common/RouteWrapper';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
+import tw, { styled } from 'twin.macro';
+import LoadingSpinner from '../../common/LoadingSpinner';
 import PostsList from '../../common/PostsList';
+import RouteWrapper from '../../common/RouteWrapper';
+import { useGetTagByNameQuery } from '../../core/features/tags/tagsApiSlice';
+
 const Tag = () => {
   const [isFollowed, setIsFollowed] = useState(false);
-  const { tagname } = useParams();
+  const { name } = useParams();
+  const { data: tag, isLoading } = useGetTagByNameQuery(name, {
+    refetchOnMountOrArgChange: true,
+  });
 
   return (
     <RouteWrapper>
-      <CurrentTag>
-        <Bg />
-        <Title>#{tagname}</Title>
-        <Button isFollowed={isFollowed} onClick={() => setIsFollowed(!isFollowed)}>
-          {isFollowed ? 'Following' : 'Follow'}
-        </Button>
-      </CurrentTag>
-      <Wrapper>
-        <PostsList />
-      </Wrapper>
+      {isLoading && <LoadingSpinner />}
+      {!isLoading && tag && (
+        <>
+          <CurrentTag>
+            <Bg color={tag.hashtagColor} />
+            <Title>
+              <Hashtag color={tag.hashtagColor}>#</Hashtag>
+              {tag.name}
+            </Title>
+            <Button isFollowed={isFollowed} onClick={() => setIsFollowed(!isFollowed)}>
+              {isFollowed ? 'Following' : 'Follow'}
+            </Button>
+          </CurrentTag>
+          <Wrapper>
+            <PostsList tagname={name} />
+          </Wrapper>
+        </>
+      )}
     </RouteWrapper>
   );
 };
 
-const Bg = tw.div`bg-black w-full h-4 absolute top-0 left-0`;
+const Bg = styled.div`
+  ${tw`bg-black w-full h-4 absolute top-0 left-0`}
+  background: ${({ color }) => color}; ;
+`;
 
-const Title = tw.h2`cursor-pointer`;
+const Title = tw.h2`px-2 py-1 rounded-md w-max`;
+
+const Hashtag = styled.span`
+  color: ${({ color }) => color};
+`;
 
 const Button = styled.button`
   ${tw`border-2 border-solid border-transparent max-w-lg rounded-md text-white bg-blue px-2 py-1 text-sm font-semibold`}

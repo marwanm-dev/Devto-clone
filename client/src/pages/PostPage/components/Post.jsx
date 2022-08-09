@@ -24,7 +24,7 @@ const Post = ({ post, isLaptop }) => {
           </AuthorMeta>
         </Header>
         <Title>{post.title}</Title>
-        <Tags tags={post.tags} />
+        <Tags tags={post.tags} isColored={true} />
         <PostBody>
           <ReactMarkdown children={post.body} components={SyntaxHighlight} />
         </PostBody>

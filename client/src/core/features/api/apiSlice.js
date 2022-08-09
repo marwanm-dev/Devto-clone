@@ -1,7 +1,6 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { setAuthModal, setToken } from '../auth/authSlice';
-import { logout } from '../auth/authSlice';
 import { persistor } from '../../store';
+import { logout, setAuthModal, setToken } from '../auth/authSlice';
 
 const baseQuery = fetchBaseQuery({
   baseUrl: 'http://localhost:5000',

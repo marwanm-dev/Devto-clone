@@ -1,11 +1,12 @@
-import tw, { styled } from 'twin.macro';
 import { AiOutlineHeart } from 'react-icons/ai';
 import { MdOutlineModeComment } from 'react-icons/md';
 import { useNavigate } from 'react-router-dom';
-import Tags from '../../Tags';
+import tw, { styled } from 'twin.macro';
 import { createPostUrl } from '../../../helpers/string';
+import { calcReadingTime } from '../../../helpers/utils';
+import Tags from '../../Tags';
 
-const Post = ({ post, isFirstPost }) => {
+const Post = ({ post, isFirstPost, filteredTag }) => {
   const navigate = useNavigate();
 
   return (
@@ -33,7 +34,7 @@ const Post = ({ post, isFirstPost }) => {
             }>
             {post.title}
           </Title>
-          <Tags tags={post.tags} />
+          <Tags tags={post.tags} filteredTag={filteredTag} />
           <Footer>
             <Reactions
               onClick={() =>
@@ -51,11 +52,11 @@ const Post = ({ post, isFirstPost }) => {
                 <CommentIcon>
                   <MdOutlineModeComment />
                 </CommentIcon>
-                <Total>{post.comments.length} comments</Total>
+                <Total>{post.comments?.length} comments</Total>
               </SumOfComments>
             </Reactions>
             <Other>
-              <MinutesRead>1 min read</MinutesRead>
+              <MinutesRead>{calcReadingTime(post.body)}</MinutesRead>
               <SaveButton>Save</SaveButton>
             </Other>
           </Footer>
@@ -95,7 +96,6 @@ const CommentIcon = styled.div`
 const Total = tw.p``;
 const Other = tw.div`flex justify-between items-center gap-2`;
 const MinutesRead = tw.p`text-darker-gray`;
-// Todo onClick save if not authed onClick={() => setShowModal(true)}
 const SaveButton = tw.button`px-2 py-1 bg-light-gray hover:bg-gray rounded-md`;
 const Wrapper = tw.div`rounded-md w-full overflow-hidden bg-white mb-2`;
 

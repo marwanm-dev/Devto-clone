@@ -1,1 +1,18 @@
-// getRandom color, getReplies, getReading time
+export const calcReadingTime = body => {
+  const minWpm = 200;
+  const maxWpm = 250;
+  const words = body.trim().split(/\s+/).length;
+  const minEstimated = words / minWpm;
+  const maxEstimated = words / maxWpm;
+  return `${Math.floor((minEstimated + maxEstimated) / 2)} min read`;
+};
+
+export const decreaseOpacity = color => {
+  if (color) {
+    const lessOpacityValue = 0.15;
+    const currentOpacity = color.lastIndexOf(color.substring(color.length - 2, color.length - 1));
+    const lessOpacityColor =
+      color.substring(0, currentOpacity) + lessOpacityValue + color.substring(currentOpacity + 1);
+    return lessOpacityColor;
+  } else return color;
+};

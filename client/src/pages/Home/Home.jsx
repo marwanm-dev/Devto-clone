@@ -1,9 +1,9 @@
 import tw, { theme } from 'twin.macro';
-import RouteWrapper from '../../common/RouteWrapper';
-import Resources from '../../common/Resources';
 import PostsList from '../../common/PostsList';
-import Tags from './components/Tags';
+import Resources from '../../common/Resources';
+import RouteWrapper from '../../common/RouteWrapper';
 import useBreakpoint from '../../hooks/useBreakpoint';
+import Tags from './components/Tags';
 
 const Home = () => {
   const isMobile = useBreakpoint(theme`screens.mob.max`.replace('px', ''));

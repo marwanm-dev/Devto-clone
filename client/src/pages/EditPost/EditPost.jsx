@@ -1,22 +1,24 @@
-import { useState, useRef, useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import 'easymde/dist/easymde.min.css';
+import { useEffect, useRef, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
-import tw from 'twin.macro';
 import SimpleMDE from 'react-simplemde-editor';
-import RouteWrapper from '../../common/RouteWrapper';
+import tw from 'twin.macro';
+import Error from '../../common/Error';
 import LoadingSpinner from '../../common/LoadingSpinner';
 import NotFound from '../../common/NotFound';
-import Error from '../../common/Error';
-import useBase64 from '../../hooks/useBase64';
-import 'easymde/dist/easymde.min.css';
-import { useUpdatePostMutation } from '../../core/features/posts/postsApiSlice';
-import { useDeletePostMutation } from '../../core/features/posts/postsApiSlice';
+import RouteWrapper from '../../common/RouteWrapper';
 import {
-  selectCurrentUser,
   selectCurrentToken,
+  selectCurrentUser,
   setAuthModal,
 } from '../../core/features/auth/authSlice';
-import { useGetPostQuery } from '../../core/features/posts/postsApiSlice';
+import {
+  useDeletePostMutation,
+  useGetPostQuery,
+  useUpdatePostMutation,
+} from '../../core/features/posts/postsApiSlice';
+import useBase64 from '../../hooks/useBase64';
 
 const EditPost = () => {
   const currentUser = useSelector(selectCurrentUser);
@@ -33,7 +35,8 @@ const EditPost = () => {
   const [title, setTitle] = useState(post?.title);
   const [file, setFile] = useState(post?.image?.url);
   const [body, setBody] = useState(post?.body);
-  const [tags, setTags] = useState(post?.tags.toString());
+  const [tags, setTags] = useState(post.tags.map(tag => tag.name).join(', '));
+
   const [isTagsFocused, setIsTagsFocused] = useState(false);
   const [inputsFilled, setInputsFilled] = useState(false);
 
