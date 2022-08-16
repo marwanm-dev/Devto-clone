@@ -7,9 +7,8 @@ export const calcReadingTime = body => {
   return `${Math.floor((minEstimated + maxEstimated) / 2)} min read`;
 };
 
-export const decreaseOpacity = color => {
+export const decreaseOpacity = (color, lessOpacityValue = 0.15) => {
   if (color) {
-    const lessOpacityValue = 0.15;
     const currentOpacity = color.lastIndexOf(color.substring(color.length - 2, color.length - 1));
     const lessOpacityColor =
       color.substring(0, currentOpacity) + lessOpacityValue + color.substring(currentOpacity + 1);

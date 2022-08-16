@@ -35,7 +35,7 @@ const EditPost = () => {
   const [title, setTitle] = useState(post?.title);
   const [file, setFile] = useState(post?.image?.url);
   const [body, setBody] = useState(post?.body);
-  const [tags, setTags] = useState(post.tags.map(tag => tag.name).join(', '));
+  const [tags, setTags] = useState(post?.tags.map(tag => tag.name).join(', '));
 
   const [isTagsFocused, setIsTagsFocused] = useState(false);
   const [inputsFilled, setInputsFilled] = useState(false);

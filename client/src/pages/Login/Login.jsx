@@ -1,14 +1,14 @@
-import tw from 'twin.macro';
-import { useState, useEffect, useRef } from 'react';
 import jwt from 'jwt-decode';
-import { useNavigate } from 'react-router-dom';
+import { useEffect, useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import RouteWrapper from '../../common/RouteWrapper';
-import LoadingSpinner from '../../common/LoadingSpinner';
+import { useNavigate } from 'react-router-dom';
+import tw from 'twin.macro';
+import Auth0 from '../../common/Auth0';
 import Error from '../../common/Error';
+import LoadingSpinner from '../../common/LoadingSpinner';
+import RouteWrapper from '../../common/RouteWrapper';
 import { useLoginMutation } from '../../core/features/auth/authApiSlice';
 import { setCredentials, setToken } from '../../core/features/auth/authSlice';
-import Auth0 from '../../common/Auth0';
 
 const Login = () => {
   const navigate = useNavigate();
@@ -50,7 +50,7 @@ const Login = () => {
           work: payload.work,
           availableFor: payload.availableFor,
           skills: payload.skills,
-          joinDate: payload.joinDate,
+          createdAt: payload.createdAt,
         })
       );
       dispatch(setToken(payload.token));

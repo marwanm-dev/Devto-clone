@@ -1,20 +1,35 @@
-import tw, { styled } from 'twin.macro';
 import { useEffect } from 'react';
+import { CgNotes } from 'react-icons/cg';
+import { FaBirthdayCake, FaHashtag, FaRegComment } from 'react-icons/fa';
+import { HiLocationMarker } from 'react-icons/hi';
 import { useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
-import { HiLocationMarker } from 'react-icons/hi';
-import { FaBirthdayCake, FaRegComment, FaHashtag } from 'react-icons/fa';
-import { CgNotes } from 'react-icons/cg';
-import RouteWrapper from '../../common/RouteWrapper';
-import { useGetUserQuery } from '../../core/features/users/usersApiSlice';
-import { selectCurrentUser } from '../../core/features/auth/authSlice';
+import tw, { styled } from 'twin.macro';
 import NotFound from '../../common/NotFound/NotFound';
+import RouteWrapper from '../../common/RouteWrapper';
+import { selectCurrentUser } from '../../core/features/auth/authSlice';
+import {
+  useGetUserQuery,
+  useHandleUserFollowMutation,
+} from '../../core/features/users/usersApiSlice';
+import { formatDate } from '../../helpers/string';
 
 const Profile = () => {
   const navigate = useNavigate();
   const currentUser = useSelector(selectCurrentUser);
   const { username } = useParams();
   const { data: previewedUser } = useGetUserQuery(username, { refetchOnMountOrArgChange: true });
+  const [handleUserFollow] = useHandleUserFollowMutation();
+  const isFollowed = previewedUser?.followers?.includes(currentUser.id);
+
+  const handleFollowFunc = async () => {
+    await handleUserFollow({
+      previewedId: previewedUser._id,
+      action: isFollowed ? 'unFollow' : 'follow',
+      currentId: currentUser.id,
+      previewedUsername: previewedUser.username,
+    });
+  };
 
   return (
     <RouteWrapper>
@@ -25,7 +40,9 @@ const Profile = () => {
             {previewedUser.username === currentUser.username ? (
               <EditButton onClick={() => navigate('/customize')}>Edit profile</EditButton>
             ) : (
-              <FollowButton>Follow</FollowButton>
+              <FollowButton onClick={handleFollowFunc} isFollowed={isFollowed}>
+                {isFollowed ? 'UnFollow' : 'Follow'}
+              </FollowButton>
             )}
             <Name>{previewedUser.name}</Name>
             <Bio>{previewedUser.bio || 'No bio'}</Bio>
@@ -34,10 +51,10 @@ const Profile = () => {
                 <HiLocationMarker />
                 <Location>{previewedUser.location || 'Not determined'}</Location>
               </LocationWrapper>
-              <JoinDateWrapper>
+              <CreatedAtWrapper>
                 <FaBirthdayCake />
-                <JoinDate>Joined on {previewedUser.joinDate || 'Not determined'}</JoinDate>
-              </JoinDateWrapper>
+                <CreatedAt>Joined on {formatDate(previewedUser.createdAt)}</CreatedAt>
+              </CreatedAtWrapper>
             </Other>
             <Footer>
               <EducationWrapper>
@@ -57,17 +74,17 @@ const Profile = () => {
           <Stats>
             <StatWrapper>
               <CgNotes />
-              <Count>{previewedUser?.posts?.length || 0}</Count>
+              <Count>{previewedUser.posts?.length || 0}</Count>
               <StatName>Posts published</StatName>
             </StatWrapper>
             <StatWrapper>
               <FaRegComment />
-              <Count>{previewedUser?.comments?.length || 0}</Count>
+              <Count>{previewedUser.comments?.length || 0}</Count>
               <StatName>Comments written</StatName>
             </StatWrapper>
             <StatWrapper>
               <FaHashtag />
-              <Count>{previewedUser?.tags?.length || 0}</Count>
+              <Count>{previewedUser.followedTags?.length || 0}</Count>
               <StatName>Tags followed</StatName>
             </StatWrapper>
           </Stats>
@@ -85,6 +102,7 @@ const Card = styled.div`
   box-shadow: 0 8px 5px -7px rgba(0, 0, 0, 0.2);
   ${tw`bg-white flex flex-col items-center gap-sm relative rounded-md`}
 `;
+
 const Avatar = tw.img`w-28 h-28 object-cover rounded-full border-4 border-black`;
 
 const EditButton = tw.button`absolute top-lg right-lg text-white bg-blue rounded-md py-2 px-4`;
@@ -101,9 +119,9 @@ const LocationWrapper = tw.div`flex gap-2 text-gray`;
 
 const Location = tw.div``;
 
-const JoinDateWrapper = tw.div`flex gap-2 text-gray`;
+const CreatedAtWrapper = tw.div`flex gap-2 text-gray`;
 
-const JoinDate = tw.div``;
+const CreatedAt = tw.div``;
 
 const Footer = tw.div`w-full text-center border-t border-light-gray py-md flex items-center justify-evenly`;
 

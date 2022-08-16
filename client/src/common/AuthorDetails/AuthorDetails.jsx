@@ -1,7 +1,8 @@
-import tw from 'twin.macro';
-import { useNavigate } from 'react-router-dom';
-import { selectCurrentUser } from '../../core/features/auth/authSlice';
 import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import tw from 'twin.macro';
+import { selectCurrentUser } from '../../core/features/auth/authSlice';
+import { formatDate } from '../../helpers/string';
 
 const AuthorDetails = ({ isLaptop, author }) => {
   const navigate = useNavigate();
@@ -9,7 +10,7 @@ const AuthorDetails = ({ isLaptop, author }) => {
 
   return (
     <Wrapper isLaptop={isLaptop} scrollY={scrollY}>
-      <Header onClick={() => navigate(`/${author.name}`)}>
+      <Header onClick={() => navigate(`/${author.username}`)}>
         <Avatar src={author?.picture?.url} />
         <Name>{author.username}</Name>
       </Header>
@@ -26,7 +27,7 @@ const AuthorDetails = ({ isLaptop, author }) => {
       <Heading>Work</Heading>
       <Work>{author.work}</Work>
       <Heading>Join date</Heading>
-      <JoinDate>{author.joinDate}</JoinDate>
+      <CreatedAt>{formatDate(author.createdAt)}</CreatedAt>
     </Wrapper>
   );
 };
@@ -51,7 +52,7 @@ const Location = tw.p`text-dark-gray`;
 
 const Work = tw.p`text-dark-gray`;
 
-const JoinDate = tw.p`text-dark-gray`;
+const CreatedAt = tw.p`text-dark-gray`;
 
 const Wrapper = tw.div`h-full w-1/3 py-6 px-4 bg-white lap:(w-full border-t border-light-gray)`;
 

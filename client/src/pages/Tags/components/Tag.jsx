@@ -1,10 +1,9 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import tw, { styled } from 'twin.macro';
+import FollowTag from '../../../common/FollowTag';
 import { decreaseOpacity } from '../../../helpers/utils';
-
 const Tag = ({ tag }) => {
-  const [isFollowed, setIsFollowed] = useState(false);
   const navigate = useNavigate();
 
   return (
@@ -18,9 +17,7 @@ const Tag = ({ tag }) => {
         {tag.name}
       </Title>
       <Posts>{tag.posts.length} posts published</Posts>
-      <Button isFollowed={isFollowed} onClick={() => setIsFollowed(!isFollowed)}>
-        {isFollowed ? 'Following' : 'Follow'}
-      </Button>
+      <FollowTag tag={tag} isFollowed={tag.isFollowed} />
     </Wrapper>
   );
 };
@@ -45,11 +42,6 @@ const Hashtag = styled.span`
 `;
 
 const Posts = tw.p`text-dark-gray ml-2`;
-
-const Button = styled.button`
-  ${tw`border-2 border-solid border-transparent max-w-lg rounded-md bg-light-gray hover:bg-gray px-2 py-1 text-sm font-semibold ml-2`}
-  ${({ isFollowed }) => isFollowed && tw`border-gray bg-white hover:bg-white`}
-`;
 
 const Wrapper = styled.div`
   box-shadow: 0 0px 8px -4px rgba(0, 0, 0, 0.2);

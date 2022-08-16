@@ -50,7 +50,7 @@ const handleLogin = async (req, res) => {
       availableFor: foundUser.availableFor,
       skills: foundUser.skills,
       token: accessToken,
-      joinDate: foundUser.joinDate,
+      createdAt: foundUser.createdAt,
     });
   } else {
     res.sendStatus(401);

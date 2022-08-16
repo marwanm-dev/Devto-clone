@@ -10,4 +10,6 @@ router
 
 router.route('/:username').get(usersController.getUser);
 
+router.route('/:previewedId/:action').patch(usersController.handleFollow);
+
 module.exports = router;

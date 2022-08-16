@@ -1,24 +1,32 @@
 import { nanoid } from '@reduxjs/toolkit';
-import { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import tw, { styled } from 'twin.macro';
 import RouteWrapper from '../../common/RouteWrapper';
+import { selectCurrentUser } from '../../core/features/auth/authSlice';
 import { selectSearchValue } from '../../core/features/search/searchSlice';
 import { useGetTagsQuery } from '../../core/features/tags/tagsApiSlice';
 import usePlaceholder from '../../hooks/usePlaceholder';
 import Tag from './components/Tag';
 
 const Tags = () => {
-  const dispatch = useDispatch();
   const searchValue = useSelector(selectSearchValue);
   const { data: tags } = useGetTagsQuery([], { refetchOnMountOrArgChange: true });
+  const { id: userId } = useSelector(selectCurrentUser);
+  const modifiedTags = tags.map(tag => {
+    return { ...tag, isFollowed: tag.followers.includes(userId) };
+  });
   usePlaceholder('tags by name');
 
   return (
     <RouteWrapper>
       <Wrapper>
-        {tags &&
-          tags.map(tag => tag.name.includes(searchValue) && <Tag key={nanoid()} tag={tag} />)}
+        {modifiedTags &&
+          modifiedTags.map(
+            tag =>
+              tag.name.includes(searchValue) && (
+                <Tag key={nanoid()} tag={tag} isFollowed={tag.isFollowed} />
+              )
+          )}
       </Wrapper>
     </RouteWrapper>
   );

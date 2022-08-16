@@ -1,13 +1,15 @@
 const User = require('../model/User');
 const Post = require('../model/Post');
+const Comment = require('../model/Comment');
 const cloudinary = require('../config/cloudinary');
 const { uploadToCloudinary } = require('../utils/cloudinary');
+const { deletePostsByUserId } = require('./postsController');
 
 const getUser = async (req, res) => {
   const username = req.params.username;
   if (!username) return res.status(400).json({ message: 'User name required' });
 
-  const user = await User.findOne({ username }).exec();
+  const user = await User.findOne({ username });
   if (!user) return res.status(204).json({ message: `User ${username} not found` });
 
   res.json(user);
@@ -23,11 +25,17 @@ const deleteUser = async (req, res) => {
   if (user.picture.publicId !== process.env.CLOUDINARY_DEFAULT_PUBLIC_ID)
     cloudinary.uploader.destroy(user.picture.publicId);
 
+  ['followers', 'following'].forEach(k => {
+    (async () => {
+      await User.updateMany({ [k]: id }, { $pull: { [k]: id } });
+    })();
+  });
+
+  await deletePostsByUserId(user);
+
   const deletedUser = await User.deleteOne({ _id: id }).exec();
 
-  await Post.findAndDelete({ author: _id });
-
-  res.status(200).json(deletedUser);
+  res.json(deletedUser);
 };
 
 const updateUser = async (req, res) => {
@@ -44,11 +52,32 @@ const updateUser = async (req, res) => {
   req.body.picture = { url, publicId };
 
   const updatedUser = await User.findOneAndUpdate({ _id: id }, { ...req.body }, { new: true });
-  res.status(200).json(updatedUser);
+  res.json(updatedUser);
+};
+
+const handleFollow = async (req, res) => {
+  const { previewedId, action } = req.params;
+  const { currentId } = req.body;
+  const isUndoing = action.includes('un');
+
+  await User.findOneAndUpdate(
+    { _id: currentId },
+    { [isUndoing ? '$pull' : '$addToSet']: { following: currentId } },
+    { timestamps: false }
+  );
+
+  const followedUser = await User.findOneAndUpdate(
+    { _id: previewedId },
+    { [isUndoing ? '$pull' : '$addToSet']: { followers: currentId } },
+    { new: true, timestamps: false }
+  );
+  console.log({ previewedId, currentId, followedUser });
+  res.json(followedUser);
 };
 
 module.exports = {
   getUser,
   deleteUser,
   updateUser,
+  handleFollow,
 };

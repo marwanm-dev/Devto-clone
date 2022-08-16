@@ -4,6 +4,7 @@ import tw, { styled } from 'twin.macro';
 import AuthorDetails from '../../../common/AuthorDetails';
 import SyntaxHighlight from '../../../common/SyntaxHighlight';
 import Tags from '../../../common/Tags';
+import { formatDate } from '../../../helpers/string';
 import Comments from './Comments';
 
 const Post = ({ post, isLaptop }) => {
@@ -20,7 +21,10 @@ const Post = ({ post, isLaptop }) => {
           />
           <AuthorMeta>
             <AuthorName>{post.author.username}</AuthorName>
-            <CreatedAt>{post.date}</CreatedAt>
+            <CreatedAt>{formatDate(post.createdAt, true)}</CreatedAt>
+            {post.updatedAt !== post.createdAt && (
+              <UpdatedAt>{`Last updated ${formatDate(post.updatedAt, true)}`}</UpdatedAt>
+            )}{' '}
           </AuthorMeta>
         </Header>
         <Title>{post.title}</Title>
@@ -49,6 +53,7 @@ const Author = tw.img`w-10 h-10 rounded-full cursor-pointer`;
 const AuthorMeta = tw.div``;
 const AuthorName = tw.h4`text-darker-gray pr-1 pt-1 rounded-md hover:bg-lighter-gray cursor-pointer`;
 const CreatedAt = tw.p`text-darker-gray`;
+const UpdatedAt = tw.p`text-darker-gray`;
 
 const Title = tw.h1`my-sm`;
 

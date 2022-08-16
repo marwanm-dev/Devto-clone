@@ -1,15 +1,25 @@
 const Tag = require('../model/Tag');
+const User = require('../model/User');
 const Post = require('../model/Post');
+const { unCapitalizeFirstLetter } = require('../helpers/string');
 
 const getTags = async (req, res) => {
-  const tags = await Tag.find({}, null, { sort: { followers: 1 } });
+  const tags = await Tag.find({}).sort({ followers: -1 });
+
+  res.status(200).json(tags);
+};
+
+const getFollowingTags = async (req, res) => {
+  const { userId } = req.params;
+  const tags = await Tag.find({ followers: userId }).limit(6).sort({ followers: -1 });
 
   res.status(200).json(tags);
 };
 
 const getNumTags = async (req, res) => {
-  const tags = await Tag.find({}, null, { sort: { followers: 1 } })
+  const tags = await Tag.find({})
     .limit(3)
+    .sort({ posts: -1 })
     .populate({ path: 'posts', populate: 'author' });
 
   res.status(200).json(tags);
@@ -19,12 +29,6 @@ const getTagByName = async (req, res) => {
   const tag = await Tag.findOne({ name: req.params.name }).populate('posts').exec();
 
   res.status(200).json(tag);
-};
-
-const getTagsByPostId = async (req, res) => {
-  const tags = await Tag.find({ posts: req.params.postId }, null, { sort: { followers: 1 } });
-  if (!tags) res.status(204).json('No tags found');
-  res.status(200).json(tags);
 };
 
 const createTags = async (tags, post) => {
@@ -58,12 +62,30 @@ const updateTags = async (tags, post) => {
   await deleteTags(tags, post, false);
 };
 
+const handleFollow = async (req, res) => {
+  const { name, action } = req.params;
+  const { userId, tagId } = req.body;
+  const isUndoing = action.includes('un');
+
+  const updatedTag = await Tag.findOneAndUpdate(
+    { name },
+    isUndoing ? { $pull: { followers: userId } } : { $addToSet: { followers: userId } }
+  );
+  await User.findOneAndUpdate(
+    { _id: userId },
+    isUndoing ? { $pull: { followedTags: tagId } } : { $addToSet: { followedTags: tagId } }
+  );
+
+  res.json(updatedTag).status(200);
+};
+
 module.exports = {
   getTags,
   getNumTags,
-  getTagsByPostId,
+  getFollowingTags,
   getTagByName,
   createTags,
   updateTags,
   deleteTags,
+  handleFollow,
 };

@@ -1,12 +1,24 @@
-import tw, { styled } from 'twin.macro';
-import { Link } from 'react-router-dom';
-import { AiFillFacebook, AiFillInstagram, AiFillGithub } from 'react-icons/ai';
+import { nanoid } from '@reduxjs/toolkit';
+import { AiFillFacebook, AiFillGithub, AiFillInstagram } from 'react-icons/ai';
 import { RiSettingsLine } from 'react-icons/ri';
 import { useSelector } from 'react-redux';
-import { selectCurrentToken } from '../../core/features/auth/authSlice';
+import { Link, useNavigate } from 'react-router-dom';
+import tw, { styled } from 'twin.macro';
+import { selectCurrentToken, selectCurrentUser } from '../../core/features/auth/authSlice';
+import {
+  useGetFollowingTagsQuery,
+  useGetNumTagsQuery,
+} from '../../core/features/tags/tagsApiSlice';
 
 const Resources = () => {
+  const navigate = useNavigate();
   const token = useSelector(selectCurrentToken);
+  const { id: userId } = useSelector(selectCurrentUser);
+  const { data: followingTags } = useGetFollowingTagsQuery(
+    { userId },
+    { refetchOnMountOrArgChange: true }
+  );
+  const { data: tags } = useGetNumTagsQuery([], { refetchOnMountOrArgChange: true });
 
   return (
     <Wrapper>
@@ -83,43 +95,36 @@ const Resources = () => {
         </SocialWrapper>
       </SocialLinks>
       <Tags>
-        {token ? (
+        {token && followingTags?.length > 0 && (
           <>
             <Header>
               <TagsHeading>My Tags</TagsHeading>
               <Settings>
                 <LinkWrapper>
-                  <RiSettingsLine onClick={() => null} />
+                  <RiSettingsLine onClick={() => navigate('/customize')} />
                 </LinkWrapper>
               </Settings>
             </Header>
             <SubscribedTags>
-              <LinkWrapper>
-                <Link to=''>#javascript</Link>
-              </LinkWrapper>
-              <LinkWrapper>
-                <Link to=''>#news</Link>
-              </LinkWrapper>
-              <LinkWrapper>
-                <Link to=''>#react-native</Link>
-              </LinkWrapper>
+              {followingTags?.map(tag => (
+                <LinkWrapper key={nanoid()}>
+                  <Link to={`/tags/${tag.name}`}>#{tag.name}</Link>
+                </LinkWrapper>
+              ))}
             </SubscribedTags>
           </>
-        ) : (
+        )}
+        {(!token || !followingTags?.length > 0) && (
           <>
             <Header>
               <TagsHeading>Popular Tags</TagsHeading>
             </Header>
             <PopularTags>
-              <LinkWrapper>
-                <Link to=''>#javascript</Link>
-              </LinkWrapper>
-              <LinkWrapper>
-                <Link to=''>#news</Link>
-              </LinkWrapper>
-              <LinkWrapper>
-                <Link to=''>#react-native</Link>
-              </LinkWrapper>
+              {tags?.map(tag => (
+                <LinkWrapper key={nanoid()}>
+                  <Link to={`/tags/${tag.name}`}>#{tag.name}</Link>
+                </LinkWrapper>
+              ))}
             </PopularTags>
           </>
         )}

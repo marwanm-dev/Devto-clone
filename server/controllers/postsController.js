@@ -23,14 +23,6 @@ const createPost = async (req, res) => {
     image: { url, publicId },
     body,
     author: author._id,
-    date: new Date().toLocaleDateString('en-us', {
-      year: 'numeric',
-      month: 'short',
-      week: 'numeric',
-      day: 'numeric',
-      hour: 'numeric',
-      minute: 'numeric',
-    }),
   });
 
   await createTags(formattedTags, createdPost);
@@ -61,7 +53,7 @@ const getPost = async (req, res) => {
 };
 
 const getPosts = async (req, res) => {
-  const posts = await Post.find({}).sort({ date: -1 }).populate('author').populate('tags');
+  const posts = await Post.find({}).sort({ createdAt: -1 }).populate('author').populate('tags');
   if (!posts) res.status(204).json('No posts found');
 
   res.status(200).json(posts);
@@ -82,22 +74,14 @@ const updatePost = async (req, res) => {
     .map(w => w.trim().replace(/ /g, '-'));
   req.body.tags = [];
 
-  req.body.date = new Date().toLocaleDateString('en-us', {
-    year: 'numeric',
-    month: 'short',
-    week: 'numeric',
-    day: 'numeric',
-    hour: 'numeric',
-    minute: 'numeric',
-  });
-
   const updatedPost = await Post.findOneAndUpdate(
     {
       author: authorId,
       title: postTitle,
       _id: postId,
     },
-    { ...req.body }
+    { ...req.body },
+    { new: true }
   )
     .populate('author')
     .populate('tags')
@@ -106,6 +90,38 @@ const updatePost = async (req, res) => {
   await updateTags(formattedTags, updatedPost);
 
   res.status(200).json(updatedPost);
+};
+
+const deletePostsByUserId = async user => {
+  const { _id: userId } = user;
+
+  user.comments.forEach(commentId => {
+    (async () => {
+      await Post.updateMany({ comments: commentId }, { $pull: { comments: commentId } });
+    })();
+  });
+
+  const posts = await Post.find({ author: userId }).populate('tags');
+
+  ['likes', 'unicorns', 'bookmarks'].forEach(k => {
+    (async () => {
+      await Post.updateMany({ [k]: userId }, { $pull: { [k]: userId } });
+    })();
+  });
+
+  posts.forEach(post => {
+    (async () => {
+      await deleteTags(
+        post.tags.map(({ name }) => name),
+        post,
+        true
+      );
+      await cloudinary.uploader.destroy(post.image.publicId);
+      await Post.deleteOne({ _id: post._id });
+    })();
+  });
+
+  await Comment.deleteMany({ author: userId });
 };
 
 const deletePost = async (req, res) => {
@@ -160,10 +176,18 @@ const postReaction = async (req, res) => {
   const updatedPost = await Post.findOneAndUpdate(
     { author: authorId, title: postTitle, _id: postId },
     isUndoing ? { $pull: { [actionKey]: userId } } : { $addToSet: { [actionKey]: userId } },
-    { new: true }
+    { new: true, timestamps: false }
   );
 
   res.status(200).json(updatedPost);
 };
 
-module.exports = { createPost, getPosts, getPost, updatePost, deletePost, postReaction };
+module.exports = {
+  createPost,
+  getPosts,
+  getPost,
+  updatePost,
+  deletePost,
+  deletePostsByUserId,
+  postReaction,
+};

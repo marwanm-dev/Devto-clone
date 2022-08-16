@@ -1,7 +1,6 @@
 import { nanoid } from '@reduxjs/toolkit';
 import { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { useParams } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import tw from 'twin.macro';
 import { useGetPostsQuery } from '../../core/features/posts/postsApiSlice';
 import { selectSearchValue } from '../../core/features/search/searchSlice';
@@ -10,13 +9,16 @@ import LoadingSpinner from '../LoadingSpinner';
 import Post from './components/Post';
 
 const PostsList = ({ tagname = null }) => {
-  const dispatch = useDispatch();
   const searchValue = useSelector(selectSearchValue);
   const { data: posts, isLoading } = useGetPostsQuery([null], {
     refetchOnMountOrArgChange: true,
   });
   const [filteredPosts, setFilteredPosts] = useState(posts);
   usePlaceholder('posts by title');
+
+  useEffect(() => {
+    setFilteredPosts(posts);
+  }, [posts]);
 
   useEffect(() => {
     setFilteredPosts(

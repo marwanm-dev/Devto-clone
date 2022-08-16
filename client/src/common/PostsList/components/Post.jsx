@@ -2,7 +2,7 @@ import { AiOutlineHeart } from 'react-icons/ai';
 import { MdOutlineModeComment } from 'react-icons/md';
 import { useNavigate } from 'react-router-dom';
 import tw, { styled } from 'twin.macro';
-import { createPostUrl } from '../../../helpers/string';
+import { createPostUrl, formatDate } from '../../../helpers/string';
 import { calcReadingTime } from '../../../helpers/utils';
 import Tags from '../../Tags';
 
@@ -15,17 +15,20 @@ const Post = ({ post, isFirstPost, filteredTag }) => {
         {isFirstPost && (
           <Image
             onClick={() =>
-              navigate(`/${post.author.username}/${createPostUrl(post.title, post._id)}`)
+              navigate(`/${post.author?.username}/${createPostUrl(post.title, post._id)}`)
             }
             src={post.image.url}
           />
         )}
         <Content>
-          <Header onClick={() => navigate(`/${post.author.username}`)}>
-            <Author src={post.author.picture.url} />
+          <Header onClick={() => navigate(`/${post?.author.username}`)}>
+            <Author src={post.author?.picture.url} />
             <AuthorMeta>
-              <AuthorName>{post.author.username}</AuthorName>
-              <CreatedAt>{post.date}</CreatedAt>
+              <AuthorName>{post.author?.username}</AuthorName>
+              <CreatedAt>{formatDate(post.createdAt, true)}</CreatedAt>
+              {post.updatedAt !== post.createdAt && (
+                <UpdatedAt>{`Last updated ${formatDate(post.updatedAt, true)}`}</UpdatedAt>
+              )}
             </AuthorMeta>
           </Header>
           <Title
@@ -78,6 +81,7 @@ const Author = tw.img`w-10 h-10 rounded-full cursor-pointer`;
 const AuthorMeta = tw.div``;
 const AuthorName = tw.h4`text-darker-gray pr-1 pt-1 rounded-md hover:bg-lighter-gray cursor-pointer`;
 const CreatedAt = tw.p`text-darker-gray`;
+const UpdatedAt = tw.p`text-darker-gray`;
 const Title = tw.h1`mb-2 hover:text-blue cursor-pointer`;
 const Footer = tw.div`flex justify-between items-center`;
 const Reactions = tw.div`flex justify-between items-center gap-md`;

@@ -17,14 +17,6 @@ const postComment = async (req, res) => {
     parentPost,
     parentComment,
     author,
-    date: new Date().toLocaleDateString('en-us', {
-      year: 'numeric',
-      month: 'short',
-      week: 'numeric',
-      day: 'numeric',
-      hour: 'numeric',
-      minute: 'numeric',
-    }),
   });
   const post = await Post.findById(parentPost);
   const user = await User.findById(author);
@@ -32,7 +24,7 @@ const postComment = async (req, res) => {
   post.comments.push(comment._id);
   user.comments.push(comment._id);
 
-  await post.save();
+  await post.save({ timestamps: false });
   await user.save();
 
   res.status(200).json(comment);
@@ -42,14 +34,6 @@ const updateComment = async (req, res) => {
   const { commentId } = req.params;
 
   const { body } = req.body;
-  const date = new Date().toLocaleDateString('en-us', {
-    year: 'numeric',
-    month: 'short',
-    week: 'numeric',
-    day: 'numeric',
-    hour: 'numeric',
-    minute: 'numeric',
-  });
 
   const updatedComment = await Comment.findByIdAndUpdate(commentId, { body, date }, { new: true });
 
@@ -81,7 +65,7 @@ const deleteComment = async (req, res) => {
     await Comment.deleteMany({ parentComment: comment._id });
   }
 
-  await post.save();
+  await post.save({ timestamps: false });
   await user.save();
 
   res.status(200).json(comment);

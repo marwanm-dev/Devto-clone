@@ -1,18 +1,18 @@
-import { useState, useRef } from 'react';
-import { useSelector } from 'react-redux';
-import tw from 'twin.macro';
 import 'easymde/dist/easymde.min.css';
+import { useRef, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import LoadingSpinner from '../../common/LoadingSpinner';
+import tw from 'twin.macro';
 import Error from '../../common/Error';
+import LoadingSpinner from '../../common/LoadingSpinner';
 import RouteWrapper from '../../common/RouteWrapper';
-import useBase64 from '../../hooks/useBase64';
 import {
   selectCurrentToken,
   selectCurrentUser,
   setAuthModal,
 } from '../../core/features/auth/authSlice';
 import { useUpdateUserMutation } from '../../core/features/users/usersApiSlice';
+import useBase64 from '../../hooks/useBase64';
 
 const EditProfile = () => {
   const currentUser = useSelector(selectCurrentUser);
