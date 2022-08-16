@@ -12,6 +12,8 @@ Auth0 Authentication
 
 _NEEDS FIX_
 
+Post sorting system sorts by clock only (solution => maybe save timestamps instead of formatted date in database)
+
 Reply deletion results in deletion of another only until refresh
 
 _STANDBY SOLUTIONS_
