@@ -19,14 +19,17 @@ import {
   useUpdatePostMutation,
 } from '../../core/features/posts/postsApiSlice';
 import useBase64 from '../../hooks/useBase64';
+import useRequireAuth from '../../hooks/useRequireAuth';
 
 const EditPost = () => {
   const currentUser = useSelector(selectCurrentUser);
-  const token = useSelector(selectCurrentToken);
   const dispatch = useDispatch();
   const { username, postUrl } = useParams();
 
-  const { data: post } = useGetPostQuery({ url: `${username}/${postUrl}` });
+  const { data: post, isLoading } = useGetPostQuery(
+    { url: `${username}/${postUrl}` },
+    { refetchOnMountOrArgChange: true }
+  );
   const [updatePost, { isLoading: updateIsLoading, isError }] = useUpdatePostMutation();
   const [deletePost, { isLoading: deletionIsLoading }] = useDeletePostMutation();
 
@@ -44,6 +47,7 @@ const EditPost = () => {
   const titleRef = useRef();
   const previewURL = useBase64(file);
   const navigate = useNavigate();
+  const { isAuthed } = useRequireAuth();
 
   useEffect(() => titleRef.current?.focus(), []);
 
@@ -53,7 +57,7 @@ const EditPost = () => {
   }, [title, file, body, tags]);
 
   const handleDeletion = async () => {
-    if (token) {
+    if (isAuthed) {
       try {
         await deletePost({
           url: `${username}/${postUrl}`,
@@ -72,7 +76,7 @@ const EditPost = () => {
 
   const handleUpdate = async () => {
     if (inputsFilled) {
-      if (token) {
+      if (isAuthed) {
         try {
           await updatePost({
             meta: {
@@ -106,7 +110,7 @@ const EditPost = () => {
 
   return (
     <RouteWrapper>
-      {username === currentUser.username ? (
+      {!isLoading && username === currentUser.username ? (
         <Wrapper>
           {(updateIsLoading || deletionIsLoading) && <LoadingSpinner />}
           {!updateIsLoading && !deletionIsLoading && (
@@ -118,7 +122,7 @@ const EditPost = () => {
                   ref={titleRef}
                   id='title'
                   value={title}
-                  onBlur={() => setTitle(prev => prev.trim())}
+                  onBlur={() => setTitle(prev => prev?.trim())}
                   onChange={e => setTitle(e.target.value)}
                   required
                 />

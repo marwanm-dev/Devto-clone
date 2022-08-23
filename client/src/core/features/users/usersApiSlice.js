@@ -8,6 +8,11 @@ const usersApiSlice = apiSlice.injectEndpoints({
       providesTags: (result, err, args) =>
         result ? [{ type: 'User', id: result._id }] : [{ type: 'User', id: 'LIST' }],
     }),
+    getUserDashboard: builder.query({
+      query: username => `/users/dash/${username}`,
+      providesTags: (result, err, args) =>
+        result ? [{ type: 'User', id: result._id }] : [{ type: 'User', id: 'LIST' }],
+    }),
     deleteUser: builder.mutation({
       query: ({ id }) => ({
         url: `/users/${id}`,
@@ -81,6 +86,7 @@ const usersApiSlice = apiSlice.injectEndpoints({
 
 export const {
   useGetUserQuery,
+  useGetUserDashboardQuery,
   useDeleteUserMutation,
   useUpdateUserMutation,
   useHandleUserFollowMutation,

@@ -2,15 +2,12 @@ import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import tw, { styled } from 'twin.macro';
 import LoadingSpinner from '../../../common/LoadingSpinner';
-import {
-  selectCurrentToken,
-  selectCurrentUser,
-  setAuthModal,
-} from '../../../core/features/auth/authSlice';
+import { selectCurrentUser } from '../../../core/features/auth/authSlice';
 import {
   useGetCommentsQuery,
   usePostCommentMutation,
 } from '../../../core/features/comments/commentsApiSlice';
+import useRequireAuth from '../../../hooks/useRequireAuth';
 import Comment from './Comment';
 
 const Comments = ({ postId }) => {
@@ -25,10 +22,10 @@ const Comments = ({ postId }) => {
   const [body, setBody] = useState('');
   const [postComment] = usePostCommentMutation();
   const currentUser = useSelector(selectCurrentUser);
-  const token = useSelector(selectCurrentToken);
+  const { isAuthed, handleAuth } = useRequireAuth();
 
   const handleNewComment = () => {
-    if (!token) setAuthModal(true);
+    if (!isAuthed) handleAuth();
     if (body) {
       try {
         postComment({ body, author: currentUser.id, parentPost: postId });
@@ -44,7 +41,7 @@ const Comments = ({ postId }) => {
     <Wrapper>
       <CommentContainer>
         <Heading>Discussion ({comments?.length} comments)</Heading>
-        {token && (
+        {isAuthed && (
           <AddToDiscussion>
             <Avatar src={currentUser.picture.url} />
             <AddComment>

@@ -41,7 +41,7 @@ const Profile = () => {
               <EditButton onClick={() => navigate('/customize')}>Edit profile</EditButton>
             ) : (
               <FollowButton onClick={handleFollowFunc} isFollowed={isFollowed}>
-                {isFollowed ? 'UnFollow' : 'Follow'}
+                {isFollowed ? 'Following' : 'Follow'}
               </FollowButton>
             )}
             <Name>{previewedUser.name}</Name>
@@ -107,7 +107,10 @@ const Avatar = tw.img`w-28 h-28 object-cover rounded-full border-4 border-black`
 
 const EditButton = tw.button`absolute top-lg right-lg text-white bg-blue rounded-md py-2 px-4`;
 
-const FollowButton = tw(EditButton)``;
+const FollowButton = styled.button`
+  ${tw`bg-blue text-white border border-solid border-transparent absolute top-lg right-lg rounded-md py-2 px-4`}
+  ${({ isFollowed }) => isFollowed && tw`text-blue border-blue bg-white`}
+`;
 
 const Name = tw.h2``;
 

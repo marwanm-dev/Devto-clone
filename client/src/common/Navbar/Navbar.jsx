@@ -1,20 +1,21 @@
-import tw, { styled, theme } from 'twin.macro';
-import { Link } from 'react-router-dom';
 import { FaDev } from 'react-icons/fa';
 import { GiHamburgerMenu } from 'react-icons/gi';
-import { RiNotification3Line } from 'react-icons/ri';
 import { IoSearch } from 'react-icons/io5';
-import useBreakpoint from '../../hooks/useBreakpoint';
-import useToggle from '../../hooks/useToggle';
-import Search from './components/Search';
-import MobileMenu from './components/MobileMenu';
+import { RiNotification3Line } from 'react-icons/ri';
 import { useSelector } from 'react-redux';
-import { selectCurrentUser, selectCurrentToken } from '../../core/features/auth/authSlice';
+import { Link } from 'react-router-dom';
+import tw, { styled, theme } from 'twin.macro';
+import { selectCurrentUser } from '../../core/features/auth/authSlice';
 import { preventScroll } from '../../helpers/body';
+import useBreakpoint from '../../hooks/useBreakpoint';
+import useRequireAuth from '../../hooks/useRequireAuth';
+import useToggle from '../../hooks/useToggle';
+import MobileMenu from './components/MobileMenu';
+import Search from './components/Search';
 
 const Navbar = () => {
   const currentUser = useSelector(selectCurrentUser);
-  const token = useSelector(selectCurrentToken);
+  const { isAuthed } = useRequireAuth();
 
   const isMobile = useBreakpoint(theme`screens.mob.max`.replace('px', ''));
 
@@ -40,7 +41,7 @@ const Navbar = () => {
           {isMobile && mobileMenu && <MobileMenu toggleMobileMenu={toggleMobileMenu} />}
         </LeftSide>
         <RightSide>
-          {token ? (
+          {isAuthed ? (
             <>
               {isMobile ? (
                 <SearchIcon onClick={toggleMobileSearch}>

@@ -9,7 +9,8 @@ router
   .delete(verifyJWT, usersController.deleteUser);
 
 router.route('/:username').get(usersController.getUser);
+router.route(verifyJWT, '/dash/:username').get(usersController.getUserDashboard);
 
-router.route('/:previewedId/:action').patch(usersController.handleFollow);
+router.route(verifyJWT, '/:previewedId/:action').patch(usersController.handleFollow);
 
 module.exports = router;

@@ -14,6 +14,7 @@ import {
   selectCurrentToken,
   setAuthModal,
 } from '../../core/features/auth/authSlice';
+import useRequireAuth from '../../hooks/useRequireAuth';
 
 const NewPost = () => {
   const [title, setTitle] = useState('');
@@ -27,9 +28,9 @@ const NewPost = () => {
   const [createPost, { isLoading, isError }] = useCreatePostMutation();
   const navigate = useNavigate();
   const { username } = useSelector(selectCurrentUser);
-  const token = useSelector(selectCurrentToken);
   const dispatch = useDispatch();
   const previewURL = useBase64(file);
+  const { isAuthed, handleAuth } = useRequireAuth();
 
   useEffect(() => titleRef.current.focus(), []);
 
@@ -40,7 +41,7 @@ const NewPost = () => {
 
   const handleSubmit = async () => {
     if (inputsFilled) {
-      if (token) {
+      if (isAuthed) {
         try {
           await createPost({
             title,
@@ -59,9 +60,7 @@ const NewPost = () => {
         } catch (err) {
           console.log(err);
         }
-      } else {
-        dispatch(setAuthModal(true));
-      }
+      } else handleAuth();
     }
   };
 

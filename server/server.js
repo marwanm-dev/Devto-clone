@@ -53,11 +53,8 @@ app.use('/posts', require('./routes/posts'));
 app.use('/comments', require('./routes/comments'));
 app.use('/tags', require('./routes/tags'));
 
-//* Users/Posts/Comments all CRUD operations need a verifyJWT middleware except Read operation
-
 mongoose.connection.once('open', () => {
   console.log(`Connected to MongoDB, The Server Running on http://localhost:${PORT}`);
-
   // io "on" events
   // const io = new Server(PORT, {
   //   corsOptions,

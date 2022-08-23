@@ -4,15 +4,17 @@ import { RiSettingsLine } from 'react-icons/ri';
 import { useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import tw, { styled } from 'twin.macro';
-import { selectCurrentToken, selectCurrentUser } from '../../core/features/auth/authSlice';
+import { selectCurrentUser } from '../../core/features/auth/authSlice';
 import {
   useGetFollowingTagsQuery,
   useGetNumTagsQuery,
 } from '../../core/features/tags/tagsApiSlice';
+import useRequireAuth from '../../hooks/useRequireAuth';
 
 const Resources = () => {
   const navigate = useNavigate();
-  const token = useSelector(selectCurrentToken);
+  const { isAuthed } = useRequireAuth();
+
   const { id: userId } = useSelector(selectCurrentUser);
   const { data: followingTags } = useGetFollowingTagsQuery(
     { userId },
@@ -22,7 +24,7 @@ const Resources = () => {
 
   return (
     <Wrapper>
-      {!token && (
+      {!isAuthed && (
         <DevCommunity>
           <DevHeading>
             <span>DEV Community</span> is a community of 861,806 amazing developers
@@ -95,7 +97,7 @@ const Resources = () => {
         </SocialWrapper>
       </SocialLinks>
       <Tags>
-        {token && followingTags?.length > 0 && (
+        {isAuthed && followingTags?.length > 0 && (
           <>
             <Header>
               <TagsHeading>My Tags</TagsHeading>
@@ -114,7 +116,7 @@ const Resources = () => {
             </SubscribedTags>
           </>
         )}
-        {(!token || !followingTags?.length > 0) && (
+        {(!isAuthed || !followingTags?.length > 0) && (
           <>
             <Header>
               <TagsHeading>Popular Tags</TagsHeading>

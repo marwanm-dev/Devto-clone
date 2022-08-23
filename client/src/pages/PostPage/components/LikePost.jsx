@@ -1,18 +1,17 @@
-import tw, { styled } from 'twin.macro';
-import { AiOutlineHeart, AiFillHeart } from 'react-icons/ai';
+import { AiFillHeart, AiOutlineHeart } from 'react-icons/ai';
 import { useDispatch, useSelector } from 'react-redux';
-import { selectCurrentToken } from '../../../core/features/auth/authSlice';
+import tw, { styled } from 'twin.macro';
+import useRequireAuth from '../../../hooks/useRequireAuth';
 
-const LikePost = ({ likes, isLiked, handleReaction, setAuthModal }) => {
-  const dispatch = useDispatch();
+const LikePost = ({ likes, isLiked, handleReaction }) => {
+  const { isAuthed, handleAuth } = useRequireAuth(false);
 
-  const token = useSelector(selectCurrentToken);
   const action = isLiked ? 'removeLike' : 'like';
   const effect = isLiked ? 'negative' : 'positive';
 
   const handleClick = () => {
-    if (!token) dispatch(setAuthModal(true));
-    else handleReaction(action, effect, likes, 'isLiked');
+    if (isAuthed) handleReaction(action, effect, likes, 'isLiked');
+    else handleAuth();
   };
 
   return (

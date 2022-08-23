@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import tw, { styled } from 'twin.macro';
 import { selectCurrentUser } from '../../core/features/auth/authSlice';
@@ -13,14 +14,14 @@ const FollowTag = ({ tag, isFollowed }) => {
       bg={decreaseOpacity(tag.hashtagColor, 0.5)}
       color={tag.hashtagColor}
       isFollowed={isFollowed}
-      onClick={() =>
+      onClick={() => {
         handleFollow({
           name: tag.name,
           action: isFollowed ? 'unFollow' : 'follow',
           userId,
           tagId: tag._id,
-        })
-      }>
+        });
+      }}>
       {isFollowed ? 'Following' : 'Follow'}
     </FollowButton>
   );

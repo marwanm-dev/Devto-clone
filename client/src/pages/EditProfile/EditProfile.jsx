@@ -1,23 +1,18 @@
 import 'easymde/dist/easymde.min.css';
 import { useRef, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import tw from 'twin.macro';
 import Error from '../../common/Error';
 import LoadingSpinner from '../../common/LoadingSpinner';
 import RouteWrapper from '../../common/RouteWrapper';
-import {
-  selectCurrentToken,
-  selectCurrentUser,
-  setAuthModal,
-} from '../../core/features/auth/authSlice';
+import { selectCurrentUser } from '../../core/features/auth/authSlice';
 import { useUpdateUserMutation } from '../../core/features/users/usersApiSlice';
 import useBase64 from '../../hooks/useBase64';
+import useRequireAuth from '../../hooks/useRequireAuth';
 
 const EditProfile = () => {
   const currentUser = useSelector(selectCurrentUser);
-  const token = useSelector(selectCurrentToken);
-  const dispatch = useDispatch();
   const [name, setName] = useState(currentUser.name);
   const [username, setUsername] = useState(currentUser.username);
   const [file, setFile] = useState(currentUser.picture?.url);
@@ -32,9 +27,10 @@ const EditProfile = () => {
 
   const previewURL = useBase64(file);
   const [updateUser, { isLoading, isError }] = useUpdateUserMutation();
+  const { isAuthed } = useRequireAuth();
 
   const handleUpdate = async () => {
-    if (token) {
+    if (isAuthed) {
       try {
         await updateUser({
           id: currentUser.id,
@@ -53,9 +49,7 @@ const EditProfile = () => {
       } catch (err) {
         console.log(err);
       }
-    } else {
-      dispatch(setAuthModal(true));
-    }
+    } else handleAuth();
   };
 
   return (

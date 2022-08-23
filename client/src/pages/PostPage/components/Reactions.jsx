@@ -2,7 +2,7 @@ import tw, { styled } from 'twin.macro';
 import useScroll from '../../../hooks/useScroll';
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import { selectCurrentUser, setAuthModal } from '../../../core/features/auth/authSlice';
+import { selectCurrentUser } from '../../../core/features/auth/authSlice';
 import LikePost from './LikePost';
 import UnicornPost from './UnicornPost';
 import BookmarkPost from './BookmarkPost';
@@ -29,23 +29,16 @@ const Reactions = ({ post }) => {
   return (
     <Wrapper scrollDirection={scrollDirection}>
       <Content>
-        <LikePost
-          likes={likesArr}
-          isLiked={isLiked}
-          handleReaction={handleReaction}
-          setAuthModal={setAuthModal}
-        />
+        <LikePost likes={likesArr} isLiked={isLiked} handleReaction={handleReaction} />
         <UnicornPost
           unicorns={unicornsArr}
           isUnicorned={isUnicorned}
           handleReaction={handleReaction}
-          setAuthModal={setAuthModal}
         />
         <BookmarkPost
           bookmarks={bookmarksArr}
           isBookmarked={isBookmarked}
           handleReaction={handleReaction}
-          setAuthModal={setAuthModal}
         />
         {author.username === username && (
           <EditButton onClick={() => navigate('edit')}>Edit</EditButton>

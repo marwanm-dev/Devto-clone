@@ -22,9 +22,9 @@ const Post = ({ post, isLaptop }) => {
           <AuthorMeta>
             <AuthorName>{post.author.username}</AuthorName>
             <CreatedAt>{formatDate(post.createdAt, true)}</CreatedAt>
-            {post.updatedAt !== post.createdAt && (
+            {formatDate(post.updatedAt, true) !== formatDate(post.createdAt, true) && (
               <UpdatedAt>{`Last updated ${formatDate(post.updatedAt, true)}`}</UpdatedAt>
-            )}{' '}
+            )}
           </AuthorMeta>
         </Header>
         <Title>{post.title}</Title>

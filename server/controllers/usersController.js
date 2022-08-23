@@ -10,6 +10,22 @@ const getUser = async (req, res) => {
   if (!username) return res.status(400).json({ message: 'User name required' });
 
   const user = await User.findOne({ username });
+
+  if (!user) return res.status(204).json({ message: `User ${username} not found` });
+
+  res.json(user);
+};
+
+const getUserDashboard = async (req, res) => {
+  const username = req.params.username;
+  if (!username) return res.status(400).json({ message: 'User name required' });
+
+  const user = await User.findOne({ username })
+    .populate({ path: 'posts', options: { sort: { createdAt: -1 } } })
+    .populate('following')
+    .populate('followers')
+    .populate({ path: 'followedTags', options: { sort: { followers: -1 } } });
+
   if (!user) return res.status(204).json({ message: `User ${username} not found` });
 
   res.json(user);
@@ -62,7 +78,7 @@ const handleFollow = async (req, res) => {
 
   await User.findOneAndUpdate(
     { _id: currentId },
-    { [isUndoing ? '$pull' : '$addToSet']: { following: currentId } },
+    { [isUndoing ? '$pull' : '$addToSet']: { following: previewedId } },
     { timestamps: false }
   );
 
@@ -71,12 +87,13 @@ const handleFollow = async (req, res) => {
     { [isUndoing ? '$pull' : '$addToSet']: { followers: currentId } },
     { new: true, timestamps: false }
   );
-  console.log({ previewedId, currentId, followedUser });
+
   res.json(followedUser);
 };
 
 module.exports = {
   getUser,
+  getUserDashboard,
   deleteUser,
   updateUser,
   handleFollow,
