@@ -1,12 +1,11 @@
-import tw, { styled } from 'twin.macro';
-import { useNavigate } from 'react-router-dom';
-import { IoCloseOutline } from 'react-icons/io5';
 import { FaDev } from 'react-icons/fa';
-import { setAuthModal, selectAuthModal } from '../../core/features/auth/authSlice';
-import { useDispatch } from 'react-redux';
-import { useSelector } from 'react-redux';
-import { preventScroll } from '../../helpers/body';
+import { IoCloseOutline } from 'react-icons/io5';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import tw, { styled } from 'twin.macro';
 import Backdrop from '../../common/Backdrop';
+import { selectAuthModal, setAuthModal } from '../../core/features/auth/authSlice';
+import { preventScroll } from '../../helpers/body';
 
 const AuthModal = () => {
   const navigate = useNavigate();
@@ -14,18 +13,24 @@ const AuthModal = () => {
   const authModal = useSelector(selectAuthModal);
   preventScroll(authModal);
 
+  const onClick = (navigation = '') => {
+    dispatch(setAuthModal(false));
+
+    if (navigation) navigate(navigation);
+  };
+
   return (
     <>
-      <Backdrop onClick={() => dispatch(setAuthModal(false))} />
+      <Backdrop onClick={onClick} />
       <Wrapper>
         <Header>
-          <Heading>Login to continue</Heading>
+          <Heading>Unauthorized</Heading>
           <CloseIcon>
-            <IoCloseOutline onClick={() => dispatch(setAuthModal(false))} />
+            <IoCloseOutline onClick={onClick} />
           </CloseIcon>
         </Header>
         <Main>
-          <DevIcon>
+          <DevIcon onClick={() => onClick('/')}>
             <FaDev />
           </DevIcon>
           <Paragraph>
@@ -33,20 +38,8 @@ const AuthModal = () => {
           </Paragraph>
         </Main>
         <Footer>
-          <SignUp
-            onClick={() => {
-              navigate('/auth/new');
-              dispatch(setAuthModal(false));
-            }}>
-            Create new account
-          </SignUp>
-          <Login
-            onClick={() => {
-              navigate('/auth/login');
-              dispatch(setAuthModal(false));
-            }}>
-            Log in
-          </Login>
+          <SignUp onClick={() => onClick('/auth/new')}>Create new account</SignUp>
+          <Login onClick={() => onClick('/auth/login')}>Log in</Login>
         </Footer>
       </Wrapper>
     </>

@@ -9,11 +9,7 @@ import Error from '../../common/Error';
 import useBase64 from '../../hooks/useBase64';
 import { useCreatePostMutation } from '../../core/features/posts/postsApiSlice';
 import 'easymde/dist/easymde.min.css';
-import {
-  selectCurrentUser,
-  selectCurrentToken,
-  setAuthModal,
-} from '../../core/features/auth/authSlice';
+import { selectCurrentUser, selectCurrentToken } from '../../core/features/auth/authSlice';
 import useRequireAuth from '../../hooks/useRequireAuth';
 
 const NewPost = () => {

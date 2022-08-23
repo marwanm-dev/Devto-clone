@@ -1,15 +1,12 @@
-import tw from 'twin.macro';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux';
+import tw from 'twin.macro';
 import RouteWrapper from '../../common/RouteWrapper';
 import { useLazyLogoutQuery } from '../../core/features/auth/authApiSlice';
+import { selectCurrentToken, selectCurrentUser } from '../../core/features/auth/authSlice';
 import { useDeleteUserMutation } from '../../core/features/users/usersApiSlice';
 import { capitalizeFirstLetter } from '../../helpers/string';
-import {
-  selectCurrentUser,
-  selectCurrentToken,
-  setAuthModal,
-} from '../../core/features/auth/authSlice';
+import useRequireAuth from '../../hooks/useRequireAuth';
 
 const Confirmation = () => {
   const navigate = useNavigate();
@@ -17,11 +14,11 @@ const Confirmation = () => {
   const [trigger] = useLazyLogoutQuery();
   const [deleteUser] = useDeleteUserMutation();
   const { id } = useSelector(selectCurrentUser);
-  const token = useSelector(selectCurrentToken);
   const dispatch = useDispatch();
+  const { isAuthed, handleAuth } = useRequireAuth();
 
   const handleConfirmation = async () => {
-    if (token) {
+    if (isAuthed) {
       try {
         confirmType.includes('delete') && (await deleteUser({ id }).unwrap());
         trigger();
@@ -30,9 +27,7 @@ const Confirmation = () => {
       } catch (err) {
         console.log(err);
       }
-    } else {
-      dispatch(setAuthModal);
-    }
+    } else handleAuth();
   };
 
   return (

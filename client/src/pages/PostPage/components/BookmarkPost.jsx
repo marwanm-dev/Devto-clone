@@ -10,7 +10,7 @@ const BookmarkPost = ({ bookmarks, isBookmarked, handleReaction }) => {
   const effect = isBookmarked ? 'negative' : 'positive';
 
   const handleClick = () => {
-    if (isAuthed) handleReaction(action, effect, likes, 'isBookmarked');
+    if (isAuthed) handleReaction(action, effect, bookmarks, 'isBookmarked');
     else handleAuth();
   };
 

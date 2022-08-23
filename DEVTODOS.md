@@ -8,7 +8,7 @@ Auth0 Authentication
 
 _NEEDS FIX_
 
-Reply deletion results in deletion of another only until refresh
+Reply deletion results in deleting the lowest reply until refresh
 
 Detection of what inputs changed on post edit (do not reupload the same image!)
 

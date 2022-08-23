@@ -10,7 +10,7 @@ const UnicornPost = ({ unicorns, isUnicorned, handleReaction }) => {
   const effect = isUnicorned ? 'negative' : 'positive';
 
   const handleClick = () => {
-    if (isAuthed) handleReaction(action, effect, likes, 'isUnicorned');
+    if (isAuthed) handleReaction(action, effect, unicorns, 'isUnicorned');
     else handleAuth();
   };
 

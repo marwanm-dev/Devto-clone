@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import tw, { styled } from 'twin.macro';
 import LoadingSpinner from '../../common/LoadingSpinner';
 import RouteWrapper from '../../common/RouteWrapper';
-import { selectCurrentUser, setAuthModal } from '../../core/features/auth/authSlice';
+import { selectCurrentUser } from '../../core/features/auth/authSlice';
 import { useGetUserDashboardQuery } from '../../core/features/users/usersApiSlice';
 import useLocalStorage from '../../hooks/useLocalStorage';
 import useRequireAuth from '../../hooks/useRequireAuth';
@@ -21,7 +21,6 @@ const Dashboard = () => {
   const { data: user, isLoading } = useGetUserDashboardQuery(username, {
     refetchOnMountOrArgChange: true,
   });
-  useRequireAuth(true, true);
 
   return (
     <RouteWrapper>

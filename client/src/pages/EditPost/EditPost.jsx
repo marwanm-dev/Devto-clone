@@ -8,11 +8,7 @@ import Error from '../../common/Error';
 import LoadingSpinner from '../../common/LoadingSpinner';
 import NotFound from '../../common/NotFound';
 import RouteWrapper from '../../common/RouteWrapper';
-import {
-  selectCurrentToken,
-  selectCurrentUser,
-  setAuthModal,
-} from '../../core/features/auth/authSlice';
+import { selectCurrentUser } from '../../core/features/auth/authSlice';
 import {
   useDeletePostMutation,
   useGetPostQuery,
@@ -69,9 +65,7 @@ const EditPost = () => {
       } catch (err) {
         console.log(err);
       }
-    } else {
-      dispatch(setAuthModal(true));
-    }
+    } else handleAuth();
   };
 
   const handleUpdate = async () => {
@@ -102,9 +96,7 @@ const EditPost = () => {
         } catch (err) {
           console.log(err);
         }
-      } else {
-        dispatch(setAuthModal(true));
-      }
+      } else handleAuth();
     }
   };
 

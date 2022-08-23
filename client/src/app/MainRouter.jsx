@@ -33,6 +33,7 @@ import TermsOfUse from '../pages/TermsOfUse';
 // Components
 import Layout from '../common/Layout';
 import NotFound from '../common/NotFound';
+import RequireAuth from '../common/RequireAuth/RequireAuth';
 
 const AnimatedRoutes = () => {
   const location = useLocation();
@@ -48,8 +49,9 @@ const AnimatedRoutes = () => {
           <Route path='code-of-conduct' element={<CodeOfConduct />} />
           <Route path='privacy-policy' element={<PrivacyPolicy />} />
           <Route path='terms-of-use' element={<TermsOfUse />} />
-          <Route path='post' element={<NewPost />} />
-
+          <Route element={<RequireAuth />}>
+            <Route path='post' element={<NewPost />} />
+          </Route>
           <Route path='tags'>
             <Route index element={<Tags />} />
             <Route path=':name' element={<Tag />} />
@@ -61,7 +63,9 @@ const AnimatedRoutes = () => {
 
             <Route path=':postUrl'>
               <Route index element={<PostPage />} />
-              <Route path='edit' element={<EditPost />} />
+              <Route element={<RequireAuth />}>
+                <Route path='edit' element={<EditPost />} />
+              </Route>
               <Route path='*' element={<NotFound />} />
             </Route>
 
@@ -77,9 +81,12 @@ const AnimatedRoutes = () => {
             <Route path='*' element={<NotFound />} />
           </Route>
 
-          <Route path='notifications' element={<Notifications />} />
-          <Route path='dashboard' element={<Dashboard />} />
-          <Route path='readinglist' element={<ReadingList />} />
+          <Route element={<RequireAuth />}>
+            <Route path='dashboard' element={<Dashboard />} />
+            <Route path='notifications' element={<Notifications />} />
+            <Route path='readinglist' element={<ReadingList />} />
+          </Route>
+
           <Route path='*' element={<NotFound />} />
         </Route>
       </Routes>
