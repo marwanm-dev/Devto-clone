@@ -20,7 +20,7 @@ const Resources = () => {
     { userId },
     { refetchOnMountOrArgChange: true }
   );
-  const { data: tags } = useGetNumTagsQuery([], { refetchOnMountOrArgChange: true });
+  const { data: tags } = useGetNumTagsQuery([null], { refetchOnMountOrArgChange: true });
 
   return (
     <Wrapper>

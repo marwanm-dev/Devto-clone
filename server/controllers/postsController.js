@@ -72,24 +72,24 @@ const updatePost = async (req, res) => {
     .trim()
     .split(',')
     .map(w => w.trim().replace(/ /g, '-'));
-  req.body.tags = [];
 
-  const updatedPost = await Post.findOneAndUpdate(
-    {
-      author: authorId,
-      title: postTitle,
-      _id: postId,
-    },
-    { ...req.body },
-    { new: true }
-  )
+  const post = await Post.findOne({
+    author: authorId,
+    title: postTitle,
+    _id: postId,
+  })
     .populate('author')
-    .populate('tags')
-    .exec();
+    .populate('tags');
 
-  await updateTags(formattedTags, updatedPost);
+  Object.keys(req.body).map(key => {
+    if (key !== 'tags') post[key] = req.body[key];
+  });
 
-  res.status(200).json(updatedPost);
+  await updateTags(formattedTags, post);
+
+  await post.save();
+
+  res.status(200).json(post);
 };
 
 const deletePostsByUserId = async user => {

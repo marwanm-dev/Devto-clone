@@ -10,9 +10,9 @@ import Tag from './components/Tag';
 
 const Tags = () => {
   const searchValue = useSelector(selectSearchValue);
-  const { data: tags } = useGetTagsQuery([], { refetchOnMountOrArgChange: true });
+  const { data: tags } = useGetTagsQuery([null], { refetchOnMountOrArgChange: true });
   const { id: userId } = useSelector(selectCurrentUser);
-  const modifiedTags = tags.map(tag => {
+  const modifiedTags = tags?.map(tag => {
     return { ...tag, isFollowed: tag.followers.includes(userId) };
   });
   usePlaceholder('tags by name');

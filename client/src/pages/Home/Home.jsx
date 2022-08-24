@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import tw, { theme } from 'twin.macro';
 import PostsList from '../../common/PostsList';
 import Resources from '../../common/Resources';

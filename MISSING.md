@@ -6,6 +6,10 @@ Notifications system (front/back(socket.io + schema + controller)) => New skill 
 
 Auth0 Authentication
 
+About/Contact/etc pages
+
+SAVE button on postsList
+
 _NEEDS FIX_
 
 Reply deletion results in deleting the lowest reply until refresh
@@ -18,7 +22,7 @@ _STANDBY SOLUTIONS_
 
 Redirect to previous page he was on if refresh token expired and he was redirected to login and actually logged back
 
-See wtf is this
+See wtf is this (any rtk query with no args should be [null])
 works => useGetPostsQuery([null], { refetchOnMountOrArgChange: true })
 doesn't work => useGetPostsQuery([], { refetchOnMountOrArgChange: true })
 neither this => useGetPostsQuery((null || undefined), { refetchOnMountOrArgChange: true })

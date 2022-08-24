@@ -3,6 +3,10 @@ const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
 const cookieParser = require('cookie-parser');
+const { createServer } = require('http');
+
+const socketHandlers = require('./utils/socket');
+
 const corsOptions = require('./config/corsOptions');
 const dbConn = require('./config/dbConn');
 
@@ -12,6 +16,7 @@ const credentials = require('./middleware/credentials');
 
 const { Server } = require('socket.io');
 const app = express();
+const httpServer = createServer(app);
 const PORT = process.env.PORT || 5000;
 
 // Connect to MongoDB
@@ -55,9 +60,10 @@ app.use('/tags', require('./routes/tags'));
 
 mongoose.connection.once('open', () => {
   console.log(`Connected to MongoDB, The Server Running on http://localhost:${PORT}`);
-  // io "on" events
-  // const io = new Server(PORT, {
-  //   corsOptions,
-  // });
-  app.listen(PORT);
+
+  const io = new Server(httpServer, { cors: corsOptions });
+
+  socketHandlers(io);
+
+  httpServer.listen(PORT);
 });

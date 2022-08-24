@@ -45,19 +45,22 @@ const createTags = async (tags, post) => {
 };
 
 const deleteTags = async (tags, post, isPostDeletion) => {
-  for (const [i, tag] of post.tags.entries()) {
-    if (isPostDeletion ? tags.includes(tag.name) : !tags.includes(tag.name)) {
-      const postTag = await Tag.findOneAndUpdate(
-        { _id: post.tags[i]._id },
-        { $pull: { posts: post._id } }
-      );
-      await Post.updateOne({ _id: post._id }, { $pull: { tags: post.tags[i]._id } });
-      if (postTag.posts.length === 1) await Tag.deleteOne({ name: tag.name });
-    }
-  }
+  post.tags.map((tag, i) => {
+    (async () => {
+      if (isPostDeletion ? tags.includes(tag.name) : !tags.includes(tag.name)) {
+        const postTag = await Tag.findOneAndUpdate(
+          { _id: post.tags[i]._id },
+          { $pull: { posts: post._id } }
+        );
+        await Post.updateOne({ _id: post._id }, { $pull: { tags: post.tags[i]._id } });
+        if (postTag.posts.length == 1) await Tag.deleteOne({ name: tag.name });
+      }
+    })();
+  });
 };
 
 const updateTags = async (tags, post) => {
+  console.log({ tags, postTags: post.tags });
   await createTags(tags, post);
   await deleteTags(tags, post, false);
 };

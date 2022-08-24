@@ -4,7 +4,7 @@ import { useGetNumTagsQuery } from '../../../core/features/tags/tagsApiSlice';
 import Tag from './Tag';
 
 const Tags = () => {
-  const { data: tags } = useGetNumTagsQuery([], { refetchOnMountOrArgChange: true });
+  const { data: tags } = useGetNumTagsQuery([null], { refetchOnMountOrArgChange: true });
 
   return <Wrapper>{tags && tags.map((tag, i) => <Tag tag={tag} key={i} />)}</Wrapper>;
 };
