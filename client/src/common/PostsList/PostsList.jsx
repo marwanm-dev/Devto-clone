@@ -10,7 +10,7 @@ import Post from './components/Post';
 
 const PostsList = ({ tagname = null }) => {
   const searchValue = useSelector(selectSearchValue);
-  const { data: posts, isLoading } = useGetPostsQuery([null], {
+  const { data: posts, isLoading } = useGetPostsQuery(null, {
     refetchOnMountOrArgChange: true,
   });
   const [filteredPosts, setFilteredPosts] = useState(posts);
@@ -23,12 +23,18 @@ const PostsList = ({ tagname = null }) => {
   useEffect(() => {
     setFilteredPosts(
       searchValue && !tagname
-        ? posts?.filter(post => post.title.includes(searchValue))
+        ? posts?.filter(post => post.title.toLowerCase().includes(searchValue.toLowerCase()))
         : !searchValue && tagname
         ? posts?.filter(post => post.tags.some(tag => tag.name === tagname))
+        : searchValue && tagname
+        ? posts?.filter(
+            post =>
+              post.title.toLowerCase().includes(searchValue.toLowerCase()) &&
+              post.tags.some(tag => tag.name === tagname)
+          )
         : posts
     );
-  }, [searchValue, tagname]);
+  }, [searchValue, tagname, posts]);
 
   return (
     <Wrapper>

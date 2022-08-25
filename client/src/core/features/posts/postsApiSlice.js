@@ -4,7 +4,13 @@ const postsApiSlice = apiSlice.injectEndpoints({
   endpoints: builder => ({
     getPosts: builder.query({
       query: args => '/posts',
-      transformResponse: response => response.sort((a, b) => (a.date < b.date ? 1 : -1)),
+      providesTags: (result, err, args) =>
+        result
+          ? [{ type: 'Post', id: 'LIST' }, ...result.map(({ _id }) => ({ type: 'Post', id: _id }))]
+          : [{ type: 'Post', id: 'LIST' }],
+    }),
+    getBookmarkedPosts: builder.query({
+      query: id => `/posts/bookmarked/${id}`,
       providesTags: (result, err, args) =>
         result
           ? [{ type: 'Post', id: 'LIST' }, ...result.map(({ _id }) => ({ type: 'Post', id: _id }))]
@@ -96,8 +102,11 @@ const postsApiSlice = apiSlice.injectEndpoints({
 export const {
   useGetPostsQuery,
   useGetPostQuery,
+  useGetBookmarkedPostsQuery,
   useCreatePostMutation,
   useUpdatePostMutation,
   useDeletePostMutation,
   usePostReactionMutation,
 } = postsApiSlice;
+
+export default postsApiSlice;

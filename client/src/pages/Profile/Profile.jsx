@@ -109,7 +109,10 @@ const EditButton = tw.button`absolute top-lg right-lg text-white bg-blue rounded
 
 const FollowButton = styled.button`
   ${tw`bg-blue text-white border border-solid border-transparent absolute top-lg right-lg rounded-md py-2 px-4`}
-  ${({ isFollowed }) => isFollowed && tw`text-blue border-blue bg-white`}
+  ${({ isFollowed }) =>
+    isFollowed
+      ? tw`text-blue border-blue bg-transparent`
+      : tw`hover:(text-blue border-blue bg-transparent)`}
 `;
 
 const Name = tw.h2``;

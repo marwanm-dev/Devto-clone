@@ -1,12 +1,12 @@
-import tw, { styled } from 'twin.macro';
-import useScroll from '../../../hooks/useScroll';
-import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import tw, { styled } from 'twin.macro';
 import { selectCurrentUser } from '../../../core/features/auth/authSlice';
+import usePostReaction from '../../../hooks/usePostReaction';
+import useScroll from '../../../hooks/useScroll';
+import BookmarkPost from './BookmarkPost';
 import LikePost from './LikePost';
 import UnicornPost from './UnicornPost';
-import BookmarkPost from './BookmarkPost';
-import usePostReaction from '../hooks/usePostReaction';
 
 const Reactions = ({ post }) => {
   const { scrollDirection } = useScroll();
@@ -22,7 +22,8 @@ const Reactions = ({ post }) => {
     author,
     likesArr,
     unicornsArr,
-    bookmarksArr
+    bookmarksArr,
+    post.title
   );
   const { isLiked, isUnicorned, isBookmarked } = state;
 

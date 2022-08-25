@@ -1,12 +1,29 @@
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import tw from 'twin.macro';
+import tw, { styled } from 'twin.macro';
 import { selectCurrentUser } from '../../core/features/auth/authSlice';
+import { useHandleUserFollowMutation } from '../../core/features/users/usersApiSlice';
 import { formatDate } from '../../helpers/string';
 
-const AuthorDetails = ({ isLaptop, author }) => {
+const AuthorDetails = ({ isLaptop, post }) => {
   const navigate = useNavigate();
   const currentUser = useSelector(selectCurrentUser);
+  const [handleUserFollow] = useHandleUserFollowMutation();
+  const { _id, title, author } = post;
+  const isFollowed = author?.followers?.includes(currentUser.id);
+
+  const handleFollowFunc = async () => {
+    await handleUserFollow({
+      previewedId: author._id,
+      action: isFollowed ? 'unFollow' : 'follow',
+      currentId: currentUser.id,
+      previewedUsername: author.username,
+      post: {
+        title,
+        _id,
+      },
+    });
+  };
 
   return (
     <Wrapper isLaptop={isLaptop} scrollY={scrollY}>
@@ -17,7 +34,9 @@ const AuthorDetails = ({ isLaptop, author }) => {
       {author.username === currentUser.username ? (
         <EditButton onClick={() => navigate('/customize')}>Edit details</EditButton>
       ) : (
-        <FollowButton>Follow</FollowButton>
+        <FollowButton onClick={handleFollowFunc} isFollowed={isFollowed}>
+          {isFollowed ? 'Following' : 'Follow'}
+        </FollowButton>
       )}
       <Bio>{author.bio}</Bio>
       <Heading>Skills/languages</Heading>
@@ -34,11 +53,17 @@ const AuthorDetails = ({ isLaptop, author }) => {
 
 const Header = tw.div`flex items-center gap-2`;
 
-const Avatar = tw.img`w-12 rounded-full`;
+const Avatar = tw.img`w-14 h-14 rounded-full`;
 
 const Name = tw.h2`cursor-pointer hover:text-blue`;
 
-const FollowButton = tw.button`w-full py-2 bg-blue text-white text-center rounded-md my-md`;
+const FollowButton = styled.button`
+  ${tw`w-full bg-blue text-white border border-solid border-transparent rounded-md my-md py-2 px-4`}
+  ${({ isFollowed }) =>
+    isFollowed
+      ? tw`text-blue border-blue bg-transparent`
+      : tw`hover:(text-blue border-blue bg-transparent)`}
+`;
 
 const EditButton = tw(FollowButton)``;
 

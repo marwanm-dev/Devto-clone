@@ -1,13 +1,16 @@
-import { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { selectCurrentUser } from '../../../core/features/auth/authSlice';
-import { usePostReactionMutation } from '../../../core/features/posts/postsApiSlice';
-import { checkInArray } from '../../../helpers/array';
+import { useParams } from 'react-router-dom';
+import { selectCurrentUser } from '../core/features/auth/authSlice';
+import { usePostReactionMutation } from '../core/features/posts/postsApiSlice';
+import { checkInArray } from '../helpers/array';
+import { createPostUrl } from '../helpers/string';
 
-const usePostReaction = (postId, author, likes, unicorns, bookmarks) => {
+const usePostReaction = (postId, author, likes, unicorns, bookmarks, postTitle) => {
   const currentUser = useSelector(selectCurrentUser);
-  const { username, postUrl } = useParams();
+
+  const username = author.username;
+  const postUrl = createPostUrl(postTitle, postId);
 
   const [postReaction] = usePostReactionMutation();
 
@@ -26,7 +29,12 @@ const usePostReaction = (postId, author, likes, unicorns, bookmarks) => {
     updateReactionArr(arr, effect);
 
     setState(prev => ({ ...prev, [stateKey]: !prev[stateKey] }));
-
+    console.log({
+      url: `${username}/${postUrl}`,
+      action: `${action}`,
+      userId: currentUser.id,
+      postId,
+    });
     await postReaction({
       url: `${username}/${postUrl}`,
       action: `${action}`,

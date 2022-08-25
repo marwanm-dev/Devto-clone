@@ -10,7 +10,7 @@ import Tag from './components/Tag';
 
 const Tags = () => {
   const searchValue = useSelector(selectSearchValue);
-  const { data: tags } = useGetTagsQuery([null], { refetchOnMountOrArgChange: true });
+  const { data: tags } = useGetTagsQuery(null, { refetchOnMountOrArgChange: true });
   const { id: userId } = useSelector(selectCurrentUser);
   const modifiedTags = tags?.map(tag => {
     return { ...tag, isFollowed: tag.followers.includes(userId) };
@@ -23,7 +23,7 @@ const Tags = () => {
         {modifiedTags &&
           modifiedTags.map(
             tag =>
-              tag.name.includes(searchValue) && (
+              tag.name.toLowerCase().includes(searchValue.toLowerCase()) && (
                 <Tag key={nanoid()} tag={tag} isFollowed={tag.isFollowed} />
               )
           )}

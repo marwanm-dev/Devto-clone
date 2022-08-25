@@ -10,9 +10,11 @@ import {
   REHYDRATE,
 } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
+
 import apiSlice from './features/api/apiSlice';
 import authReducer from './features/auth/authSlice';
 import searchReducer from './features/search/searchSlice';
+import socketReducer from './features/socket/socketSlice';
 
 const persistConfig = {
   key: 'root',
@@ -24,6 +26,7 @@ const rootReducer = combineReducers({
   [apiSlice.reducerPath]: apiSlice.reducer,
   auth: authReducer,
   search: searchReducer,
+  socket: socketReducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

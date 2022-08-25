@@ -1,13 +1,25 @@
-import { io } from 'socket.io-client';
+import { useEffect } from 'react';
+import { useSelector } from 'react-redux';
 import tw, { styled } from 'twin.macro';
+import LoadingSpinner from '../../common/LoadingSpinner';
 import RouteWrapper from '../../common/RouteWrapper';
+import { selectCurrentUser } from '../../core/features/auth/authSlice';
+import { useGetAllNotificationsQuery } from '../../core/features/users/usersApiSlice';
 
 const Notifications = () => {
+  const { id } = useSelector(selectCurrentUser);
+  const { data: notifications, isLoading } = useGetAllNotificationsQuery(id, {
+    refetchOnMountOrArgChange: true,
+  });
+
+  useEffect(() => {
+    console.log(notifications);
+  }, [notifications]);
+
   return (
     <RouteWrapper>
-      <Wrapper>
-        <h1>Notifications page</h1>
-      </Wrapper>
+      {isLoading && <LoadingSpinner />}
+      {!isLoading && <Wrapper></Wrapper>}
     </RouteWrapper>
   );
 };

@@ -2,6 +2,7 @@ const Comment = require('../model/Comment');
 const Post = require('../model/Post');
 const User = require('../model/User');
 const { unCapitalizeFirstLetter } = require('../helpers/string');
+const { commentNotification, removeCommentNotification } = require('./notificationsController');
 
 const getCommentsByPost = async (req, res) => {
   const comments = await Comment.find({ parentPost: req.params.postId }).populate('author');
@@ -26,6 +27,8 @@ const postComment = async (req, res) => {
 
   await post.save({ timestamps: false });
   await user.save();
+
+  commentNotification(author, parentPost, comment._id, post.author);
 
   res.status(200).json(comment);
 };
@@ -67,6 +70,8 @@ const deleteComment = async (req, res) => {
 
   await post.save({ timestamps: false });
   await user.save();
+
+  await removeCommentNotification(comment.author, comment.parentPost, comment._id, post.author);
 
   res.status(200).json(comment);
 };

@@ -9,6 +9,8 @@ const GlobalReset = createGlobalStyle`
   transition: all .25s;
 }
 
+path,
+svg,
 i::before,
 i::after {
   transition: initial;

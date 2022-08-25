@@ -26,7 +26,7 @@ const PostPage = () => {
           <Wrapper>
             <Reactions post={post} />
             <Post post={post} isLaptop={isLaptop} />
-            {!isLaptop && <AuthorDetails isLaptop={isLaptop} author={post.author} />}
+            {!isLaptop && <AuthorDetails isLaptop={isLaptop} post={post} />}
           </Wrapper>
         ) : (
           <NotFound />

@@ -1,5 +1,7 @@
+import { createPostUrl } from '../../../helpers/string';
 import apiSlice from '../api/apiSlice';
 import { setCredentials } from '../auth/authSlice';
+import postsApiSlice from '../posts/postsApiSlice';
 
 const usersApiSlice = apiSlice.injectEndpoints({
   endpoints: builder => ({
@@ -12,6 +14,12 @@ const usersApiSlice = apiSlice.injectEndpoints({
       query: username => `/users/dash/${username}`,
       providesTags: (result, err, args) =>
         result ? [{ type: 'User', id: result._id }] : [{ type: 'User', id: 'LIST' }],
+    }),
+    getAllNotifications: builder.query({
+      query: id => `/users/${id}/notifications`,
+    }),
+    getUnreadNotifications: builder.query({
+      query: id => `/users/${id}/notifications/unread`,
     }),
     deleteUser: builder.mutation({
       query: ({ id }) => ({
@@ -65,14 +73,27 @@ const usersApiSlice = apiSlice.injectEndpoints({
         body: { currentId },
         method: 'PATCH',
       }),
-      invalidatesTags: (result, err, { previewedId }) => [{ type: 'User', id: previewedId }],
-      async onQueryStarted({ previewedUsername, ...patch }, { dispatch, queryFulfilled }) {
+      invalidatesTags: (result, err, { previewedId, post }) => [
+        { type: post ? 'Post' : 'User', id: post ? post._id : previewedId },
+      ],
+      async onQueryStarted({ previewedUsername, post, ...patch }, { dispatch, queryFulfilled }) {
         const username = previewedUsername;
         const patchResult = dispatch(
-          usersApiSlice.util.updateQueryData('getUser', username, draftUser => {
-            Object.assign(draftUser, patch);
-          })
+          post
+            ? postsApiSlice.util.updateQueryData(
+                'getPost',
+                {
+                  url: `${previewedUsername}/${createPostUrl(post.title, post._id)}`,
+                },
+                draftPost => {
+                  Object.assign(draftPost, patch);
+                }
+              )
+            : usersApiSlice.util.updateQueryData('getUser', username, draftUser => {
+                Object.assign(draftUser, patch);
+              })
         );
+
         try {
           await queryFulfilled;
         } catch {
@@ -87,6 +108,8 @@ const usersApiSlice = apiSlice.injectEndpoints({
 export const {
   useGetUserQuery,
   useGetUserDashboardQuery,
+  useGetAllNotificationsQuery,
+  useGetUnreadNotificationsQuery,
   useDeleteUserMutation,
   useUpdateUserMutation,
   useHandleUserFollowMutation,

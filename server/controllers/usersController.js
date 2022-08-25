@@ -4,6 +4,7 @@ const Comment = require('../model/Comment');
 const cloudinary = require('../config/cloudinary');
 const { uploadToCloudinary } = require('../utils/cloudinary');
 const { deletePostsByUserId } = require('./postsController');
+const { followNotification, removeFollowNotification } = require('./notificationsController');
 
 const getUser = async (req, res) => {
   const username = req.params.username;
@@ -87,6 +88,9 @@ const handleFollow = async (req, res) => {
     { [isUndoing ? '$pull' : '$addToSet']: { followers: currentId } },
     { new: true, timestamps: false }
   );
+
+  if (isUndoing) await removeFollowNotification(currentId, previewedId);
+  else await followNotification(currentId, previewedId);
 
   res.json(followedUser);
 };

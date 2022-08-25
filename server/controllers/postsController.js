@@ -6,6 +6,7 @@ const cloudinary = require('../config/cloudinary');
 const { uploadToCloudinary } = require('../utils/cloudinary');
 const { getPostParams, unCapitalizeFirstLetter } = require('../helpers/string');
 const { createTags, updateTags, deleteTags } = require('./tagsController');
+const { likeNotification, removeLikeNotification } = require('./notificationsController');
 
 const createPost = async (req, res) => {
   const { title, file, body, tags, authorUsername } = req.body;
@@ -54,6 +55,18 @@ const getPost = async (req, res) => {
 
 const getPosts = async (req, res) => {
   const posts = await Post.find({}).sort({ createdAt: -1 }).populate('author').populate('tags');
+  if (!posts) res.status(204).json('No posts found');
+
+  res.status(200).json(posts);
+};
+
+const getBookmarkedPosts = async (req, res) => {
+  const { userId } = req.params;
+
+  const posts = await Post.find({ bookmarks: userId })
+    .sort({ createdAt: -1 })
+    .populate('author')
+    .populate('tags');
   if (!posts) res.status(204).json('No posts found');
 
   res.status(200).json(posts);
@@ -179,6 +192,9 @@ const postReaction = async (req, res) => {
     { new: true, timestamps: false }
   );
 
+  if (isUndoing) await removeLikeNotification(userId, updatedPost._id, authorId);
+  else await likeNotification(userId, updatedPost._id, authorId);
+
   res.status(200).json(updatedPost);
 };
 
@@ -186,6 +202,7 @@ module.exports = {
   createPost,
   getPosts,
   getPost,
+  getBookmarkedPosts,
   updatePost,
   deletePost,
   deletePostsByUserId,
