@@ -4,6 +4,7 @@ import tw, { styled } from 'twin.macro';
 import CommentModifiers from '../../../common/CommentModifiers';
 import CommentReactions from '../../../common/CommentReactions';
 import { selectCurrentUser } from '../../../core/features/auth/authSlice';
+import { formatDate } from '../../../helpers/string';
 import useToggle from '../../../hooks/useToggle';
 import Replies from './Replies';
 
@@ -50,7 +51,7 @@ const Comment = ({ comment, replies, parentCommentIfReply = null }) => {
           <Content isFocused={isFocused}>
             <Meta>
               <Name>{comment.author?.name}</Name>
-              <CreatedAt>{comment.date}</CreatedAt>
+              <CreatedAt>{formatDate(comment.createdAt)}</CreatedAt>
             </Meta>
 
             <TextArea

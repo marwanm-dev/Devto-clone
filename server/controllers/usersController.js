@@ -25,7 +25,7 @@ const getUserDashboard = async (req, res) => {
     .populate({ path: 'posts', options: { sort: { createdAt: -1 } } })
     .populate('following')
     .populate('followers')
-    .populate({ path: 'followedTags', options: { sort: { followers: -1 } } });
+    .populate({ path: 'followedTags', options: { sort: { posts: -1 } } });
 
   if (!user) return res.status(204).json({ message: `User ${username} not found` });
 

@@ -8,6 +8,10 @@ const CommentModifier = ({ id, editMode, setEditMode, textareaRef }) => {
   const [deleteComment] = useDeleteCommentMutation();
   const [updateComment] = useUpdateCommentMutation();
 
+  const handleDelete = () => {
+    deleteComment(id);
+  };
+
   return (
     <Wrapper>
       {editMode ? (
@@ -24,7 +28,7 @@ const CommentModifier = ({ id, editMode, setEditMode, textareaRef }) => {
       ) : (
         <>
           <EditButton onClick={() => setEditMode(true)}>Edit</EditButton>
-          <DeleteButton onClick={() => deleteComment(id)}>Delete</DeleteButton>
+          <DeleteButton onClick={handleDelete}>Delete</DeleteButton>
         </>
       )}
     </Wrapper>

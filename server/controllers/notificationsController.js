@@ -5,7 +5,7 @@ const getAllNotifications = async (req, res, next) => {
 
   await Notification.updateMany({ receiver: userId }, { read: true });
   const notifications = await Notification.find({ receiver: userId })
-    .sort({ date: -1 })
+    .sort({ createdAt: -1 })
     .populate('receiver')
     .populate('sender')
     .populate('post')

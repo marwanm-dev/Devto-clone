@@ -28,6 +28,7 @@ const Comments = ({ postId }) => {
     if (!isAuthed) handleAuth();
     if (body) {
       try {
+        // socket.emit('comment')
         postComment({ body, author: currentUser.id, parentPost: postId });
 
         setBody('');

@@ -1,3 +1,4 @@
+import { useContext, useEffect, useState } from 'react';
 import { FaDev } from 'react-icons/fa';
 import { GiHamburgerMenu } from 'react-icons/gi';
 import { IoSearch } from 'react-icons/io5';
@@ -5,7 +6,9 @@ import { RiNotification3Line } from 'react-icons/ri';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import tw, { styled, theme } from 'twin.macro';
+import SocketContext from '../../context/SocketContext';
 import { selectCurrentUser } from '../../core/features/auth/authSlice';
+import { useGetUnreadNotificationsQuery } from '../../core/features/users/usersApiSlice';
 import { preventScroll } from '../../helpers/body';
 import useBreakpoint from '../../hooks/useBreakpoint';
 import useRequireAuth from '../../hooks/useRequireAuth';
@@ -16,12 +19,23 @@ import Search from './components/Search';
 const Navbar = () => {
   const currentUser = useSelector(selectCurrentUser);
   const { isAuthed } = useRequireAuth();
-
+  const { current } = useContext(SocketContext);
   const isMobile = useBreakpoint(theme`screens.mob.max`.replace('px', ''));
 
   const [profileMenu, toggleProfileMenu] = useToggle(false);
   const [mobileSearch, toggleMobileSearch] = useToggle(false);
   const [mobileMenu, toggleMobileMenu] = useToggle(false);
+
+  const { data: oldUnreadNotifications } = useGetUnreadNotificationsQuery(currentUser.id, {
+    refetchOnMountOrArgChange: true,
+  });
+  const [unreadNotifications, setUnreadNotifications] = useState(oldUnreadNotifications || []);
+
+  useEffect(() => {
+    socket.on('notificationReceived', data => {
+      setUnreadNotifications(prev => [...prev, data]);
+    });
+  }, [socket]);
 
   preventScroll(mobileMenu);
 
@@ -52,7 +66,7 @@ const Navbar = () => {
               )}
               <NotificationIcon>
                 <RiNotification3Line />
-                <Count>2</Count>
+                {unreadNotifications?.length > 0 && <Count>{unreadNotifications.length}</Count>}
               </NotificationIcon>
               <Avatar src={currentUser.picture.url} onClick={toggleProfileMenu} />
               {profileMenu && (

@@ -38,7 +38,7 @@ const updateComment = async (req, res) => {
 
   const { body } = req.body;
 
-  const updatedComment = await Comment.findByIdAndUpdate(commentId, { body, date }, { new: true });
+  const updatedComment = await Comment.findByIdAndUpdate(commentId, { body }, { new: true });
 
   res.status(200).json(updatedComment);
 };

@@ -19,7 +19,10 @@ const socketHandlers = io => {
       console.log(`After add: ${onlineUsers}`);
     });
 
-    // socket.on(like-comment-post-reply-follow)
+    socket.on('follow', ({ sender, receiver }) => {
+      const receiverSocket = findConnectedUser(receiver._id);
+      socket.emit('notificationReceived');
+    });
 
     socket.on('disconnect', () => {
       removeUser(socket.id);

@@ -1,9 +1,7 @@
 import { Auth0Provider } from '@auth0/auth0-react';
 import { AnimatePresence } from 'framer-motion';
-import { useEffect, useState } from 'react';
-import { Provider, useDispatch, useSelector } from 'react-redux';
+import { Provider } from 'react-redux';
 import { BrowserRouter as Router, Route, Routes, useLocation } from 'react-router-dom';
-import { io } from 'socket.io-client';
 
 // Store
 import { PersistGate } from 'redux-persist/integration/react';
@@ -36,21 +34,11 @@ import Layout from '../common/Layout';
 import NotFound from '../common/NotFound';
 import RequireAuth from '../common/RequireAuth/RequireAuth';
 
-import { selectCurrentUser } from '../core/features/auth/authSlice';
+// Contexts
+import { SocketProvider } from '../context/SocketContext';
 
 const AnimatedRoutes = () => {
   const location = useLocation();
-  const { username } = useSelector(selectCurrentUser);
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    //! Must be in redux slice so u can access it easily
-    // try in state first
-    const socket = io('http://localhost:5000');
-    socket.on('connect', () => {
-      socket.emit('join', username);
-    });
-  }, []);
 
   return (
     <AnimatePresence exitBeforeEnter>
@@ -116,11 +104,13 @@ const MainRouter = () => {
         clientId={process.env.REACT_APP_AUTH0_CLIENT_ID}
         redirectUri={window.location.origin}>
         <Provider store={store}>
-          <PersistGate loading={null} persistor={persistor}>
-            <Routes>
-              <Route path='/*' element={<AnimatedRoutes />} />
-            </Routes>
-          </PersistGate>
+          <SocketProvider>
+            <PersistGate loading={null} persistor={persistor}>
+              <Routes>
+                <Route path='/*' element={<AnimatedRoutes />} />
+              </Routes>
+            </PersistGate>
+          </SocketProvider>
         </Provider>
       </Auth0Provider>
     </Router>

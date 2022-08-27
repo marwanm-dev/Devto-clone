@@ -4,14 +4,14 @@ const Post = require('../model/Post');
 const { unCapitalizeFirstLetter } = require('../helpers/string');
 
 const getTags = async (req, res) => {
-  const tags = await Tag.find({}).sort({ followers: -1 });
+  const tags = await Tag.find({}).sort({ posts: -1 });
 
   res.status(200).json(tags);
 };
 
 const getFollowingTags = async (req, res) => {
   const { userId } = req.params;
-  const tags = await Tag.find({ followers: userId }).limit(6).sort({ followers: -1 });
+  const tags = await Tag.find({ followers: userId }).limit(6);
 
   res.status(200).json(tags);
 };

@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useContext, useEffect } from 'react';
 import { CgNotes } from 'react-icons/cg';
 import { FaBirthdayCake, FaHashtag, FaRegComment } from 'react-icons/fa';
 import { HiLocationMarker } from 'react-icons/hi';
@@ -7,6 +7,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import tw, { styled } from 'twin.macro';
 import NotFound from '../../common/NotFound/NotFound';
 import RouteWrapper from '../../common/RouteWrapper';
+import socketContext from '../../context/SocketContext';
 import { selectCurrentUser } from '../../core/features/auth/authSlice';
 import {
   useGetUserQuery,
@@ -21,8 +22,14 @@ const Profile = () => {
   const { data: previewedUser } = useGetUserQuery(username, { refetchOnMountOrArgChange: true });
   const [handleUserFollow] = useHandleUserFollowMutation();
   const isFollowed = previewedUser?.followers?.includes(currentUser.id);
+  const { current } = useContext(socketContext);
 
-  const handleFollowFunc = async () => {
+  const handleFollow = async () => {
+    if (!isFollowed)
+      current.emit('follow', {
+        sender: currentUser,
+        receiver: previewedUser,
+      });
     await handleUserFollow({
       previewedId: previewedUser._id,
       action: isFollowed ? 'unFollow' : 'follow',
@@ -40,7 +47,7 @@ const Profile = () => {
             {previewedUser.username === currentUser.username ? (
               <EditButton onClick={() => navigate('/customize')}>Edit profile</EditButton>
             ) : (
-              <FollowButton onClick={handleFollowFunc} isFollowed={isFollowed}>
+              <FollowButton onClick={handleFollow} isFollowed={isFollowed}>
                 {isFollowed ? 'Following' : 'Follow'}
               </FollowButton>
             )}
@@ -53,7 +60,7 @@ const Profile = () => {
               </LocationWrapper>
               <CreatedAtWrapper>
                 <FaBirthdayCake />
-                <CreatedAt>Joined on {formatDate(previewedUser.createdAt)}</CreatedAt>
+                <CreatedAt>Joined {formatDate(previewedUser.createdAt)}</CreatedAt>
               </CreatedAtWrapper>
             </Other>
             <Footer>

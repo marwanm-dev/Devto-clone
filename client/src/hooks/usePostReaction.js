@@ -1,6 +1,7 @@
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
+import SocketContext from '../context/SocketContext';
 import { selectCurrentUser } from '../core/features/auth/authSlice';
 import { usePostReactionMutation } from '../core/features/posts/postsApiSlice';
 import { checkInArray } from '../helpers/array';
@@ -11,6 +12,8 @@ const usePostReaction = (postId, author, likes, unicorns, bookmarks, postTitle) 
 
   const username = author.username;
   const postUrl = createPostUrl(postTitle, postId);
+
+  const { current } = useContext(SocketContext);
 
   const [postReaction] = usePostReactionMutation();
 
@@ -29,12 +32,9 @@ const usePostReaction = (postId, author, likes, unicorns, bookmarks, postTitle) 
     updateReactionArr(arr, effect);
 
     setState(prev => ({ ...prev, [stateKey]: !prev[stateKey] }));
-    console.log({
-      url: `${username}/${postUrl}`,
-      action: `${action}`,
-      userId: currentUser.id,
-      postId,
-    });
+
+    // current.emit('like')
+
     await postReaction({
       url: `${username}/${postUrl}`,
       action: `${action}`,

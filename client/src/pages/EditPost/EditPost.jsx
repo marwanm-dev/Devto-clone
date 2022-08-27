@@ -1,6 +1,6 @@
 import 'easymde/dist/easymde.min.css';
 import { useEffect, useRef, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import SimpleMDE from 'react-simplemde-editor';
 import tw from 'twin.macro';
@@ -19,10 +19,9 @@ import useRequireAuth from '../../hooks/useRequireAuth';
 
 const EditPost = () => {
   const currentUser = useSelector(selectCurrentUser);
-  const dispatch = useDispatch();
   const { username, postUrl } = useParams();
 
-  const { data: post, isLoading } = useGetPostQuery(
+  const { data: post, isLoading: postIsLoading } = useGetPostQuery(
     { url: `${username}/${postUrl}` },
     { refetchOnMountOrArgChange: true }
   );
@@ -44,6 +43,15 @@ const EditPost = () => {
   const previewURL = useBase64(file);
   const navigate = useNavigate();
   const { isAuthed } = useRequireAuth();
+
+  useEffect(() => {
+    setId(post?._id);
+    setPublicId(post?.image?.publicId);
+    setTitle(post?.title);
+    setFile(post?.image?.url);
+    setBody(post?.body);
+    setTags(post?.tags.map(tag => tag.name).join(', '));
+  }, [post]);
 
   useEffect(() => titleRef.current?.focus(), []);
 
@@ -101,65 +109,68 @@ const EditPost = () => {
   };
 
   return (
-    <RouteWrapper>
-      {!isLoading && username === currentUser.username ? (
-        <Wrapper>
-          {(updateIsLoading || deletionIsLoading) && <LoadingSpinner />}
-          {!updateIsLoading && !deletionIsLoading && (
-            <NewPostWrapper>
-              <Heading>Edit post</Heading>
-              <InputWrapper>
-                <Label htmlFor='title'>Title</Label>
-                <Input
-                  ref={titleRef}
-                  id='title'
-                  value={title}
-                  onBlur={() => setTitle(prev => prev?.trim())}
-                  onChange={e => setTitle(e.target.value)}
-                  required
-                />
-              </InputWrapper>
-              <InputWrapper>
-                <Input
-                  type='file'
-                  ref={filePickerRef}
-                  onChange={e => setFile(e.target.files[0])}
-                  style={{ display: 'none' }}
-                  required
-                />
-                <ImagePreview src={previewURL.toString()} alt='Please pick an image' />
-                <Button onClick={() => filePickerRef.current.click()}>Choose image</Button>
-              </InputWrapper>
-              <InputWrapper>
-                <SimpleMDE value={body} onChange={setBody} required />
-              </InputWrapper>
-              <InputWrapper>
-                <Label htmlFor='tags'>
-                  Tags
-                  {isTagsFocused && (
-                    <Span>Tags separated by commas, word by either dashes or underscores</Span>
-                  )}
-                </Label>
-                <Input
-                  id='tags'
-                  value={tags}
-                  onFocus={() => setIsTagsFocused(true)}
-                  onBlur={() => setIsTagsFocused(false)}
-                  onChange={e => setTags(e.target.value)}
-                  required
-                />
-              </InputWrapper>
-              <Submit onClick={handleUpdate}>Submit</Submit>
-              {isError && <Error>Something went wrong.</Error>}
-              {!inputsFilled && <Error>All inputs must be filled.</Error>}
-              <DeletePost onClick={handleDeletion}>Delete post</DeletePost>
-            </NewPostWrapper>
-          )}
-        </Wrapper>
-      ) : (
-        <NotFound />
-      )}
-    </RouteWrapper>
+    !postIsLoading &&
+    post && (
+      <RouteWrapper>
+        {username === currentUser.username ? (
+          <Wrapper>
+            {(updateIsLoading || deletionIsLoading) && <LoadingSpinner />}
+            {!updateIsLoading && !deletionIsLoading && (
+              <NewPostWrapper>
+                <Heading>Edit post</Heading>
+                <InputWrapper>
+                  <Label htmlFor='title'>Title</Label>
+                  <Input
+                    ref={titleRef}
+                    id='title'
+                    value={title}
+                    onBlur={() => setTitle(prev => prev?.trim())}
+                    onChange={e => setTitle(e.target.value)}
+                    required
+                  />
+                </InputWrapper>
+                <InputWrapper>
+                  <Input
+                    type='file'
+                    ref={filePickerRef}
+                    onChange={e => setFile(e.target.files[0])}
+                    style={{ display: 'none' }}
+                    required
+                  />
+                  <ImagePreview src={previewURL.toString()} alt='Please pick an image' />
+                  <Button onClick={() => filePickerRef.current.click()}>Choose image</Button>
+                </InputWrapper>
+                <InputWrapper>
+                  <SimpleMDE value={body} onChange={setBody} required />
+                </InputWrapper>
+                <InputWrapper>
+                  <Label htmlFor='tags'>
+                    Tags
+                    {isTagsFocused && (
+                      <Span>Tags separated by commas, word by either dashes or underscores</Span>
+                    )}
+                  </Label>
+                  <Input
+                    id='tags'
+                    value={tags}
+                    onFocus={() => setIsTagsFocused(true)}
+                    onBlur={() => setIsTagsFocused(false)}
+                    onChange={e => setTags(e.target.value)}
+                    required
+                  />
+                </InputWrapper>
+                <Submit onClick={handleUpdate}>Submit</Submit>
+                {isError && <Error>Something went wrong.</Error>}
+                {!inputsFilled && <Error>All inputs must be filled.</Error>}
+                <DeletePost onClick={handleDeletion}>Delete post</DeletePost>
+              </NewPostWrapper>
+            )}
+          </Wrapper>
+        ) : (
+          <NotFound />
+        )}
+      </RouteWrapper>
+    )
   );
 };
 

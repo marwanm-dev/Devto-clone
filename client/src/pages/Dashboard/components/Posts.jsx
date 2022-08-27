@@ -40,7 +40,7 @@ const Wrapper = tw.div`flex flex-col gap-2`;
 
 const Post = tw.div`p-5 flex items-center justify-between rounded-md border border-light-gray`;
 
-const Title = tw.h3`cursor-pointer hover:text-blue`;
+const Title = tw.h3`w-1/3 cursor-pointer hover:text-blue`;
 
 const Edit = tw(Link)`cursor-pointer hover:(text-blue underline)`;
 
