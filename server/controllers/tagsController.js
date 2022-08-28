@@ -6,14 +6,14 @@ const { unCapitalizeFirstLetter } = require('../helpers/string');
 const getTags = async (req, res) => {
   const tags = await Tag.find({}).sort({ posts: -1 });
 
-  res.status(200).json(tags);
+  res.status(200).json(tags.map(tag => tag.toObject({ getters: true })));
 };
 
 const getFollowingTags = async (req, res) => {
   const { userId } = req.params;
   const tags = await Tag.find({ followers: userId }).limit(6);
 
-  res.status(200).json(tags);
+  res.status(200).json(tags.map(tag => tag.toObject({ getters: true })));
 };
 
 const getNumTags = async (req, res) => {
@@ -22,13 +22,13 @@ const getNumTags = async (req, res) => {
     .sort({ posts: -1 })
     .populate({ path: 'posts', populate: 'author' });
 
-  res.status(200).json(tags);
+  res.status(200).json(tags.map(tag => tag.toObject({ getters: true })));
 };
 
 const getTagByName = async (req, res) => {
   const tag = await Tag.findOne({ name: req.params.name }).populate('posts').exec();
 
-  res.status(200).json(tag);
+  res.status(200).json(tag.toObject({ getters: true }));
 };
 
 const createTags = async (tags, post) => {
@@ -79,7 +79,7 @@ const handleFollow = async (req, res) => {
     isUndoing ? { $pull: { followedTags: tagId } } : { $addToSet: { followedTags: tagId } }
   );
 
-  res.json(updatedTag).status(200);
+  res.status(200).json(updatedTag.toObject({ getters: true }));
 };
 
 module.exports = {

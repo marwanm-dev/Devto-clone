@@ -19,7 +19,7 @@ const FollowTag = ({ tag, isFollowed }) => {
           name: tag.name,
           action: isFollowed ? 'unFollow' : 'follow',
           userId,
-          tagId: tag._id,
+          tagId: tag.id,
         });
       }}>
       {isFollowed ? 'Following' : 'Follow'}

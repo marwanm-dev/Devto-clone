@@ -22,16 +22,16 @@ const Profile = () => {
   const { data: previewedUser } = useGetUserQuery(username, { refetchOnMountOrArgChange: true });
   const [handleUserFollow] = useHandleUserFollowMutation();
   const isFollowed = previewedUser?.followers?.includes(currentUser.id);
-  const { current } = useContext(socketContext);
+  const { socket } = useContext(socketContext);
 
   const handleFollow = async () => {
     if (!isFollowed)
-      current.emit('follow', {
+      socket.emit('follow', {
         sender: currentUser,
         receiver: previewedUser,
       });
     await handleUserFollow({
-      previewedId: previewedUser._id,
+      previewedId: previewedUser.id,
       action: isFollowed ? 'unFollow' : 'follow',
       currentId: currentUser.id,
       previewedUsername: previewedUser.username,
@@ -107,26 +107,26 @@ const Wrapper = tw.div`max-w-[1200px]`;
 
 const Card = styled.div`
   box-shadow: 0 8px 5px -7px rgba(0, 0, 0, 0.2);
-  ${tw`bg-white flex flex-col items-center gap-sm relative rounded-md`}
+  ${tw`bg-white flex flex-col items-center gap-sm relative rounded-md mob:(items-start)`}
 `;
 
-const Avatar = tw.img`w-28 h-28 object-cover rounded-full border-4 border-black`;
+const Avatar = tw.img`w-28 h-28 object-cover rounded-full border-4 border-black mob:(ml-md)`;
 
-const EditButton = tw.button`absolute top-lg right-lg text-white bg-blue rounded-md py-2 px-4`;
+const EditButton = tw.button`absolute top-md right-md text-white bg-blue rounded-md py-2 px-4`;
 
 const FollowButton = styled.button`
-  ${tw`bg-blue text-white border border-solid border-transparent absolute top-lg right-lg rounded-md py-2 px-4`}
+  ${tw`absolute top-md right-md bg-blue text-white border border-solid border-transparent rounded-md py-2 px-4`}
   ${({ isFollowed }) =>
     isFollowed
       ? tw`text-blue border-blue bg-transparent`
       : tw`hover:(text-blue border-blue bg-transparent)`}
 `;
 
-const Name = tw.h2``;
+const Name = tw.h2` mob:(ml-md)`;
 
-const Bio = tw.p`text-lg max-w-2xl text-center`;
+const Bio = tw.p`text-lg max-w-2xl text-center mob:text-left mob:(ml-md)`;
 
-const Other = tw.div`flex gap-lg`;
+const Other = tw.div`flex gap-lg mob:(ml-md)`;
 
 const LocationWrapper = tw.div`flex gap-2 text-gray`;
 

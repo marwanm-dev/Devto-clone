@@ -1,4 +1,5 @@
-import { useContext, useEffect, useState } from 'react';
+import { useState } from 'react';
+import { useContext, useEffect } from 'react';
 import { FaDev } from 'react-icons/fa';
 import { GiHamburgerMenu } from 'react-icons/gi';
 import { IoSearch } from 'react-icons/io5';
@@ -8,7 +9,7 @@ import { Link } from 'react-router-dom';
 import tw, { styled, theme } from 'twin.macro';
 import SocketContext from '../../context/SocketContext';
 import { selectCurrentUser } from '../../core/features/auth/authSlice';
-import { useGetUnreadNotificationsQuery } from '../../core/features/users/usersApiSlice';
+import { useGetUnreadNotifsQuery } from '../../core/features/users/usersApiSlice';
 import { preventScroll } from '../../helpers/body';
 import useBreakpoint from '../../hooks/useBreakpoint';
 import useRequireAuth from '../../hooks/useRequireAuth';
@@ -19,25 +20,24 @@ import Search from './components/Search';
 const Navbar = () => {
   const currentUser = useSelector(selectCurrentUser);
   const { isAuthed } = useRequireAuth();
-  const { current } = useContext(SocketContext);
+  const { socket } = useContext(SocketContext);
   const isMobile = useBreakpoint(theme`screens.mob.max`.replace('px', ''));
-
   const [profileMenu, toggleProfileMenu] = useToggle(false);
   const [mobileSearch, toggleMobileSearch] = useToggle(false);
   const [mobileMenu, toggleMobileMenu] = useToggle(false);
-
-  const { data: oldUnreadNotifications } = useGetUnreadNotificationsQuery(currentUser.id, {
+  const { data: unreadNotifications, refetch } = useGetUnreadNotifsQuery(currentUser.id, {
     refetchOnMountOrArgChange: true,
   });
-  const [unreadNotifications, setUnreadNotifications] = useState(oldUnreadNotifications || []);
-
-  useEffect(() => {
-    socket.on('notificationReceived', data => {
-      setUnreadNotifications(prev => [...prev, data]);
-    });
-  }, [socket]);
 
   preventScroll(mobileMenu);
+
+  useEffect(() => {
+    console.log({ unreadNotifications });
+  }, [unreadNotifications]);
+
+  socket.on('notificationReceived', () => {
+    refetch();
+  });
 
   return (
     <Wrapper>
@@ -66,7 +66,8 @@ const Navbar = () => {
               )}
               <NotificationIcon>
                 <RiNotification3Line />
-                {unreadNotifications?.length > 0 && <Count>{unreadNotifications.length}</Count>}
+                {/* {unreadNotifications?.length > 0 && <Count>{unreadNotifications.length}</Count>} */}
+                {<Count>{unreadNotifications?.length}</Count>}
               </NotificationIcon>
               <Avatar src={currentUser.picture.url} onClick={toggleProfileMenu} />
               {profileMenu && (

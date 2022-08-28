@@ -7,12 +7,18 @@ const removeUser = socketId => {
   onlineUsers = onlineUsers.filter(user => user.socketId !== socketId);
 };
 
-const findConnectedUser = userId => onlineUsers.find(user => user.userId === userId);
+const findConnectedUser = username => onlineUsers.find(user => user.username === username);
 
 const socketHandlers = io => {
   return io.on('connection', socket => {
-    console.log(`new connected socketId: ${socket.id}`);
     console.log(`Previous onlineUsers: ${onlineUsers}`);
+
+    const handler = (sender, receiver) => {
+      const receiverSocket = findConnectedUser(receiver.username);
+      if (receiverSocket && sender.id != receiver.id) {
+        io.to(receiverSocket.socketId).emit('notificationReceived');
+      }
+    };
 
     socket.on('join', username => {
       addUser(username, socket.id);
@@ -20,8 +26,21 @@ const socketHandlers = io => {
     });
 
     socket.on('follow', ({ sender, receiver }) => {
-      const receiverSocket = findConnectedUser(receiver._id);
-      socket.emit('notificationReceived');
+      handler(sender, receiver);
+    });
+
+    socket.on('like', ({ sender, receiver }) => {
+      handler(sender, receiver);
+    });
+
+    socket.on('comment', ({ sender, receiver }) => {
+      handler(sender, receiver);
+    });
+
+    socket.on('post', ({ sender, receivers }) => {
+      receivers.map(receiver => {
+        handler(sender, receiver);
+      });
     });
 
     socket.on('disconnect', () => {

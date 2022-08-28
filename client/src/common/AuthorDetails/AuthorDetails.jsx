@@ -1,6 +1,8 @@
+import { useContext } from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import tw, { styled } from 'twin.macro';
+import SocketContext from '../../context/SocketContext';
 import { selectCurrentUser } from '../../core/features/auth/authSlice';
 import { useHandleUserFollowMutation } from '../../core/features/users/usersApiSlice';
 import { formatDate } from '../../helpers/string';
@@ -9,51 +11,56 @@ const AuthorDetails = ({ isLaptop, post }) => {
   const navigate = useNavigate();
   const currentUser = useSelector(selectCurrentUser);
   const [handleUserFollow] = useHandleUserFollowMutation();
-  const { _id, title, author } = post;
-  const isFollowed = author?.followers?.includes(currentUser.id);
+  const isFollowed = post?.author?.followers?.includes(currentUser.id);
+  const { socket } = useContext(SocketContext);
 
-  const handleFollowFunc = async () => {
+  const handleFollow = async () => {
+    if (!isFollowed)
+      socket.emit('follow', {
+        sender: currentUser,
+        receiver: post?.author,
+      });
     await handleUserFollow({
-      previewedId: author._id,
+      previewedId: post?.author.id,
       action: isFollowed ? 'unFollow' : 'follow',
       currentId: currentUser.id,
-      previewedUsername: author.username,
+      previewedUsername: post?.author.username,
       post: {
-        title,
-        _id,
+        title: post?.title,
+        id: post?.id,
       },
     });
   };
 
   return (
     <Wrapper isLaptop={isLaptop} scrollY={scrollY}>
-      <Header onClick={() => navigate(`/${author.username}`)}>
-        <Avatar src={author?.picture?.url} />
-        <Name>{author.username}</Name>
+      <Header onClick={() => navigate(`/${post?.author.username}`)}>
+        <Avatar src={post?.author?.picture?.url} />
+        <Name>{post?.author.username}</Name>
       </Header>
-      {author.username === currentUser.username ? (
+      {post?.author.username === currentUser.username ? (
         <EditButton onClick={() => navigate('/customize')}>Edit details</EditButton>
       ) : (
-        <FollowButton onClick={handleFollowFunc} isFollowed={isFollowed}>
+        <FollowButton onClick={handleFollow} isFollowed={isFollowed}>
           {isFollowed ? 'Following' : 'Follow'}
         </FollowButton>
       )}
-      <Bio>{author.bio}</Bio>
+      <Bio>{post?.author.bio}</Bio>
       <Heading>Skills/languages</Heading>
-      <Skills>{author.skills}</Skills>
+      <Skills>{post?.author.skills}</Skills>
       <Heading>Location</Heading>
-      <Location>{author.Location}</Location>
+      <Location>{post?.author.Location}</Location>
       <Heading>Work</Heading>
-      <Work>{author.work}</Work>
+      <Work>{post?.author.work}</Work>
       <Heading>Join date</Heading>
-      <CreatedAt>{formatDate(author.createdAt)}</CreatedAt>
+      <CreatedAt>{formatDate(post?.author.createdAt)}</CreatedAt>
     </Wrapper>
   );
 };
 
 const Header = tw.div`flex items-center gap-2`;
 
-const Avatar = tw.img`w-14 h-14 rounded-full`;
+const Avatar = tw.img`cursor-pointer w-14 h-14 rounded-full`;
 
 const Name = tw.h2`cursor-pointer hover:text-blue`;
 

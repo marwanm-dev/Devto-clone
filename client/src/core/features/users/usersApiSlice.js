@@ -8,17 +8,17 @@ const usersApiSlice = apiSlice.injectEndpoints({
     getUser: builder.query({
       query: username => `/users/${username}`,
       providesTags: (result, err, args) =>
-        result ? [{ type: 'User', id: result._id }] : [{ type: 'User', id: 'LIST' }],
+        result ? [{ type: 'User', id: result.id }] : [{ type: 'User', id: 'LIST' }],
     }),
     getUserDashboard: builder.query({
       query: username => `/users/dash/${username}`,
       providesTags: (result, err, args) =>
-        result ? [{ type: 'User', id: result._id }] : [{ type: 'User', id: 'LIST' }],
+        result ? [{ type: 'User', id: result.id }] : [{ type: 'User', id: 'LIST' }],
     }),
     getAllNotifications: builder.query({
       query: id => `/users/${id}/notifications`,
     }),
-    getUnreadNotifications: builder.query({
+    getUnreadNotifs: builder.query({
       query: id => `/users/${id}/notifications/unread`,
     }),
     deleteUser: builder.mutation({
@@ -74,7 +74,7 @@ const usersApiSlice = apiSlice.injectEndpoints({
         method: 'PATCH',
       }),
       invalidatesTags: (result, err, { previewedId, post }) => [
-        { type: post ? 'Post' : 'User', id: post ? post._id : previewedId },
+        { type: post ? 'Post' : 'User', id: post ? post.id : previewedId },
       ],
       async onQueryStarted({ previewedUsername, post, ...patch }, { dispatch, queryFulfilled }) {
         const username = previewedUsername;
@@ -83,7 +83,7 @@ const usersApiSlice = apiSlice.injectEndpoints({
             ? postsApiSlice.util.updateQueryData(
                 'getPost',
                 {
-                  url: `${previewedUsername}/${createPostUrl(post.title, post._id)}`,
+                  url: `${previewedUsername}/${createPostUrl(post.title, post.id)}`,
                 },
                 draftPost => {
                   Object.assign(draftPost, patch);
@@ -109,7 +109,7 @@ export const {
   useGetUserQuery,
   useGetUserDashboardQuery,
   useGetAllNotificationsQuery,
-  useGetUnreadNotificationsQuery,
+  useGetUnreadNotifsQuery,
   useDeleteUserMutation,
   useUpdateUserMutation,
   useHandleUserFollowMutation,

@@ -1,7 +1,9 @@
+import { useContext } from 'react';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import tw, { styled } from 'twin.macro';
 import LoadingSpinner from '../../../common/LoadingSpinner';
+import socketContext from '../../../context/SocketContext';
 import { selectCurrentUser } from '../../../core/features/auth/authSlice';
 import {
   useGetCommentsQuery,
@@ -10,7 +12,7 @@ import {
 import useRequireAuth from '../../../hooks/useRequireAuth';
 import Comment from './Comment';
 
-const Comments = ({ postId }) => {
+const Comments = ({ postAuthor, postId }) => {
   const { data: comments, isLoading } = useGetCommentsQuery(postId, {
     refetchOnMountOrArgChange: true,
   });
@@ -23,12 +25,16 @@ const Comments = ({ postId }) => {
   const [postComment] = usePostCommentMutation();
   const currentUser = useSelector(selectCurrentUser);
   const { isAuthed, handleAuth } = useRequireAuth();
+  const { socket } = useContext(socketContext);
 
   const handleNewComment = () => {
     if (!isAuthed) handleAuth();
     if (body) {
       try {
-        // socket.emit('comment')
+        socket?.emit('comment', {
+          sender: currentUser,
+          receiver: postAuthor,
+        });
         postComment({ body, author: currentUser.id, parentPost: postId });
 
         setBody('');
@@ -55,9 +61,9 @@ const Comments = ({ postId }) => {
         {!isLoading &&
           rootComments.map(comment => (
             <Comment
-              key={comment._id}
+              key={comment.id}
               comment={comment}
-              replies={replies.filter(reply => reply.parentComment === comment._id)}
+              replies={replies.filter(reply => reply.parentComment === comment.id)}
             />
           ))}
       </CommentContainer>

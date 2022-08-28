@@ -2,7 +2,7 @@ import { nanoid } from '@reduxjs/toolkit';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import tw from 'twin.macro';
-import { useGetPostsQuery } from '../../core/features/posts/postsApiSlice';
+import { useGetPostsListQuery } from '../../core/features/posts/postsApiSlice';
 import { selectSearchValue } from '../../core/features/search/searchSlice';
 import usePlaceholder from '../../hooks/usePlaceholder';
 import LoadingSpinner from '../LoadingSpinner';
@@ -10,7 +10,7 @@ import Post from './components/Post';
 
 const PostsList = ({ tagname = null }) => {
   const searchValue = useSelector(selectSearchValue);
-  const { data: posts, isLoading } = useGetPostsQuery(null, {
+  const { data: posts, isLoading } = useGetPostsListQuery(null, {
     refetchOnMountOrArgChange: true,
   });
   const [filteredPosts, setFilteredPosts] = useState(posts);

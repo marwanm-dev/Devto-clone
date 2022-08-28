@@ -2,26 +2,24 @@ import apiSlice from '../api/apiSlice';
 
 const postsApiSlice = apiSlice.injectEndpoints({
   endpoints: builder => ({
-    getPosts: builder.query({
-      query: args => '/posts',
+    getPostsList: builder.query({
+      query: () => '/posts',
       providesTags: (result, err, args) =>
         result
-          ? [{ type: 'Post', id: 'LIST' }, ...result.map(({ _id }) => ({ type: 'Post', id: _id }))]
+          ? [{ type: 'Post', id: 'LIST' }, ...result.map(({ id }) => ({ type: 'Post', id }))]
           : [{ type: 'Post', id: 'LIST' }],
     }),
     getBookmarkedPosts: builder.query({
       query: id => `/posts/bookmarked/${id}`,
       providesTags: (result, err, args) =>
         result
-          ? [{ type: 'Post', id: 'LIST' }, ...result.map(({ _id }) => ({ type: 'Post', id: _id }))]
+          ? [{ type: 'Post', id: 'LIST' }, ...result.map(({ id }) => ({ type: 'Post', id }))]
           : [{ type: 'Post', id: 'LIST' }],
     }),
     getPost: builder.query({
-      query: ({ url }) => ({
-        url: `/posts/${url}`,
-      }),
+      query: ({ url }) => `/posts/${url}`,
       providesTags: (result, err, args) =>
-        result ? [{ type: 'Post', id: result?._id }] : [{ type: 'Post', id: 'LIST' }],
+        result ? [{ type: 'Post', id: result.id }] : [{ type: 'Post', id: 'LIST' }],
     }),
     createPost: builder.mutation({
       query: ({ ...data }) => ({
@@ -30,7 +28,7 @@ const postsApiSlice = apiSlice.injectEndpoints({
         body: { ...data },
       }),
       invalidatesTags: (result, err, args) =>
-        result ? [{ type: 'Post', id: result._id }] : [{ type: 'Post', id: 'LIST' }],
+        result ? [{ type: 'Post', id: result.id }] : [{ type: 'Post', id: 'LIST' }],
     }),
     updatePost: builder.mutation({
       query: ({ meta, data }) => ({
@@ -51,7 +49,7 @@ const postsApiSlice = apiSlice.injectEndpoints({
           patchResult.undo();
           dispatch(
             postsApiSlice.util.invalidateTags([
-              { type: 'Post', id: postId },
+              { type: 'Post', id: meta.id },
               { type: 'Post', id: 'LIST' },
             ])
           );
@@ -72,7 +70,7 @@ const postsApiSlice = apiSlice.injectEndpoints({
         method: 'PATCH',
         body: { userId },
       }),
-      invalidatesTags: (result, err, args) => [{ type: 'Post', id: args.postId }],
+      invalidatesTags: (result, err, { postId }) => [{ type: 'Post', id: postId }],
       async onQueryStarted(
         { url, action, userId, postId, ...patch },
         { dispatch, queryFulfilled }
@@ -100,7 +98,7 @@ const postsApiSlice = apiSlice.injectEndpoints({
 });
 
 export const {
-  useGetPostsQuery,
+  useGetPostsListQuery,
   useGetPostQuery,
   useGetBookmarkedPostsQuery,
   useCreatePostMutation,

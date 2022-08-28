@@ -13,12 +13,13 @@ const Reactions = ({ post }) => {
   const { username } = useSelector(selectCurrentUser);
   const navigate = useNavigate();
 
-  const { _id, author, likes, unicorns, bookmarks } = post;
+  const { id, author, likes, unicorns, bookmarks } = post;
   const likesArr = [...likes];
   const unicornsArr = [...unicorns];
   const bookmarksArr = [...bookmarks];
+
   const { state, handleReaction } = usePostReaction(
-    _id,
+    id,
     author,
     likesArr,
     unicornsArr,

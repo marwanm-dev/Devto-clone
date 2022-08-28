@@ -6,7 +6,12 @@ const cloudinary = require('../config/cloudinary');
 const { uploadToCloudinary } = require('../utils/cloudinary');
 const { getPostParams, unCapitalizeFirstLetter } = require('../helpers/string');
 const { createTags, updateTags, deleteTags } = require('./tagsController');
-const { likeNotification, removeLikeNotification } = require('./notificationsController');
+const {
+  likeNotification,
+  removeLikeNotification,
+  postNotification,
+  removePostNotification,
+} = require('./notificationsController');
 
 const createPost = async (req, res) => {
   const { title, file, body, tags, authorUsername } = req.body;
@@ -26,17 +31,24 @@ const createPost = async (req, res) => {
     author: author._id,
   });
 
+  author.followers.map(followerId => {
+    (async () => {
+      await postNotification(author._id, createdPost._id, followerId);
+    })();
+  });
+
   await createTags(formattedTags, createdPost);
 
   author.posts.push(createdPost._id);
 
   await author.save();
 
-  res.status(200).json(createdPost);
+  res.status(200).json(createdPost.toObject({ getters: true }));
 };
 
 const getPost = async (req, res) => {
-  const authorId = await User.findOne({ username: req.params.username }).exec();
+  const author = await User.findOne({ username: req.params.username }).exec();
+  const authorId = author.toObject({ getters: true }).id;
 
   const { postTitle, postId } = getPostParams(req.params.postUrl);
 
@@ -50,14 +62,14 @@ const getPost = async (req, res) => {
     .populate('tags')
     .exec();
 
-  res.status(200).json(foundPost);
+  res.status(200).json(foundPost.toObject({ getters: true }));
 };
 
 const getPosts = async (req, res) => {
   const posts = await Post.find({}).sort({ createdAt: -1 }).populate('author').populate('tags');
   if (!posts) res.status(204).json('No posts found');
 
-  res.status(200).json(posts);
+  res.status(200).json(posts.map(post => post.toObject({ getters: true })));
 };
 
 const getBookmarkedPosts = async (req, res) => {
@@ -69,7 +81,7 @@ const getBookmarkedPosts = async (req, res) => {
     .populate('tags');
   if (!posts) res.status(204).json('No posts found');
 
-  res.status(200).json(posts);
+  res.status(200).json(posts.map(post => post.toObject({ getters: true })));
 };
 
 const updatePost = async (req, res) => {
@@ -102,7 +114,7 @@ const updatePost = async (req, res) => {
 
   await post.save();
 
-  res.status(200).json(post);
+  res.status(200).json(post.toObject({ getters: true }));
 };
 
 const deletePostsByUserId = async user => {
@@ -173,7 +185,7 @@ const deletePost = async (req, res) => {
 
   await Post.deleteOne({ _id: foundPost._id });
 
-  res.status(200).json(foundPost);
+  res.status(200).json(foundPost.toObject({ getters: true }));
 };
 
 const postReaction = async (req, res) => {
@@ -184,7 +196,9 @@ const postReaction = async (req, res) => {
   const actionKey = isUndoing
     ? unCapitalizeFirstLetter(action.replace('remove', '')) + 's'
     : action + 's';
-  const authorId = await User.findOne({ username: req.params.username }).exec();
+
+  const author = await User.findOne({ username: req.params.username }).exec();
+  const authorId = author.toObject({ getters: true }).id;
 
   const updatedPost = await Post.findOneAndUpdate(
     { author: authorId, title: postTitle, _id: postId },
@@ -195,7 +209,7 @@ const postReaction = async (req, res) => {
   if (isUndoing) await removeLikeNotification(userId, updatedPost._id, authorId);
   else await likeNotification(userId, updatedPost._id, authorId);
 
-  res.status(200).json(updatedPost);
+  res.status(200).json(updatedPost.toObject({ getters: true }));
 };
 
 module.exports = {

@@ -1,19 +1,18 @@
 import { useContext, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { useParams } from 'react-router-dom';
 import SocketContext from '../context/SocketContext';
 import { selectCurrentUser } from '../core/features/auth/authSlice';
 import { usePostReactionMutation } from '../core/features/posts/postsApiSlice';
 import { checkInArray } from '../helpers/array';
 import { createPostUrl } from '../helpers/string';
 
-const usePostReaction = (postId, author, likes, unicorns, bookmarks, postTitle) => {
+const usePostReaction = (id, author, likes, unicorns, bookmarks, postTitle) => {
   const currentUser = useSelector(selectCurrentUser);
 
   const username = author.username;
-  const postUrl = createPostUrl(postTitle, postId);
+  const postUrl = createPostUrl(postTitle, id);
 
-  const { current } = useContext(SocketContext);
+  const { socket } = useContext(SocketContext);
 
   const [postReaction] = usePostReactionMutation();
 
@@ -24,8 +23,8 @@ const usePostReaction = (postId, author, likes, unicorns, bookmarks, postTitle) 
   });
 
   const updateReactionArr = (arr, effect) => {
-    if (effect === 'negative') arr.splice(arr.indexOf(author._id), 1);
-    else arr.push(author._id);
+    if (effect === 'negative') arr.splice(arr.indexOf(author.id), 1);
+    else arr.push(author.id);
   };
 
   const handleReaction = async (action, effect, arr, stateKey) => {
@@ -33,13 +32,18 @@ const usePostReaction = (postId, author, likes, unicorns, bookmarks, postTitle) 
 
     setState(prev => ({ ...prev, [stateKey]: !prev[stateKey] }));
 
-    // current.emit('like')
+    if (!action.includes('remove')) {
+      socket?.emit('like', {
+        sender: currentUser,
+        receiver: author,
+      });
+    }
 
     await postReaction({
       url: `${username}/${postUrl}`,
       action: `${action}`,
       userId: currentUser.id,
-      postId,
+      id,
     });
   };
 

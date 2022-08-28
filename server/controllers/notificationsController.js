@@ -11,31 +11,32 @@ const getAllNotifications = async (req, res, next) => {
     .populate('post')
     .populate('comment', 'body');
 
-  res.json(notifications);
+  res.json(notifications.map(notification => notification.toObject({ getters: true })));
 };
 
 const getUnreadNotifications = async (req, res, next) => {
+  console.log(
+    '_________________________________GET unreadNotifications_________________________________'
+  );
   const { userId } = req.params;
 
-  const notifications = await Notification.find({
+  const unreadNotifications = await Notification.find({
     receiver: userId,
     read: false,
-  })
-    .populate('receiver')
-    .populate('sender')
-    .populate('post')
-    .populate('comment', 'body');
+  });
 
-  res.json(notifications);
+  res.json(unreadNotifications);
 };
 
 const likeNotification = async (senderId, postId, receiverId) => {
-  await Notification.create({
-    type: 'like',
-    sender: senderId,
-    receiver: receiverId,
-    post: postId,
-  });
+  console.log(senderId, receiverId);
+  if (senderId !== receiverId)
+    await Notification.create({
+      type: 'like',
+      sender: senderId,
+      receiver: receiverId,
+      post: postId,
+    });
 };
 
 const removeLikeNotification = async (senderId, postId, receiverId) => {
@@ -48,13 +49,14 @@ const removeLikeNotification = async (senderId, postId, receiverId) => {
 };
 
 const commentNotification = async (senderId, postId, commentId, receiverId) => {
-  await Notification.create({
-    type: 'comment',
-    sender: senderId,
-    receiver: receiverId,
-    post: postId,
-    comment: commentId,
-  });
+  if (senderId !== receiverId)
+    await Notification.create({
+      type: 'comment',
+      sender: senderId,
+      receiver: receiverId,
+      post: postId,
+      comment: commentId,
+    });
 };
 
 const removeCommentNotification = async (senderId, postId, commentId, receiverId) => {
@@ -69,17 +71,34 @@ const removeCommentNotification = async (senderId, postId, commentId, receiverId
 
 const followNotification = async (senderId, receiverId) => {
   await Notification.create({
+    type: 'follow',
     sender: senderId,
     receiver: receiverId,
-    type: 'follow',
   });
 };
 
 const removeFollowNotification = async (senderId, receiverId) => {
   await Notification.findOneAndDelete({
+    type: 'follow',
     sender: senderId,
     receiver: receiverId,
-    notificationType: 'follow',
+  });
+};
+const postNotification = async (senderId, postId, receiverId) => {
+  await Notification.create({
+    type: 'post',
+    sender: senderId,
+    post: postId,
+    receiver: receiverId,
+  });
+};
+
+const removePostNotification = async (senderId, postId, receiverId) => {
+  await Notification.findOneAndDelete({
+    type: 'post',
+    sender: senderId,
+    post: postId,
+    receiver: receiverId,
   });
 };
 
@@ -92,4 +111,6 @@ module.exports = {
   removeCommentNotification,
   followNotification,
   removeFollowNotification,
+  postNotification,
+  removePostNotification,
 };

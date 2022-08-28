@@ -9,8 +9,11 @@ import Error from '../../common/Error';
 import useBase64 from '../../hooks/useBase64';
 import { useCreatePostMutation } from '../../core/features/posts/postsApiSlice';
 import 'easymde/dist/easymde.min.css';
-import { selectCurrentUser, selectCurrentToken } from '../../core/features/auth/authSlice';
+import { selectCurrentUser } from '../../core/features/auth/authSlice';
 import useRequireAuth from '../../hooks/useRequireAuth';
+import { useContext } from 'react';
+import socketContext from '../../context/SocketContext';
+import { useGetUserDashboardQuery } from '../../core/features/users/usersApiSlice';
 
 const NewPost = () => {
   const [title, setTitle] = useState('');
@@ -23,10 +26,12 @@ const NewPost = () => {
   const titleRef = useRef();
   const [createPost, { isLoading, isError }] = useCreatePostMutation();
   const navigate = useNavigate();
-  const { username } = useSelector(selectCurrentUser);
+  const currentUser = useSelector(selectCurrentUser);
   const dispatch = useDispatch();
   const previewURL = useBase64(file);
   const { isAuthed, handleAuth } = useRequireAuth();
+  const { socket } = useContext(socketContext);
+  const { data: user } = useGetUserDashboardQuery(currentUser.username);
 
   useEffect(() => titleRef.current.focus(), []);
 
@@ -38,13 +43,14 @@ const NewPost = () => {
   const handleSubmit = async () => {
     if (inputsFilled) {
       if (isAuthed) {
+        socket.emit('post', { sender: currentUser, receivers: user?.followers });
         try {
           await createPost({
             title,
             file: previewURL,
             body,
             tags,
-            authorUsername: username,
+            authorUsername: currentUser.username,
           }).unwrap();
 
           setTitle('');

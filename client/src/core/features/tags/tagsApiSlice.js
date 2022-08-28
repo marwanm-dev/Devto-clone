@@ -6,27 +6,27 @@ const tagsApiSlice = apiSlice.injectEndpoints({
       query: () => '/tags',
       providesTags: (result, err, args) =>
         result
-          ? [{ type: 'Tag', id: 'LIST' }, ...result.map(({ _id }) => ({ type: 'Tag', id: _id }))]
+          ? [{ type: 'Tag', id: 'LIST' }, ...result.map(({ id }) => ({ type: 'Tag', id }))]
           : [{ type: 'Tag', id: 'LIST' }],
     }),
     getFollowingTags: builder.query({
       query: ({ userId }) => `/tags/limit/${userId}`,
       providesTags: (result, err, args) =>
         result
-          ? [{ type: 'Tag', id: 'LIST' }, ...result.map(({ _id }) => ({ type: 'Tag', id: _id }))]
+          ? [{ type: 'Tag', id: 'LIST' }, ...result.map(({ id }) => ({ type: 'Tag', id }))]
           : [{ type: 'Tag', id: 'LIST' }],
     }),
     getNumTags: builder.query({
       query: () => '/tags/limit',
       providesTags: (result, err, args) =>
         result
-          ? [{ type: 'Tag', id: 'LIST' }, ...result.map(({ _id }) => ({ type: 'Tag', id: _id }))]
+          ? [{ type: 'Tag', id: 'LIST' }, ...result.map(({ id }) => ({ type: 'Tag', id }))]
           : [{ type: 'Tag', id: 'LIST' }],
     }),
     getTagByName: builder.query({
       query: name => `/tags/${name}`,
       providesTags: (result, err, args) =>
-        result ? [{ type: 'Tag', id: result._id }] : [{ type: 'Tag', id: 'LIST' }],
+        result ? [{ type: 'Tag', id: result.id }] : [{ type: 'Tag', id: 'LIST' }],
     }),
     handleFollow: builder.mutation({
       query: ({ name, action, userId, tagId }) => ({

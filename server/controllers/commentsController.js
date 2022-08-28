@@ -7,7 +7,7 @@ const { commentNotification, removeCommentNotification } = require('./notificati
 const getCommentsByPost = async (req, res) => {
   const comments = await Comment.find({ parentPost: req.params.postId }).populate('author');
 
-  res.status(200).json(comments);
+  res.status(200).json(comments.map(comment => comment.toObject({ getters: true })));
 };
 
 const postComment = async (req, res) => {
@@ -30,7 +30,7 @@ const postComment = async (req, res) => {
 
   commentNotification(author, parentPost, comment._id, post.author);
 
-  res.status(200).json(comment);
+  res.status(200).json(comment.toObject({ getters: true }));
 };
 
 const updateComment = async (req, res) => {
@@ -73,7 +73,7 @@ const deleteComment = async (req, res) => {
 
   await removeCommentNotification(comment.author, comment.parentPost, comment._id, post.author);
 
-  res.status(200).json(comment);
+  res.status(200).json(comment.toObject({ getters: true }));
 };
 
 const commentReaction = async (req, res) => {
@@ -90,7 +90,7 @@ const commentReaction = async (req, res) => {
     { new: true }
   );
 
-  res.status(200).json(updatedComment);
+  res.status(200).json(updatedComment.toObject({ getters: true }));
 };
 
 module.exports = {

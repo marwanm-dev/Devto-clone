@@ -7,7 +7,7 @@ const commentsApiSlice = apiSlice.injectEndpoints({
       providesTags: (result, err, args) =>
         result
           ? [
-              ...result.map(({ _id }) => ({ type: 'Comment', id: _id })),
+              ...result.map(({ id }) => ({ type: 'Comment', id })),
               { type: 'Comment', id: 'LIST' },
             ]
           : [{ type: 'Comment', id: 'LIST' }],
@@ -22,7 +22,7 @@ const commentsApiSlice = apiSlice.injectEndpoints({
         result
           ? [
               { type: 'Comment', id: 'LIST' },
-              ...result.map(({ _id }) => ({ type: 'Comment', id: _id })),
+              ...result.map(({ id }) => ({ type: 'Comment', id })),
             ]
           : [{ type: 'Comment', id: 'LIST' }],
       async onQueryStarted({ parentPost }, { dispatch, queryFulfilled }) {

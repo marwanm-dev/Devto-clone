@@ -14,7 +14,7 @@ const Tag = ({ tag }) => {
         <PostWrapper
           key={nanoid()}
           onClick={() =>
-            navigate(`/${post.author.username}/${post.title.replace(/\ /g, '+')}-${post._id}`)
+            navigate(`/${post.author.username}/${post.title.replace(/\ /g, '+')}-${post.id}`)
           }>
           <Title>{post.title}</Title>
           <NumOfComments>{post.comments.length} comments</NumOfComments>

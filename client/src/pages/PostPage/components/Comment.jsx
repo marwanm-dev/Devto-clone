@@ -68,8 +68,8 @@ const Comment = ({ comment, replies, parentCommentIfReply = null }) => {
           <CommentReactions
             likes={comment.likes}
             parentPost={comment.parentPost}
-            parentComment={parentCommentIfReply || comment._id}
-            id={comment._id}
+            parentComment={parentCommentIfReply || comment.id}
+            id={comment.id}
             toggleIsReplying={toggleIsReplying}
             replyBody={replyBody}
             isReplying={isReplying}
@@ -78,7 +78,7 @@ const Comment = ({ comment, replies, parentCommentIfReply = null }) => {
           />
           {comment.author?.username === currentUser.username && (
             <CommentModifiers
-              id={comment._id}
+              id={comment.id}
               editMode={editMode}
               setEditMode={setEditMode}
               textareaRef={textareaRef}
@@ -99,7 +99,7 @@ const Comment = ({ comment, replies, parentCommentIfReply = null }) => {
           </AddToDiscussion>
         )}
 
-        {replies && <Replies replies={replies} parentComment={comment._id} />}
+        {replies && <Replies replies={replies} parentComment={comment.id} />}
       </Wrapper>
     </>
   );

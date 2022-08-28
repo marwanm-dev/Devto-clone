@@ -11,7 +11,7 @@ const Posts = ({ posts, username, navigate }) => {
     <Wrapper>
       {posts.map(post => (
         <Post key={nanoid()}>
-          <Title onClick={() => navigate(`/${username}/${createPostUrl(post.title, post._id)}`)}>
+          <Title onClick={() => navigate(`/${username}/${createPostUrl(post.title, post.id)}`)}>
             {post.title}
           </Title>
           <ReactionsWrapper>
@@ -24,7 +24,7 @@ const Posts = ({ posts, username, navigate }) => {
               {post.comments.length}
             </Comments>
           </ReactionsWrapper>
-          <Edit to={`/${username}/${createPostUrl(post.title, post._id)}/edit`}>Edit</Edit>
+          <Edit to={`/${username}/${createPostUrl(post.title, post.id)}/edit`}>Edit</Edit>
         </Post>
       ))}
     </Wrapper>

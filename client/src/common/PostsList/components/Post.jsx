@@ -13,12 +13,13 @@ const Post = ({ post, isFirstPost, filteredTag }) => {
   const navigate = useNavigate();
   const { isAuthed, handleAuth } = useRequireAuth(false);
 
-  const { _id, author, likes, unicorns, bookmarks } = post;
+  const { id, author, likes, unicorns, bookmarks } = post;
   const likesArr = [...likes];
   const unicornsArr = [...unicorns];
   const bookmarksArr = [...bookmarks];
+
   const { state, handleReaction } = usePostReaction(
-    _id,
+    id,
     author,
     likesArr,
     unicornsArr,
@@ -41,7 +42,7 @@ const Post = ({ post, isFirstPost, filteredTag }) => {
         {isFirstPost && (
           <Image
             onClick={() =>
-              navigate(`/${post.author?.username}/${createPostUrl(post.title, post._id)}`)
+              navigate(`/${post.author?.username}/${createPostUrl(post.title, post.id)}`)
             }
             src={post.image.url}
           />
@@ -59,7 +60,7 @@ const Post = ({ post, isFirstPost, filteredTag }) => {
           </Header>
           <Title
             onClick={() =>
-              navigate(`/${post.author.username}/${createPostUrl(post.title, post._id)}`)
+              navigate(`/${post.author.username}/${createPostUrl(post.title, post.id)}`)
             }>
             {post.title}
           </Title>
@@ -67,7 +68,7 @@ const Post = ({ post, isFirstPost, filteredTag }) => {
           <Footer>
             <Reactions
               onClick={() =>
-                navigate(`/${post.author.username}/${createPostUrl(post.title, post._id)}`)
+                navigate(`/${post.author.username}/${createPostUrl(post.title, post.id)}`)
               }>
               <SumOfReactions>
                 <HeartIcon>

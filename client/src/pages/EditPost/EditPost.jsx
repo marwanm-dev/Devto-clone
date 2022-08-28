@@ -28,7 +28,7 @@ const EditPost = () => {
   const [updatePost, { isLoading: updateIsLoading, isError }] = useUpdatePostMutation();
   const [deletePost, { isLoading: deletionIsLoading }] = useDeletePostMutation();
 
-  const [id, setId] = useState(post?._id);
+  const [id, setId] = useState(post?.id);
   const [publicId, setPublicId] = useState(post?.image?.publicId);
   const [title, setTitle] = useState(post?.title);
   const [file, setFile] = useState(post?.image?.url);
@@ -45,7 +45,7 @@ const EditPost = () => {
   const { isAuthed } = useRequireAuth();
 
   useEffect(() => {
-    setId(post?._id);
+    setId(post?.id);
     setPublicId(post?.image?.publicId);
     setTitle(post?.title);
     setFile(post?.image?.url);

@@ -14,7 +14,7 @@ const getUser = async (req, res) => {
 
   if (!user) return res.status(204).json({ message: `User ${username} not found` });
 
-  res.json(user);
+  res.json(user.toObject({ getters: true }));
 };
 
 const getUserDashboard = async (req, res) => {
@@ -29,7 +29,7 @@ const getUserDashboard = async (req, res) => {
 
   if (!user) return res.status(204).json({ message: `User ${username} not found` });
 
-  res.json(user);
+  res.json(user.toObject({ getters: true }));
 };
 
 const deleteUser = async (req, res) => {
@@ -52,7 +52,7 @@ const deleteUser = async (req, res) => {
 
   const deletedUser = await User.deleteOne({ _id: id }).exec();
 
-  res.json(deletedUser);
+  res.json(deletedUser.toObject({ getters: true }));
 };
 
 const updateUser = async (req, res) => {
@@ -69,7 +69,7 @@ const updateUser = async (req, res) => {
   req.body.picture = { url, publicId };
 
   const updatedUser = await User.findOneAndUpdate({ _id: id }, { ...req.body }, { new: true });
-  res.json(updatedUser);
+  res.json(updatedUser.toObject({ getters: true }));
 };
 
 const handleFollow = async (req, res) => {
@@ -92,7 +92,7 @@ const handleFollow = async (req, res) => {
   if (isUndoing) await removeFollowNotification(currentId, previewedId);
   else await followNotification(currentId, previewedId);
 
-  res.json(followedUser);
+  res.json(followedUser.toObject({ getters: true }));
 };
 
 module.exports = {
