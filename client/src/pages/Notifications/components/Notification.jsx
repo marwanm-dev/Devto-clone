@@ -9,7 +9,7 @@ const Notification = ({ notification: { type, sender, receiver, post, comment } 
     <Wrapper>
       <Avatar src={sender.picture.url} onClick={() => navigate(`/${sender.username}`)} />
       <Desc>
-        {type === 'like' ? (
+        {type === 'like' && post ? (
           <>
             <Bold onClick={() => navigate(`/${sender.username}`)}>{sender.name}</Bold> reacted to
             your post{' '}
@@ -20,7 +20,7 @@ const Notification = ({ notification: { type, sender, receiver, post, comment } 
               {post.title}
             </Bold>
           </>
-        ) : type === 'comment' ? (
+        ) : type === 'comment' && post ? (
           <>
             <Bold onClick={() => navigate(`/${sender.username}`)}>{sender.name}</Bold> commented on
             your post with {comment.body}
@@ -36,14 +36,18 @@ const Notification = ({ notification: { type, sender, receiver, post, comment } 
             <Bold onClick={() => navigate(`/${sender.username}`)}>{sender.name}</Bold> followed you
           </>
         ) : (
-          <>
-            <Bold onClick={() => navigate(`/${sender.username}`)}>{sender.name}</Bold> published a
-            new post{' '}
-            <Bold
-              onClick={() => navigate(`/${sender.username}/${createPostUrl(post.title, post.id)}`)}>
-              {post.title}
-            </Bold>
-          </>
+          post && (
+            <>
+              <Bold onClick={() => navigate(`/${sender.username}`)}>{sender.name}</Bold> published a
+              new post{' '}
+              <Bold
+                onClick={() =>
+                  navigate(`/${sender.username}/${createPostUrl(post.title, post.id)}`)
+                }>
+                {post.title}
+              </Bold>
+            </>
+          )
         )}
       </Desc>
     </Wrapper>

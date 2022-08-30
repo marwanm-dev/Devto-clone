@@ -2,15 +2,18 @@ import { AiOutlineHeart } from 'react-icons/ai';
 import { BsBookmark, BsBookmarkFill } from 'react-icons/bs';
 import { MdOutlineModeComment } from 'react-icons/md';
 import { useNavigate } from 'react-router-dom';
-import tw, { styled } from 'twin.macro';
+import tw, { styled, theme } from 'twin.macro';
 import { createPostUrl, formatDate } from '../../../helpers/string';
 import { calcReadingTime } from '../../../helpers/utils';
 import usePostReaction from '../../../hooks/usePostReaction';
 import useRequireAuth from '../../../hooks/useRequireAuth';
 import Tags from '../../Tags';
+import LoadingController from '../../LoadingController/LoadingController';
+import useBreakpoint from '../../../hooks/useBreakpoint';
 
 const Post = ({ post, isFirstPost, filteredTag }) => {
   const navigate = useNavigate();
+  const isSmall = useBreakpoint(theme`screens.sm`);
   const { isAuthed, handleAuth } = useRequireAuth(false);
 
   const { id, author, likes, unicorns, bookmarks } = post;
@@ -18,7 +21,7 @@ const Post = ({ post, isFirstPost, filteredTag }) => {
   const unicornsArr = [...unicorns];
   const bookmarksArr = [...bookmarks];
 
-  const { state, handleReaction } = usePostReaction(
+  const { state, handleReaction, isLoading } = usePostReaction(
     id,
     author,
     likesArr,
@@ -75,21 +78,29 @@ const Post = ({ post, isFirstPost, filteredTag }) => {
                   <AiOutlineHeart />
                 </HeartIcon>
                 <Total>
-                  {post.likes.length + post.unicorns.length + post.bookmarks.length} reactions
+                  {isSmall
+                    ? post.likes.length + post.unicorns.length + post.bookmarks.length
+                    : `${
+                        post.likes.length + post.unicorns.length + post.bookmarks.length
+                      } reactions`}
                 </Total>
               </SumOfReactions>
               <SumOfComments>
                 <CommentIcon>
                   <MdOutlineModeComment />
                 </CommentIcon>
-                <Total>{post.comments?.length} comments</Total>
+                <Total>
+                  {isSmall ? post.comments?.length : `${post.comments?.length} comments`}
+                </Total>
               </SumOfComments>
             </Reactions>
             <Other>
               <MinutesRead>{calcReadingTime(post.body)}</MinutesRead>
-              <SaveButton onClick={handleSave} isBookmarked={isBookmarked}>
-                {isBookmarked ? <BsBookmarkFill /> : <BsBookmark />}
-              </SaveButton>
+              <LoadingController isLoading={isLoading}>
+                <SaveButton onClick={handleSave} isBookmarked={isBookmarked}>
+                  {isBookmarked ? <BsBookmarkFill /> : <BsBookmark />}
+                </SaveButton>
+              </LoadingController>
             </Other>
           </Footer>
         </Content>

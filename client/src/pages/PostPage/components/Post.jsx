@@ -36,7 +36,7 @@ const Post = ({ post, isLaptop }) => {
           {post.comments && <Comments postAuthor={post.author} postId={post.id} />}
         </CommentsContainer>
       </Content>
-      {isLaptop && <AuthorDetails author={post.author} />}
+      {isLaptop && <AuthorDetails post={post} />}
     </Wrapper>
   );
 };

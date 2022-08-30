@@ -2,8 +2,8 @@ import { BsBookmark, BsBookmarkFill } from 'react-icons/bs';
 import { useDispatch, useSelector } from 'react-redux';
 import tw, { styled } from 'twin.macro';
 import useRequireAuth from '../../../hooks/useRequireAuth';
-
-const BookmarkPost = ({ bookmarks, isBookmarked, handleReaction }) => {
+import LoadingController from '../../../common/LoadingController/LoadingController';
+const BookmarkPost = ({ bookmarks, isBookmarked, handleReaction, isLoading }) => {
   const { isAuthed, handleAuth } = useRequireAuth(false);
 
   const action = isBookmarked ? 'removeBookmark' : 'bookmark';
@@ -16,9 +16,11 @@ const BookmarkPost = ({ bookmarks, isBookmarked, handleReaction }) => {
 
   return (
     <ReactionContainer>
-      <BookmarkIcon isBookmarked={isBookmarked} onClick={handleClick}>
-        {isBookmarked ? <BsBookmarkFill /> : <BsBookmark />}
-      </BookmarkIcon>
+      <LoadingController isLoading={isLoading}>
+        <BookmarkIcon isBookmarked={isBookmarked} onClick={handleClick}>
+          {isBookmarked ? <BsBookmarkFill /> : <BsBookmark />}
+        </BookmarkIcon>
+      </LoadingController>
       <TotalReactions>{bookmarks && bookmarks.length}</TotalReactions>
     </ReactionContainer>
   );

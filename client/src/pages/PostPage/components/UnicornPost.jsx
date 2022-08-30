@@ -2,8 +2,8 @@ import { GiUnicorn } from 'react-icons/gi';
 import { useDispatch, useSelector } from 'react-redux';
 import tw, { styled } from 'twin.macro';
 import useRequireAuth from '../../../hooks/useRequireAuth';
-
-const UnicornPost = ({ unicorns, isUnicorned, handleReaction }) => {
+import LoadingController from '../../../common/LoadingController/LoadingController';
+const UnicornPost = ({ unicorns, isUnicorned, handleReaction, isLoading }) => {
   const { isAuthed, handleAuth } = useRequireAuth(false);
 
   const action = isUnicorned ? 'removeUnicorn' : 'unicorn';
@@ -16,9 +16,11 @@ const UnicornPost = ({ unicorns, isUnicorned, handleReaction }) => {
 
   return (
     <ReactionContainer>
-      <UnicornIcon isUnicorned={isUnicorned} onClick={handleClick}>
-        <GiUnicorn />
-      </UnicornIcon>
+      <LoadingController isLoading={isLoading}>
+        <UnicornIcon isUnicorned={isUnicorned} onClick={handleClick}>
+          <GiUnicorn />
+        </UnicornIcon>
+      </LoadingController>
       <TotalReactions>{unicorns && unicorns.length}</TotalReactions>
     </ReactionContainer>
   );

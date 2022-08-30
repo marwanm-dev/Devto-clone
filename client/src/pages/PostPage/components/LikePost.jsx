@@ -2,8 +2,9 @@ import { AiFillHeart, AiOutlineHeart } from 'react-icons/ai';
 import { useDispatch, useSelector } from 'react-redux';
 import tw, { styled } from 'twin.macro';
 import useRequireAuth from '../../../hooks/useRequireAuth';
+import LoadingController from '../../../common/LoadingController/LoadingController';
 
-const LikePost = ({ likes, isLiked, handleReaction }) => {
+const LikePost = ({ likes, isLiked, handleReaction, isLoading }) => {
   const { isAuthed, handleAuth } = useRequireAuth(false);
 
   const action = isLiked ? 'removeLike' : 'like';
@@ -16,9 +17,11 @@ const LikePost = ({ likes, isLiked, handleReaction }) => {
 
   return (
     <ReactionContainer>
-      <HeartIcon isLiked={isLiked} onClick={handleClick}>
-        {isLiked ? <AiFillHeart /> : <AiOutlineHeart />}
-      </HeartIcon>
+      <LoadingController isLoading={isLoading}>
+        <HeartIcon isLiked={isLiked} onClick={handleClick}>
+          {isLiked ? <AiFillHeart /> : <AiOutlineHeart />}
+        </HeartIcon>
+      </LoadingController>
       <TotalReactions>{likes && likes.length}</TotalReactions>
     </ReactionContainer>
   );

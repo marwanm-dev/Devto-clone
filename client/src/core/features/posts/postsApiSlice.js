@@ -1,3 +1,4 @@
+import { GiConsoleController } from 'react-icons/gi';
 import apiSlice from '../api/apiSlice';
 
 const postsApiSlice = apiSlice.injectEndpoints({
@@ -36,24 +37,14 @@ const postsApiSlice = apiSlice.injectEndpoints({
         method: 'PATCH',
         body: data,
       }),
-      invalidatesTags: (result, err, args) => [{ type: 'Post', id: args.meta.id }],
-      async onQueryStarted({ meta, ...patch }, { dispatch, queryFulfilled }) {
-        const patchResult = dispatch(
-          postsApiSlice.util.updateQueryData('getPost', { meta, ...patch }, draft => {
-            Object.assign(draft, patch);
+      invalidatesTags: (result, err, { meta }) => [{ type: 'Post', id: meta.id }],
+      async onQueryStarted({ meta: { url } }, { dispatch, queryFulfilled }) {
+        const { data: updatedPost } = await queryFulfilled;
+        dispatch(
+          postsApiSlice.util.updateQueryData('getPost', { url }, draftPost => {
+            Object.assign(draftPost, updatedPost);
           })
         );
-        try {
-          await queryFulfilled;
-        } catch {
-          patchResult.undo();
-          dispatch(
-            postsApiSlice.util.invalidateTags([
-              { type: 'Post', id: meta.id },
-              { type: 'Post', id: 'LIST' },
-            ])
-          );
-        }
       },
     }),
     deletePost: builder.mutation({
@@ -70,14 +61,11 @@ const postsApiSlice = apiSlice.injectEndpoints({
         method: 'PATCH',
         body: { userId },
       }),
-      invalidatesTags: (result, err, { postId }) => [{ type: 'Post', id: postId }],
-      async onQueryStarted(
-        { url, action, userId, postId, ...patch },
-        { dispatch, queryFulfilled }
-      ) {
+      invalidatesTags: (result, err, { id }) => [{ type: 'Post', id }],
+      async onQueryStarted({ url, id, actionKey, immutatedArray }, { dispatch, queryFulfilled }) {
         const patchResult = dispatch(
-          postsApiSlice.util.updateQueryData('getPost', { url, action, userId }, draftPost => {
-            Object.assign(draftPost, patch);
+          postsApiSlice.util.updateQueryData('getPost', { url }, draftPost => {
+            draftPost[actionKey] = immutatedArray;
           })
         );
         try {
@@ -86,7 +74,7 @@ const postsApiSlice = apiSlice.injectEndpoints({
           patchResult.undo();
           dispatch(
             postsApiSlice.util.invalidateTags([
-              { type: 'Post', id: postId },
+              { type: 'Post', id },
               { type: 'Post', id: 'LIST' },
             ])
           );

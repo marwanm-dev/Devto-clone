@@ -6,10 +6,7 @@ const commentsApiSlice = apiSlice.injectEndpoints({
       query: postId => `/comments/${postId}`,
       providesTags: (result, err, args) =>
         result
-          ? [
-              ...result.map(({ id }) => ({ type: 'Comment', id })),
-              { type: 'Comment', id: 'LIST' },
-            ]
+          ? [...result.map(({ id }) => ({ type: 'Comment', id })), { type: 'Comment', id: 'LIST' }]
           : [{ type: 'Comment', id: 'LIST' }],
     }),
     postComment: builder.mutation({
@@ -20,17 +17,14 @@ const commentsApiSlice = apiSlice.injectEndpoints({
       }),
       invalidatesTags: (result, err, args) =>
         result
-          ? [
-              { type: 'Comment', id: 'LIST' },
-              ...result.map(({ id }) => ({ type: 'Comment', id })),
-            ]
+          ? [{ type: 'Comment', id: 'LIST' }, ...result.map(({ id }) => ({ type: 'Comment', id }))]
           : [{ type: 'Comment', id: 'LIST' }],
       async onQueryStarted({ parentPost }, { dispatch, queryFulfilled }) {
-        const { data } = await queryFulfilled;
         try {
+          const { data: comment } = await queryFulfilled;
           dispatch(
             commentsApiSlice.util.updateQueryData('getComments', parentPost, draftComments => {
-              Object.assign(draftComments, data);
+              Object.assign(draftComments, comment);
             })
           );
         } catch {
@@ -60,9 +54,13 @@ const commentsApiSlice = apiSlice.injectEndpoints({
         body: { userId },
       }),
       invalidatesTags: (result, err, { id }) => [{ type: 'Comment', id }],
-      async onQueryStarted({ id, parentPost, ...patch }, { dispatch, queryFulfilled }) {
+      async onQueryStarted({ id, action, userId, parentPost }, { dispatch, queryFulfilled }) {
         const patchResult = dispatch(
-          commentsApiSlice.util.updateQueryData('getComments', parentPost, () => {})
+          commentsApiSlice.util.updateQueryData('getComments', parentPost, draftComments => {
+            const comment = draftComments.find(comment => comment.id === id);
+            const userIdIndex = comment.likes.indexOf(userId);
+            action === 'like' ? comment.likes.push(userId) : comment.likes.splice(userIdIndex, 1);
+          })
         );
         try {
           await queryFulfilled;

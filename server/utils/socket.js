@@ -11,8 +11,6 @@ const findConnectedUser = username => onlineUsers.find(user => user.username ===
 
 const socketHandlers = io => {
   return io.on('connection', socket => {
-    console.log(`Previous onlineUsers: ${onlineUsers}`);
-
     const handler = (sender, receiver) => {
       const receiverSocket = findConnectedUser(receiver.username);
       if (receiverSocket && sender.id != receiver.id) {
@@ -22,7 +20,6 @@ const socketHandlers = io => {
 
     socket.on('join', username => {
       addUser(username, socket.id);
-      console.log(`After add: ${onlineUsers}`);
     });
 
     socket.on('follow', ({ sender, receiver }) => {
@@ -45,7 +42,6 @@ const socketHandlers = io => {
 
     socket.on('disconnect', () => {
       removeUser(socket.id);
-      console.log(`After remove: ${onlineUsers}`);
     });
   });
 };

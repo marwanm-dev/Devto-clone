@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { useContext, useEffect } from 'react';
 import { FaDev } from 'react-icons/fa';
 import { GiHamburgerMenu } from 'react-icons/gi';
@@ -9,7 +8,7 @@ import { Link } from 'react-router-dom';
 import tw, { styled, theme } from 'twin.macro';
 import SocketContext from '../../context/SocketContext';
 import { selectCurrentUser } from '../../core/features/auth/authSlice';
-import { useGetUnreadNotifsQuery } from '../../core/features/users/usersApiSlice';
+import { useGetUnreadNotificationsQuery } from '../../core/features/users/usersApiSlice';
 import { preventScroll } from '../../helpers/body';
 import useBreakpoint from '../../hooks/useBreakpoint';
 import useRequireAuth from '../../hooks/useRequireAuth';
@@ -25,18 +24,15 @@ const Navbar = () => {
   const [profileMenu, toggleProfileMenu] = useToggle(false);
   const [mobileSearch, toggleMobileSearch] = useToggle(false);
   const [mobileMenu, toggleMobileMenu] = useToggle(false);
-  const { data: unreadNotifications, refetch } = useGetUnreadNotifsQuery(currentUser.id, {
+  const { data: unreadNotifications, refetch } = useGetUnreadNotificationsQuery(currentUser.id, {
     refetchOnMountOrArgChange: true,
   });
-
   preventScroll(mobileMenu);
 
-  useEffect(() => {
-    console.log({ unreadNotifications });
-  }, [unreadNotifications]);
-
-  socket.on('notificationReceived', () => {
-    refetch();
+  socket?.on('notificationReceived', () => {
+    setTimeout(() => {
+      refetch();
+    }, 1000);
   });
 
   return (
@@ -66,8 +62,7 @@ const Navbar = () => {
               )}
               <NotificationIcon>
                 <RiNotification3Line />
-                {/* {unreadNotifications?.length > 0 && <Count>{unreadNotifications.length}</Count>} */}
-                {<Count>{unreadNotifications?.length}</Count>}
+                {unreadNotifications?.length > 0 && <Count>{unreadNotifications.length}</Count>}
               </NotificationIcon>
               <Avatar src={currentUser.picture.url} onClick={toggleProfileMenu} />
               {profileMenu && (

@@ -35,16 +35,23 @@ const tagsApiSlice = apiSlice.injectEndpoints({
         body: { userId, tagId },
       }),
       invalidatesTags: (result, err, { tagId }) => [{ type: 'Tag', id: tagId }],
-      async onQueryStarted({ name, ...patch }, { dispatch, queryFulfilled }) {
+      async onQueryStarted({ name, action, userId }, { dispatch, queryFulfilled }) {
         const patchResult = dispatch(
-          tagsApiSlice.util.updateQueryData('getTagByName', { name }, draftTag => {
-            Object.assign(draftTag, patch);
+          tagsApiSlice.util.updateQueryData('getTagByName', name, draftTag => {
+            const userIndex = draftTag.followers.indexOf(userId);
+            action === 'follow'
+              ? draftTag.followers.push(userId)
+              : draftTag.followers.splice(userIndex, 1);
           })
         );
         try {
           await queryFulfilled;
         } catch {
           patchResult.undo();
+          tagsApiSlice.util.invalidateTags([
+            { type: 'Tag', id: tagId },
+            { type: 'Tag', id: 'LIST' },
+          ]);
         }
       },
     }),

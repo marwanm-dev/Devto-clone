@@ -4,15 +4,17 @@ _NEEDS FINISHING_
 
 Auth0 Authentication
 
-ReadingList, FAQ, About, Contact
-
 Redirect to previous page he was on if refresh token expired and he was redirected to login and actually logged back
 
 Use Toast on notification
 
+ReadingList, FAQ, About, Contact
+
 _NEEDS FIX_
 
-Realtime Notifications not working in different browsers
+Optimistic updates (Bookmarking post homepage, follow tags page not tag page)
+
+Realtime Notifications (using setTimeout), suggestions => (create its own apiSlice so u can invalidates on posting a new not) + likeComment, replyComment
 
 .ENV variables
 

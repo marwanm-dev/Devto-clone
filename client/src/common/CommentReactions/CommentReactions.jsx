@@ -11,6 +11,7 @@ import { checkInArray } from '../../helpers/array';
 import useRequireAuth from '../../hooks/useRequireAuth';
 import LikeComment from './components/LikeComment';
 import ReplyComment from './components/ReplyComment';
+import LoadingController from '../LoadingController';
 
 const CommentReactions = ({
   likes,
@@ -26,7 +27,7 @@ const CommentReactions = ({
   const likesArr = likes && [...likes];
   const currentUser = useSelector(selectCurrentUser);
   const userId = currentUser?.id;
-  const [commentReaction] = useCommentReactionMutation();
+  const [commentReaction, { isLoading }] = useCommentReactionMutation();
   const [isLiked, setIsLiked] = useState(checkInArray(likesArr, userId));
   const [postComment] = usePostCommentMutation();
   const { isAuthed, handleAuth } = useRequireAuth();
@@ -66,7 +67,9 @@ const CommentReactions = ({
 
   return (
     <Wrapper>
-      <LikeComment handleLike={handleLike} likes={likesArr} isLiked={isLiked} />
+      <LoadingController isLoading={isLoading}>
+        <LikeComment handleLike={handleLike} likes={likesArr} isLiked={isLiked} />
+      </LoadingController>
       <ReplyComment isReplying={isReplying} toggleIsReplying={toggleIsReplying} />
     </Wrapper>
   );

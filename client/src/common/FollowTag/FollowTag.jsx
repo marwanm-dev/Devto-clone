@@ -4,26 +4,29 @@ import tw, { styled } from 'twin.macro';
 import { selectCurrentUser } from '../../core/features/auth/authSlice';
 import { useHandleFollowMutation } from '../../core/features/tags/tagsApiSlice';
 import { decreaseOpacity } from '../../helpers/utils';
+import LoadingController from '../LoadingController';
 
 const FollowTag = ({ tag, isFollowed }) => {
   const { id: userId } = useSelector(selectCurrentUser);
-  const [handleFollow] = useHandleFollowMutation();
+  const [handleFollow, { isLoading }] = useHandleFollowMutation();
 
   return (
-    <FollowButton
-      bg={decreaseOpacity(tag.hashtagColor, 0.5)}
-      color={tag.hashtagColor}
-      isFollowed={isFollowed}
-      onClick={() => {
-        handleFollow({
-          name: tag.name,
-          action: isFollowed ? 'unFollow' : 'follow',
-          userId,
-          tagId: tag.id,
-        });
-      }}>
-      {isFollowed ? 'Following' : 'Follow'}
-    </FollowButton>
+    <LoadingController isLoading={isLoading}>
+      <FollowButton
+        bg={decreaseOpacity(tag.hashtagColor, 0.5)}
+        color={tag.hashtagColor}
+        isFollowed={isFollowed}
+        onClick={() => {
+          handleFollow({
+            name: tag.name,
+            action: isFollowed ? 'unFollow' : 'follow',
+            userId,
+            tagId: tag.id,
+          });
+        }}>
+        {isFollowed ? 'Following' : 'Follow'}
+      </FollowButton>
+    </LoadingController>
   );
 };
 

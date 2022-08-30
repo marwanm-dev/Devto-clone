@@ -33,6 +33,7 @@ const EditPost = () => {
   const [title, setTitle] = useState(post?.title);
   const [file, setFile] = useState(post?.image?.url);
   const [body, setBody] = useState(post?.body);
+
   const [tags, setTags] = useState(post?.tags.map(tag => tag.name).join(', '));
 
   const [isTagsFocused, setIsTagsFocused] = useState(false);
@@ -192,7 +193,7 @@ const Button = tw.button`bg-lighter-gray hover:bg-light-gray rounded-md text-cen
 
 const Heading = tw.h1`text-dark-gray text-center`;
 
-const NewPostWrapper = tw.div`bg-white w-3/5 mx-auto py-20 px-8 [&>*:not(:last-child)]:mb-md`;
+const NewPostWrapper = tw.div`bg-white w-3/5 mob:(w-full px-4) mx-auto py-20 px-8 [&>*:not(:last-child)]:mb-md`;
 
 const Wrapper = tw.div`flex items-center`;
 

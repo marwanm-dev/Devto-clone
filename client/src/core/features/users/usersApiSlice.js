@@ -18,7 +18,7 @@ const usersApiSlice = apiSlice.injectEndpoints({
     getAllNotifications: builder.query({
       query: id => `/users/${id}/notifications`,
     }),
-    getUnreadNotifs: builder.query({
+    getUnreadNotifications: builder.query({
       query: id => `/users/${id}/notifications/unread`,
     }),
     deleteUser: builder.mutation({
@@ -27,23 +27,6 @@ const usersApiSlice = apiSlice.injectEndpoints({
         method: 'DELETE',
       }),
       invalidatesTags: (result, err, { id }) => [{ type: 'User', id }],
-      async onQueryStarted({ id }, { dispatch, queryFulfilled }) {
-        try {
-          const result = await queryFulfilled;
-          dispatch(
-            usersApiSlice.util.updateQueryData('getUser', result.username, draft => {
-              Object.assign(draft, patch);
-            })
-          );
-        } catch {
-          dispatch(
-            usersApiSlice.util.invalidateTags([
-              { type: 'User', id },
-              { type: 'User', id: 'LIST' },
-            ])
-          );
-        }
-      },
     }),
     updateUser: builder.mutation({
       query: body => ({
@@ -53,22 +36,18 @@ const usersApiSlice = apiSlice.injectEndpoints({
       }),
       invalidatesTags: (result, err, { id }) => [{ type: 'User', id }],
       async onQueryStarted(body, { dispatch, queryFulfilled }) {
+        const { data: updatedUser } = await queryFulfilled;
+        dispatch(setCredentials(body));
         const { username } = body;
-        const patchResult = dispatch(
+        dispatch(
           usersApiSlice.util.updateQueryData('getUser', username, draftUser => {
-            Object.assign(draftUser, body);
+            Object.assign(draftUser, updatedUser);
           })
         );
-        try {
-          await queryFulfilled;
-          dispatch(setCredentials(body));
-        } catch {
-          patchResult.undo();
-        }
       },
     }),
     handleUserFollow: builder.mutation({
-      query: ({ previewedId, action, currentId }) => ({
+      query: ({ previewedId, currentId, action }) => ({
         url: `/users/${previewedId}/${action}`,
         body: { currentId },
         method: 'PATCH',
@@ -76,24 +55,32 @@ const usersApiSlice = apiSlice.injectEndpoints({
       invalidatesTags: (result, err, { previewedId, post }) => [
         { type: post ? 'Post' : 'User', id: post ? post.id : previewedId },
       ],
-      async onQueryStarted({ previewedUsername, post, ...patch }, { dispatch, queryFulfilled }) {
+      async onQueryStarted(
+        { previewedUsername, currentId, action, post },
+        { dispatch, queryFulfilled }
+      ) {
         const username = previewedUsername;
         const patchResult = dispatch(
           post
             ? postsApiSlice.util.updateQueryData(
                 'getPost',
                 {
-                  url: `${previewedUsername}/${createPostUrl(post.title, post.id)}`,
+                  url: `${username}/${createPostUrl(post.title, post.id)}`,
                 },
                 draftPost => {
-                  Object.assign(draftPost, patch);
+                  const currentUserIndex = draftPost.author.followers.indexOf(currentId);
+                  action === 'follow'
+                    ? draftPost.author.followers.push(currentId)
+                    : draftPost.author.followers.splice(currentUserIndex, 1);
                 }
               )
             : usersApiSlice.util.updateQueryData('getUser', username, draftUser => {
-                Object.assign(draftUser, patch);
+                const currentUserIndex = draftUser.followers.indexOf(currentId);
+                action === 'follow'
+                  ? draftUser.followers.push(currentId)
+                  : draftUser.followers.splice(currentUserIndex, 1);
               })
         );
-
         try {
           await queryFulfilled;
         } catch {
@@ -109,7 +96,7 @@ export const {
   useGetUserQuery,
   useGetUserDashboardQuery,
   useGetAllNotificationsQuery,
-  useGetUnreadNotifsQuery,
+  useGetUnreadNotificationsQuery,
   useDeleteUserMutation,
   useUpdateUserMutation,
   useHandleUserFollowMutation,

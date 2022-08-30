@@ -60,7 +60,6 @@ const deleteTags = async (tags, post, isPostDeletion) => {
 };
 
 const updateTags = async (tags, post) => {
-  console.log({ tags, postTags: post.tags });
   await createTags(tags, post);
   await deleteTags(tags, post, false);
 };

@@ -48,7 +48,7 @@ const createPost = async (req, res) => {
 
 const getPost = async (req, res) => {
   const author = await User.findOne({ username: req.params.username }).exec();
-  const authorId = author.toObject({ getters: true }).id;
+  const authorId = await author?.toObject({ getters: true }).id;
 
   const { postTitle, postId } = getPostParams(req.params.postUrl);
 
@@ -165,7 +165,10 @@ const deletePost = async (req, res) => {
 
   if (!foundPost) return res.sendStatus(204);
 
-  const comments = await Comment.find({ parentPost: postId }).populate('author');
+  const comments = await Comment.find({ parentPost: postId }).populate({
+    path: 'author',
+    populate: 'followers',
+  });
 
   comments.forEach(({ author }) =>
     (async () => {
@@ -183,6 +186,8 @@ const deletePost = async (req, res) => {
     true
   );
 
+  removePostNotification(author._id, foundPost._id, author.followers);
+
   await Post.deleteOne({ _id: foundPost._id });
 
   res.status(200).json(foundPost.toObject({ getters: true }));
@@ -198,7 +203,7 @@ const postReaction = async (req, res) => {
     : action + 's';
 
   const author = await User.findOne({ username: req.params.username }).exec();
-  const authorId = author.toObject({ getters: true }).id;
+  const authorId = await author.toObject({ getters: true }).id;
 
   const updatedPost = await Post.findOneAndUpdate(
     { author: authorId, title: postTitle, _id: postId },

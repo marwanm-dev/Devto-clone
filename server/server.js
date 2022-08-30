@@ -59,8 +59,6 @@ app.use('/comments', require('./routes/comments'));
 app.use('/tags', require('./routes/tags'));
 
 mongoose.connection.once('open', () => {
-  console.log(`Connected to MongoDB, The Server Running on http://localhost:${PORT}`);
-
   const io = new Server(httpServer, { cors: corsOptions });
 
   socketHandlers(io);

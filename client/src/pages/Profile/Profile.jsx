@@ -5,6 +5,7 @@ import { HiLocationMarker } from 'react-icons/hi';
 import { useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import tw, { styled } from 'twin.macro';
+import LoadingController from '../../common/LoadingController/LoadingController';
 import NotFound from '../../common/NotFound/NotFound';
 import RouteWrapper from '../../common/RouteWrapper';
 import socketContext from '../../context/SocketContext';
@@ -20,7 +21,7 @@ const Profile = () => {
   const currentUser = useSelector(selectCurrentUser);
   const { username } = useParams();
   const { data: previewedUser } = useGetUserQuery(username, { refetchOnMountOrArgChange: true });
-  const [handleUserFollow] = useHandleUserFollowMutation();
+  const [handleUserFollow, { isLoading }] = useHandleUserFollowMutation();
   const isFollowed = previewedUser?.followers?.includes(currentUser.id);
   const { socket } = useContext(socketContext);
 
@@ -31,10 +32,10 @@ const Profile = () => {
         receiver: previewedUser,
       });
     await handleUserFollow({
-      previewedId: previewedUser.id,
-      action: isFollowed ? 'unFollow' : 'follow',
-      currentId: currentUser.id,
       previewedUsername: previewedUser.username,
+      previewedId: previewedUser.id,
+      currentId: currentUser.id,
+      action: isFollowed ? 'unFollow' : 'follow',
     });
   };
 
@@ -47,9 +48,11 @@ const Profile = () => {
             {previewedUser.username === currentUser.username ? (
               <EditButton onClick={() => navigate('/customize')}>Edit profile</EditButton>
             ) : (
-              <FollowButton onClick={handleFollow} isFollowed={isFollowed}>
-                {isFollowed ? 'Following' : 'Follow'}
-              </FollowButton>
+              <LoadingController isLoading={isLoading}>
+                <FollowButton onClick={handleFollow} isFollowed={isFollowed}>
+                  {isFollowed ? 'Following' : 'Follow'}
+                </FollowButton>
+              </LoadingController>
             )}
             <Name>{previewedUser.name}</Name>
             <Bio>{previewedUser.bio || 'No bio'}</Bio>

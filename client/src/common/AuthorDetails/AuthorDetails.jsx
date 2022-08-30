@@ -6,11 +6,12 @@ import SocketContext from '../../context/SocketContext';
 import { selectCurrentUser } from '../../core/features/auth/authSlice';
 import { useHandleUserFollowMutation } from '../../core/features/users/usersApiSlice';
 import { formatDate } from '../../helpers/string';
+import LoadingController from '../LoadingController/LoadingController';
 
 const AuthorDetails = ({ isLaptop, post }) => {
   const navigate = useNavigate();
   const currentUser = useSelector(selectCurrentUser);
-  const [handleUserFollow] = useHandleUserFollowMutation();
+  const [handleUserFollow, { isLoading }] = useHandleUserFollowMutation();
   const isFollowed = post?.author?.followers?.includes(currentUser.id);
   const { socket } = useContext(SocketContext);
 
@@ -21,10 +22,10 @@ const AuthorDetails = ({ isLaptop, post }) => {
         receiver: post?.author,
       });
     await handleUserFollow({
-      previewedId: post?.author.id,
-      action: isFollowed ? 'unFollow' : 'follow',
-      currentId: currentUser.id,
       previewedUsername: post?.author.username,
+      previewedId: post?.author.id,
+      currentId: currentUser.id,
+      action: isFollowed ? 'unFollow' : 'follow',
       post: {
         title: post?.title,
         id: post?.id,
@@ -41,9 +42,11 @@ const AuthorDetails = ({ isLaptop, post }) => {
       {post?.author.username === currentUser.username ? (
         <EditButton onClick={() => navigate('/customize')}>Edit details</EditButton>
       ) : (
-        <FollowButton onClick={handleFollow} isFollowed={isFollowed}>
-          {isFollowed ? 'Following' : 'Follow'}
-        </FollowButton>
+        <LoadingController isLoading={isLoading}>
+          <FollowButton onClick={handleFollow} isFollowed={isFollowed}>
+            {isFollowed ? 'Following' : 'Follow'}
+          </FollowButton>
+        </LoadingController>
       )}
       <Bio>{post?.author.bio}</Bio>
       <Heading>Skills/languages</Heading>

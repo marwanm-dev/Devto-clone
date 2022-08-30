@@ -15,10 +15,8 @@ const getAllNotifications = async (req, res, next) => {
 };
 
 const getUnreadNotifications = async (req, res, next) => {
-  console.log(
-    '_________________________________GET unreadNotifications_________________________________'
-  );
   const { userId } = req.params;
+  if (!userId) return res.status(400).json('User Id required');
 
   const unreadNotifications = await Notification.find({
     receiver: userId,
@@ -29,7 +27,6 @@ const getUnreadNotifications = async (req, res, next) => {
 };
 
 const likeNotification = async (senderId, postId, receiverId) => {
-  console.log(senderId, receiverId);
   if (senderId !== receiverId)
     await Notification.create({
       type: 'like',

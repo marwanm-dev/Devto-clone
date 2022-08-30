@@ -17,9 +17,8 @@ const Comments = ({ postAuthor, postId }) => {
     refetchOnMountOrArgChange: true,
   });
   const rootComments =
-    comments && comments.filter(comment => !comment.parentComment).sort((a, b) => b.date > a.date);
-  const replies =
-    comments && comments.filter(comment => comment.parentComment).sort((a, b) => b.date < a.date);
+    comments && comments.filter(comment => !comment.parentComment).sort((a, b) => b.date < a.date);
+  const replies = comments && comments.filter(comment => comment.parentComment);
 
   const [body, setBody] = useState('');
   const [postComment] = usePostCommentMutation();

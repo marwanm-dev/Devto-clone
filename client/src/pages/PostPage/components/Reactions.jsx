@@ -14,11 +14,12 @@ const Reactions = ({ post }) => {
   const navigate = useNavigate();
 
   const { id, author, likes, unicorns, bookmarks } = post;
+
   const likesArr = [...likes];
   const unicornsArr = [...unicorns];
   const bookmarksArr = [...bookmarks];
 
-  const { state, handleReaction } = usePostReaction(
+  const { state, handleReaction, isLoading } = usePostReaction(
     id,
     author,
     likesArr,
@@ -31,16 +32,23 @@ const Reactions = ({ post }) => {
   return (
     <Wrapper scrollDirection={scrollDirection}>
       <Content>
-        <LikePost likes={likesArr} isLiked={isLiked} handleReaction={handleReaction} />
+        <LikePost
+          likes={likesArr}
+          isLiked={isLiked}
+          handleReaction={handleReaction}
+          isLoading={isLoading}
+        />
         <UnicornPost
           unicorns={unicornsArr}
           isUnicorned={isUnicorned}
           handleReaction={handleReaction}
+          isLoading={isLoading}
         />
         <BookmarkPost
           bookmarks={bookmarksArr}
           isBookmarked={isBookmarked}
           handleReaction={handleReaction}
+          isLoading={isLoading}
         />
         {author.username === username && (
           <EditButton onClick={() => navigate('edit')}>Edit</EditButton>
