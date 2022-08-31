@@ -5,7 +5,7 @@ const verifyJWT = require('../middleware/verifyJWT');
 
 router.route('/').get(postsController.getPosts).post(postsController.createPost);
 
-router.route('/bookmarked/:userId').get(postsController.getBookmarkedPosts);
+router.route('/bookmarked/:userId').get(postsController.getPosts);
 
 router
   .route('/:username/:postUrl')

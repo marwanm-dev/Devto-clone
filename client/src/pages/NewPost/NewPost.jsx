@@ -43,15 +43,21 @@ const NewPost = () => {
   const handleSubmit = async () => {
     if (inputsFilled) {
       if (isAuthed) {
-        socket.emit('post', { sender: currentUser, receivers: user?.followers });
         try {
-          await createPost({
+          const { id } = await createPost({
             title,
             file: previewURL,
             body,
             tags,
             authorUsername: currentUser.username,
           }).unwrap();
+          console.log(id);
+
+          socket.emit('post', {
+            sender: currentUser,
+            receivers: user?.followers,
+            post: { title, id },
+          });
 
           setTitle('');
           setFile('');

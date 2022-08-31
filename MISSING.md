@@ -2,19 +2,19 @@
 
 _NEEDS FINISHING_
 
+ReadingList, FAQ, About, Contact
+
 Auth0 Authentication
 
 Redirect to previous page he was on if refresh token expired and he was redirected to login and actually logged back
 
-Use Toast on notification
-
-ReadingList, FAQ, About, Contact
+Limiting posts && (search queries must be from server)
 
 _NEEDS FIX_
 
-Optimistic updates (Bookmarking post homepage, follow tags page not tag page)
+Socket.io Realtime Notifications (do without setTimeout), resize onMobile, limit cuz it renders a lot, likeComment, replyComment
 
-Realtime Notifications (using setTimeout), suggestions => (create its own apiSlice so u can invalidates on posting a new not) + likeComment, replyComment
+Optimistic updates (Bookmarking post homepage, follow tags page not tag page)
 
 .ENV variables
 

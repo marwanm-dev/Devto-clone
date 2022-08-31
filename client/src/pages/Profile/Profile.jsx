@@ -23,6 +23,7 @@ const Profile = () => {
   const { data: previewedUser } = useGetUserQuery(username, { refetchOnMountOrArgChange: true });
   const [handleUserFollow, { isLoading }] = useHandleUserFollowMutation();
   const isFollowed = previewedUser?.followers?.includes(currentUser.id);
+  const isFollowingYou = previewedUser?.following?.includes(currentUser.id);
   const { socket } = useContext(socketContext);
 
   const handleFollow = async () => {
@@ -50,7 +51,7 @@ const Profile = () => {
             ) : (
               <LoadingController isLoading={isLoading}>
                 <FollowButton onClick={handleFollow} isFollowed={isFollowed}>
-                  {isFollowed ? 'Following' : 'Follow'}
+                  {isFollowed ? 'Following' : isFollowingYou ? 'Follow back' : 'Follow'}
                 </FollowButton>
               </LoadingController>
             )}

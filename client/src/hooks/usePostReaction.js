@@ -33,16 +33,21 @@ const usePostReaction = (id, author, likes, unicorns, bookmarks, postTitle) => {
 
     setState(prev => ({ ...prev, [stateKey]: !prev[stateKey] }));
 
-    if (!action.includes('remove')) {
-      socket?.emit('like', {
-        sender: currentUser,
-        receiver: author,
-      });
-    }
     const actionKey = action.includes('remove')
       ? unCapitalizeFirstLetter(action.slice(6, action.length) + 's')
       : action + 's';
+
+    if (!action.includes('remove')) {
+      socket?.emit('react', {
+        sender: currentUser,
+        receiver: author,
+        reactionType: actionKey.slice(0, -1),
+        post: { title: postTitle, id },
+      });
+    }
+
     const immutatedArray = eval(actionKey);
+
     await postReaction({
       url: `${username}/${postUrl}`,
       action: `${action}`,

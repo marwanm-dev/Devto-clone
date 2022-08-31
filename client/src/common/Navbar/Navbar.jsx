@@ -15,6 +15,7 @@ import useRequireAuth from '../../hooks/useRequireAuth';
 import useToggle from '../../hooks/useToggle';
 import MobileMenu from './components/MobileMenu';
 import Search from './components/Search';
+import useToast from '../../hooks/useToast';
 
 const Navbar = () => {
   const currentUser = useSelector(selectCurrentUser);
@@ -28,8 +29,10 @@ const Navbar = () => {
     refetchOnMountOrArgChange: true,
   });
   preventScroll(mobileMenu);
+  const createToast = useToast();
 
-  socket?.on('notificationReceived', () => {
+  socket?.on('notificationReceived', ({ sender, receiverUsername, type, reactionType, post }) => {
+    if (socket.connected) createToast({ sender, receiverUsername, type, reactionType, post });
     setTimeout(() => {
       refetch();
     }, 1000);

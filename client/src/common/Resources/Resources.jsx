@@ -11,7 +11,7 @@ import {
 } from '../../core/features/tags/tagsApiSlice';
 import useRequireAuth from '../../hooks/useRequireAuth';
 
-const Resources = () => {
+const Resources = ({ saved }) => {
   const navigate = useNavigate();
   const { isAuthed } = useRequireAuth();
 
@@ -43,10 +43,12 @@ const Resources = () => {
           <Image src='../../../assets/images/home.png' />
           <Link to='/'>Home</Link>
         </LinkWrapper>
+
         <LinkWrapper>
           <Image src='../../../assets/images/reading.png' />
-          <Link to='readinglist'>Reading List</Link>
+          <Link to={!saved && 'reading-list'}>Reading List</Link>
         </LinkWrapper>
+
         <LinkWrapper>
           <Image src='../../../assets/images/tags.png' />
           <Link to='tags'>Tags</Link>

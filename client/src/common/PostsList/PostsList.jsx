@@ -1,18 +1,23 @@
 import { nanoid } from '@reduxjs/toolkit';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import tw from 'twin.macro';
+import { selectCurrentUser } from '../../core/features/auth/authSlice';
 import { useGetPostsListQuery } from '../../core/features/posts/postsApiSlice';
 import { selectSearchValue } from '../../core/features/search/searchSlice';
 import usePlaceholder from '../../hooks/usePlaceholder';
 import LoadingSpinner from '../LoadingSpinner';
 import Post from './components/Post';
 
-const PostsList = ({ tagname = null }) => {
+const PostsList = ({ tagname, saved }) => {
   const searchValue = useSelector(selectSearchValue);
-  const { data: posts, isLoading } = useGetPostsListQuery(null, {
-    refetchOnMountOrArgChange: true,
-  });
+  const { id } = useSelector(selectCurrentUser);
+  const { data: posts, isLoading } = useGetPostsListQuery(
+    { id: saved ? id : undefined },
+    {
+      refetchOnMountOrArgChange: true,
+    }
+  );
   const [filteredPosts, setFilteredPosts] = useState(posts);
   usePlaceholder('posts by title');
 
@@ -40,20 +45,23 @@ const PostsList = ({ tagname = null }) => {
     <Wrapper>
       {isLoading && <LoadingSpinner />}
       {!isLoading && filteredPosts?.length > 0 ? (
-        filteredPosts.map((post, i) => (
-          <Post
-            post={post}
-            isFirstPost={i === 0 ? true : false}
-            filteredTag={tagname}
-            key={nanoid()}
-          />
-        ))
+        <>
+          {filteredPosts.map((post, i) => (
+            <Post
+              post={post}
+              isFirstPost={i === 0 ? true : false}
+              filteredTag={tagname}
+              key={nanoid()}
+            />
+          ))}
+        </>
       ) : (
         <p>No posts to display</p>
       )}
     </Wrapper>
   );
 };
+
 const Wrapper = tw.div`w-full`;
 
 export default PostsList;

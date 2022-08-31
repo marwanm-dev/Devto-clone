@@ -33,7 +33,9 @@ const Post = ({ post, isLaptop }) => {
           <ReactMarkdown children={post.body} components={SyntaxHighlight} />
         </PostBody>
         <CommentsContainer>
-          {post.comments && <Comments postAuthor={post.author} postId={post.id} />}
+          {post.comments && (
+            <Comments postTitle={post.title} postAuthor={post.author} postId={post.id} />
+          )}
         </CommentsContainer>
       </Content>
       {isLaptop && <AuthorDetails post={post} />}

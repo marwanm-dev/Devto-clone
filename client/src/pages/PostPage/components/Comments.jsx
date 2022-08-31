@@ -1,5 +1,4 @@
-import { useContext } from 'react';
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import tw, { styled } from 'twin.macro';
 import LoadingSpinner from '../../../common/LoadingSpinner';
@@ -12,7 +11,7 @@ import {
 import useRequireAuth from '../../../hooks/useRequireAuth';
 import Comment from './Comment';
 
-const Comments = ({ postAuthor, postId }) => {
+const Comments = ({ postTitle, postAuthor, postId }) => {
   const { data: comments, isLoading } = useGetCommentsQuery(postId, {
     refetchOnMountOrArgChange: true,
   });
@@ -33,6 +32,7 @@ const Comments = ({ postAuthor, postId }) => {
         socket?.emit('comment', {
           sender: currentUser,
           receiver: postAuthor,
+          post: { title: postTitle, id: postId },
         });
         postComment({ body, author: currentUser.id, parentPost: postId });
 

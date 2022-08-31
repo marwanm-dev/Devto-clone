@@ -21,7 +21,12 @@ const getUnreadNotifications = async (req, res, next) => {
   const unreadNotifications = await Notification.find({
     receiver: userId,
     read: false,
-  });
+  })
+    .sort({ createdAt: -1 })
+    .populate('receiver')
+    .populate('sender')
+    .populate('post')
+    .populate('comment', 'body');
 
   res.json(unreadNotifications);
 };

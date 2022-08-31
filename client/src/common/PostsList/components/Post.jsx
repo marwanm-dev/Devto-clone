@@ -5,11 +5,11 @@ import { useNavigate } from 'react-router-dom';
 import tw, { styled, theme } from 'twin.macro';
 import { createPostUrl, formatDate } from '../../../helpers/string';
 import { calcReadingTime } from '../../../helpers/utils';
+import useBreakpoint from '../../../hooks/useBreakpoint';
 import usePostReaction from '../../../hooks/usePostReaction';
 import useRequireAuth from '../../../hooks/useRequireAuth';
-import Tags from '../../Tags';
 import LoadingController from '../../LoadingController/LoadingController';
-import useBreakpoint from '../../../hooks/useBreakpoint';
+import Tags from '../../Tags';
 
 const Post = ({ post, isFirstPost, filteredTag }) => {
   const navigate = useNavigate();

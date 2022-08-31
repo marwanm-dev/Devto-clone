@@ -45,7 +45,7 @@ const commentsApiSlice = apiSlice.injectEndpoints({
         method: 'PATCH',
         body: data,
       }),
-      invalidatesTags: (result, err, args) => [{ type: 'Comment', id: args.id }],
+      invalidatesTags: (result, err, { id }) => [{ type: 'Comment', id: id }],
     }),
     commentReaction: builder.mutation({
       query: ({ id, action, userId }) => ({

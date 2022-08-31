@@ -66,16 +66,9 @@ const getPost = async (req, res) => {
 };
 
 const getPosts = async (req, res) => {
-  const posts = await Post.find({}).sort({ createdAt: -1 }).populate('author').populate('tags');
-  if (!posts) res.status(204).json('No posts found');
-
-  res.status(200).json(posts.map(post => post.toObject({ getters: true })));
-};
-
-const getBookmarkedPosts = async (req, res) => {
   const { userId } = req.params;
 
-  const posts = await Post.find({ bookmarks: userId })
+  const posts = await Post.find(userId ? { bookmarks: userId } : {})
     .sort({ createdAt: -1 })
     .populate('author')
     .populate('tags');
@@ -221,7 +214,6 @@ module.exports = {
   createPost,
   getPosts,
   getPost,
-  getBookmarkedPosts,
   updatePost,
   deletePost,
   deletePostsByUserId,

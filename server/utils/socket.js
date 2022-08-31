@@ -11,10 +11,16 @@ const findConnectedUser = username => onlineUsers.find(user => user.username ===
 
 const socketHandlers = io => {
   return io.on('connection', socket => {
-    const handler = (sender, receiver) => {
+    const handler = (sender, receiver, { type, reactionType, post }) => {
       const receiverSocket = findConnectedUser(receiver.username);
       if (receiverSocket && sender.id != receiver.id) {
-        io.to(receiverSocket.socketId).emit('notificationReceived');
+        io.to(receiverSocket.socketId).emit('notificationReceived', {
+          sender,
+          receiverUsername: receiver.username,
+          type,
+          reactionType,
+          post,
+        });
       }
     };
 
@@ -23,20 +29,20 @@ const socketHandlers = io => {
     });
 
     socket.on('follow', ({ sender, receiver }) => {
-      handler(sender, receiver);
+      handler(sender, receiver, { type: 'follow' });
     });
 
-    socket.on('like', ({ sender, receiver }) => {
-      handler(sender, receiver);
+    socket.on('react', ({ sender, receiver, reactionType, post }) => {
+      handler(sender, receiver, { type: 'react', reactionType, post });
     });
 
-    socket.on('comment', ({ sender, receiver }) => {
-      handler(sender, receiver);
+    socket.on('comment', ({ sender, receiver, post }) => {
+      handler(sender, receiver, { type: 'comment', post });
     });
 
-    socket.on('post', ({ sender, receivers }) => {
+    socket.on('post', ({ sender, receivers, post }) => {
       receivers.map(receiver => {
-        handler(sender, receiver);
+        handler(sender, receiver, { type: 'post', post });
       });
     });
 

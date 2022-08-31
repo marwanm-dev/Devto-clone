@@ -1,5 +1,4 @@
 import { GiUnicorn } from 'react-icons/gi';
-import { useDispatch, useSelector } from 'react-redux';
 import tw, { styled } from 'twin.macro';
 import useRequireAuth from '../../../hooks/useRequireAuth';
 import LoadingController from '../../../common/LoadingController/LoadingController';
