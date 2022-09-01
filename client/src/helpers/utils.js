@@ -4,7 +4,7 @@ export const calcReadingTime = body => {
   const words = body.trim().split(/\s+/).length;
   const minEstimated = words / minWpm;
   const maxEstimated = words / maxWpm;
-  return `${Math.ceil(minEstimated + maxEstimated)} min read`;
+  return Math.ceil(minEstimated + maxEstimated);
 };
 
 export const decreaseOpacity = (color, lessOpacityValue = 0.15) => {

@@ -19,6 +19,7 @@ const postComment = async (req, res) => {
     parentComment,
     author,
   });
+
   const post = await Post.findById(parentPost);
   const user = await User.findById(author);
 

@@ -4,6 +4,6 @@ const Error = ({ children }) => {
   return <Wrapper>{children}</Wrapper>;
 };
 
-const Wrapper = tw.h4`font-bold text-red mx-auto w-max`;
+const Wrapper = tw.p`font-bold text-red mx-auto w-max`;
 
 export default Error;

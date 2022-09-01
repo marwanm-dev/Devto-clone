@@ -10,6 +10,8 @@ const CustomToastContainer = () => {
         position='bottom-right'
         closeButton={false}
         closeOnClick={false}
+        limit={5}
+        draggablePercent={60}
       />
     </Wrapper>
   );
@@ -17,7 +19,7 @@ const CustomToastContainer = () => {
 
 const Wrapper = styled.div`
   .toast {
-    ${tw`rounded-md px-2 py-1 cursor-pointer overflow-hidden`}
+    ${tw`rounded-md px-2 py-1 cursor-pointer overflow-hidden border border-transparent hover:border-blue`}
   }
 
   .progress {

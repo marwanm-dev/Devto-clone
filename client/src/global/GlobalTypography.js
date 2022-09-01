@@ -9,7 +9,7 @@ body {
   ${tw`font-default`}
 }
 h1 {
-  ${tw`text-5xl font-black`}
+  ${tw`text-5xl font-black sm:(text-4xl font-bold)`}
 }
 h2 {
   ${tw`text-2xl font-semibold`}

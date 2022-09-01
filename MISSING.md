@@ -2,28 +2,28 @@
 
 _NEEDS FINISHING_
 
-ReadingList, FAQ, About, Contact
-
 Auth0 Authentication
+
+Search queries must be from server to search and filter posts, tags, users and limiting them (Search page)
+
+FAQ, About, Contact
 
 Redirect to previous page he was on if refresh token expired and he was redirected to login and actually logged back
 
-Limiting posts && (search queries must be from server)
-
 _NEEDS FIX_
 
-Socket.io Realtime Notifications (do without setTimeout), resize onMobile, limit cuz it renders a lot, likeComment, replyComment
+Refetching on receiving a notification from socket.io but with a 1 sec delay setTimeout (do without setTimeout), do likeComment and replyComment
 
 Optimistic updates (Bookmarking post homepage, follow tags page not tag page)
 
-.ENV variables
+.ENV variables on client side
 
-Made a socket context instead of slice (STANDBY)
+Made a socket context instead of redux slice (STANDBY)
 
 OnEdit dashboard displays EditPost page before loading post (STANDBY)
 
 Flash on Saving a post (in PostsList)
 
-Reply deletion results in deleting the lowest reply until refresh
+deletion of a reply (only) results in deleting the lowest one on that comment until refresh
 
 Detection of what inputs changed on post edit (do not reupload the same image!)

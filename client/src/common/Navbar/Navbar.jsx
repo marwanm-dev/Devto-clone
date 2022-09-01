@@ -1,4 +1,4 @@
-import { useContext, useEffect } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { FaDev } from 'react-icons/fa';
 import { GiHamburgerMenu } from 'react-icons/gi';
 import { IoSearch } from 'react-icons/io5';
@@ -12,10 +12,10 @@ import { useGetUnreadNotificationsQuery } from '../../core/features/users/usersA
 import { preventScroll } from '../../helpers/body';
 import useBreakpoint from '../../hooks/useBreakpoint';
 import useRequireAuth from '../../hooks/useRequireAuth';
+import useToast from '../../hooks/useToast';
 import useToggle from '../../hooks/useToggle';
 import MobileMenu from './components/MobileMenu';
 import Search from './components/Search';
-import useToast from '../../hooks/useToast';
 
 const Navbar = () => {
   const currentUser = useSelector(selectCurrentUser);
@@ -31,12 +31,17 @@ const Navbar = () => {
   preventScroll(mobileMenu);
   const createToast = useToast();
 
-  socket?.on('notificationReceived', ({ sender, receiverUsername, type, reactionType, post }) => {
-    if (socket.connected) createToast({ sender, receiverUsername, type, reactionType, post });
-    setTimeout(() => {
-      refetch();
-    }, 1000);
-  });
+  useEffect(() => {
+    socket?.on('notificationReceived', ({ sender, receiverUsername, type, reactionType, post }) => {
+      createToast({ sender, receiverUsername, type, reactionType, post });
+      setTimeout(() => {
+        refetch();
+      }, 1000);
+    });
+    return () => socket.off('notificationReceived');
+  }, []);
+
+  useEffect(() => {}, [socket]);
 
   return (
     <Wrapper>

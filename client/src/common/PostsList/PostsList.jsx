@@ -12,12 +12,9 @@ import Post from './components/Post';
 const PostsList = ({ tagname, saved }) => {
   const searchValue = useSelector(selectSearchValue);
   const { id } = useSelector(selectCurrentUser);
-  const { data: posts, isLoading } = useGetPostsListQuery(
-    { id: saved ? id : undefined },
-    {
-      refetchOnMountOrArgChange: true,
-    }
-  );
+  const { data: posts, isLoading } = useGetPostsListQuery(saved ? id : undefined, {
+    refetchOnMountOrArgChange: true,
+  });
   const [filteredPosts, setFilteredPosts] = useState(posts);
   usePlaceholder('posts by title');
 

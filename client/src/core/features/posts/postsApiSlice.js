@@ -4,7 +4,7 @@ import apiSlice from '../api/apiSlice';
 const postsApiSlice = apiSlice.injectEndpoints({
   endpoints: builder => ({
     getPostsList: builder.query({
-      query: ({ id, limit }) => `/posts${id ? `/bookmarked/${id}` : ''}`,
+      query: id => `/posts${id ? `/bookmarked/${id}` : ''}`,
       providesTags: (result, err, args) =>
         result
           ? [{ type: 'Post', id: 'LIST' }, ...result.map(({ id }) => ({ type: 'Post', id }))]

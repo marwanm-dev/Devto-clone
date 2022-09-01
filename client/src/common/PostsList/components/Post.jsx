@@ -13,7 +13,7 @@ import Tags from '../../Tags';
 
 const Post = ({ post, isFirstPost, filteredTag }) => {
   const navigate = useNavigate();
-  const isSmall = useBreakpoint(theme`screens.sm`);
+  const isSmall = useBreakpoint(theme`screens.sm.max`.replace('px', ''));
   const { isAuthed, handleAuth } = useRequireAuth(false);
 
   const { id, author, likes, unicorns, bookmarks } = post;
@@ -95,7 +95,9 @@ const Post = ({ post, isFirstPost, filteredTag }) => {
               </SumOfComments>
             </Reactions>
             <Other>
-              <MinutesRead>{calcReadingTime(post.body)}</MinutesRead>
+              <MinutesRead>
+                {calcReadingTime(post.body)} {`min ${!isSmall ? 'read' : ''}`}
+              </MinutesRead>
               <LoadingController isLoading={isLoading}>
                 <SaveButton onClick={handleSave} isBookmarked={isBookmarked}>
                   {isBookmarked ? <BsBookmarkFill /> : <BsBookmark />}

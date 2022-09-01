@@ -1,15 +1,13 @@
-import { useState } from 'react';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import tw, { styled } from 'twin.macro';
 import Toast from '../common/Toast/Toast';
 import { createPostUrl } from '../helpers/string';
 
 const useToast = () => {
-  let message;
-  let url;
+  let message, url;
 
   const createToast = ({ sender, receiverUsername, type, reactionType, post }) => {
+    console.log('createdToast');
     if (type === 'follow') {
       message = `${sender.name} started following you.`;
       url = `/${sender.username}`;
@@ -26,15 +24,18 @@ const useToast = () => {
       url = `/${receiverUsername}/${createPostUrl(post.title, post.id)}`;
     }
 
-    toast(
-      <Toast
-        senderUsername={sender.username}
-        message={message}
-        picture={sender.picture.url}
-        reactionType={reactionType}
-        url={url}
-      />
-    );
+    if (!toast.isActive(message)) {
+      toast(
+        <Toast
+          senderUsername={sender.username}
+          message={message}
+          picture={sender.picture.url}
+          reactionType={reactionType}
+          url={url}
+        />,
+        { toastId: message }
+      );
+    }
   };
 
   return createToast;

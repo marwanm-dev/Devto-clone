@@ -35,6 +35,7 @@ module.exports = {
       screens: {
         lap: { max: '1024px' },
         mob: { max: '768px' },
+        sm: { max: '468px' },
       },
       fontFamily: { default: 'sans-serif' },
       fontSize: { default: '16px' },
