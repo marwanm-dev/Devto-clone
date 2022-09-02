@@ -1,3 +1,4 @@
+import { nanoid } from '@reduxjs/toolkit';
 import { useContext, useEffect } from 'react';
 import { CgNotes } from 'react-icons/cg';
 import { FaBirthdayCake, FaHashtag, FaRegComment } from 'react-icons/fa';
@@ -7,6 +8,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import tw, { styled } from 'twin.macro';
 import LoadingController from '../../common/LoadingController/LoadingController';
 import NotFound from '../../common/NotFound/NotFound';
+import Post from '../../common/PostsList/components/Post';
 import RouteWrapper from '../../common/RouteWrapper';
 import socketContext from '../../context/SocketContext';
 import { selectCurrentUser } from '../../core/features/auth/authSlice';
@@ -78,27 +80,36 @@ const Profile = () => {
               </WorkWrapper>
             </Footer>
           </Card>
-          <AvailableForWrapper>
-            <Heading>Available for</Heading>
-            <AvailableFor>{previewedUser.availableFor || 'Not determined'}</AvailableFor>
-          </AvailableForWrapper>
-          <Stats>
-            <StatWrapper>
-              <CgNotes />
-              <Count>{previewedUser.posts?.length || 0}</Count>
-              <StatName>Posts published</StatName>
-            </StatWrapper>
-            <StatWrapper>
-              <FaRegComment />
-              <Count>{previewedUser.comments?.length || 0}</Count>
-              <StatName>Comments written</StatName>
-            </StatWrapper>
-            <StatWrapper>
-              <FaHashtag />
-              <Count>{previewedUser.followedTags?.length || 0}</Count>
-              <StatName>Tags followed</StatName>
-            </StatWrapper>
-          </Stats>
+          <MoreInfo>
+            <LeftPortion>
+              <AvailableForWrapper>
+                <Heading>Available for</Heading>
+                <AvailableFor>{previewedUser.availableFor || 'Not determined'}</AvailableFor>
+              </AvailableForWrapper>
+              <Stats>
+                <StatWrapper>
+                  <CgNotes />
+                  <Count>{previewedUser.posts?.length || 0}</Count>
+                  <StatName>Posts published</StatName>
+                </StatWrapper>
+                <StatWrapper>
+                  <FaRegComment />
+                  <Count>{previewedUser.comments?.length || 0}</Count>
+                  <StatName>Comments written</StatName>
+                </StatWrapper>
+                <StatWrapper>
+                  <FaHashtag />
+                  <Count>{previewedUser.followedTags?.length || 0}</Count>
+                  <StatName>Tags followed</StatName>
+                </StatWrapper>
+              </Stats>
+            </LeftPortion>
+            <Posts>
+              {previewedUser.posts.map((post, i) => (
+                <Post post={post} isFirstPost={i === 0 ? true : false} key={nanoid()} />
+              ))}
+            </Posts>
+          </MoreInfo>
         </Wrapper>
       ) : (
         <NotFound />
@@ -106,6 +117,12 @@ const Profile = () => {
     </RouteWrapper>
   );
 };
+
+const LeftPortion = tw.div``;
+
+const MoreInfo = tw.div`flex`;
+
+const Posts = tw.div`w-full mt-sm ml-sm`;
 
 const Wrapper = tw.div`max-w-[1200px]`;
 

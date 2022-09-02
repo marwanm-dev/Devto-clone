@@ -10,7 +10,11 @@ const getUser = async (req, res) => {
   const username = req.params.username;
   if (!username) return res.status(400).json({ message: 'User name required' });
 
-  const user = await User.findOne({ username });
+  const user = await User.findOne({ username }).populate({
+    path: 'posts',
+    populate: 'author',
+    populate: 'tags',
+  });
 
   if (!user) return res.status(204).json({ message: `User ${username} not found` });
 
