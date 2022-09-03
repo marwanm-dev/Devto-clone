@@ -8,6 +8,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import tw, { styled } from 'twin.macro';
 import LoadingController from '../../common/LoadingController/LoadingController';
 import NotFound from '../../common/NotFound/NotFound';
+import PostsList from '../../common/PostsList';
 import Post from '../../common/PostsList/components/Post';
 import RouteWrapper from '../../common/RouteWrapper';
 import socketContext from '../../context/SocketContext';
@@ -105,9 +106,14 @@ const Profile = () => {
               </Stats>
             </LeftPortion>
             <Posts>
-              {previewedUser.posts.map((post, i) => (
-                <Post post={post} isFirstPost={i === 0 ? true : false} key={nanoid()} />
-              ))}
+              <PostsList
+                posts={previewedUser.posts}
+                toInvalidate={{
+                  type: 'User',
+                  id: previewedUser.id,
+                  extra: { username },
+                }}
+              />
             </Posts>
           </MoreInfo>
         </Wrapper>

@@ -4,10 +4,9 @@ import SocketContext from '../context/SocketContext';
 import { selectCurrentUser } from '../core/features/auth/authSlice';
 import { usePostReactionMutation } from '../core/features/posts/postsApiSlice';
 import { checkInArray } from '../helpers/array';
-import { createPostUrl } from '../helpers/string';
-import { unCapitalizeFirstLetter } from '../helpers/string';
+import { createPostUrl, unCapitalizeFirstLetter } from '../helpers/string';
 
-const usePostReaction = (id, author, likes, unicorns, bookmarks, postTitle) => {
+const usePostReaction = (id, author, likes, unicorns, bookmarks, postTitle, toInvalidate) => {
   const currentUser = useSelector(selectCurrentUser);
 
   const username = author?.username;
@@ -55,6 +54,7 @@ const usePostReaction = (id, author, likes, unicorns, bookmarks, postTitle) => {
       id,
       actionKey,
       immutatedArray,
+      toInvalidate,
     });
   };
 

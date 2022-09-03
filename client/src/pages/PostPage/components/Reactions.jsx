@@ -8,7 +8,7 @@ import BookmarkPost from './BookmarkPost';
 import LikePost from './LikePost';
 import UnicornPost from './UnicornPost';
 
-const Reactions = ({ post }) => {
+const Reactions = ({ post, toInvalidate }) => {
   const { scrollDirection } = useScroll();
   const { username } = useSelector(selectCurrentUser);
   const navigate = useNavigate();
@@ -25,7 +25,8 @@ const Reactions = ({ post }) => {
     likesArr,
     unicornsArr,
     bookmarksArr,
-    post.title
+    post.title,
+    toInvalidate
   );
   const { isLiked, isUnicorned, isBookmarked } = state;
 

@@ -16,7 +16,7 @@ const tagsApiSlice = apiSlice.injectEndpoints({
           ? [{ type: 'Tag', id: 'LIST' }, ...result.map(({ id }) => ({ type: 'Tag', id }))]
           : [{ type: 'Tag', id: 'LIST' }],
     }),
-    getNumTags: builder.query({
+    getNTags: builder.query({
       query: () => '/tags/limit',
       providesTags: (result, err, args) =>
         result
@@ -35,14 +35,29 @@ const tagsApiSlice = apiSlice.injectEndpoints({
         body: { userId, tagId },
       }),
       invalidatesTags: (result, err, { tagId }) => [{ type: 'Tag', id: tagId }],
-      async onQueryStarted({ name, action, userId }, { dispatch, queryFulfilled }) {
+      async onQueryStarted(
+        { name, action, userId, isTagPage, tagId },
+        { dispatch, queryFulfilled }
+      ) {
         const patchResult = dispatch(
-          tagsApiSlice.util.updateQueryData('getTagByName', name, draftTag => {
-            const userIndex = draftTag.followers.indexOf(userId);
-            action === 'follow'
-              ? draftTag.followers.push(userId)
-              : draftTag.followers.splice(userIndex, 1);
-          })
+          tagsApiSlice.util.updateQueryData(
+            isTagPage ? 'getTagByName' : 'getTags',
+            isTagPage ? name : null,
+            draft => {
+              if (isTagPage) {
+                const userIndex = draft.followers.indexOf(userId);
+                action === 'follow'
+                  ? draft.followers.push(userId)
+                  : draft.followers.splice(userIndex, 1);
+              } else {
+                const foundTag = draft.find(tag => tag.id === tagId);
+                const userIndex = foundTag.followers.indexOf(userId);
+                action === 'follow'
+                  ? foundTag.followers.push(userId)
+                  : foundTag.followers.splice(userIndex, 1);
+              }
+            }
+          )
         );
         try {
           await queryFulfilled;
@@ -61,8 +76,10 @@ const tagsApiSlice = apiSlice.injectEndpoints({
 
 export const {
   useGetTagsQuery,
-  useGetNumTagsQuery,
+  useGetNTagsQuery,
   useGetFollowingTagsQuery,
   useGetTagByNameQuery,
   useHandleFollowMutation,
 } = tagsApiSlice;
+
+export default tagsApiSlice;

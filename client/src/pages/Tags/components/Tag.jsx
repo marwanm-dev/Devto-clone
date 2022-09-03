@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import tw, { styled } from 'twin.macro';
 import FollowTag from '../../../common/FollowTag';
 import { decreaseOpacity } from '../../../helpers/utils';
-const Tag = ({ tag }) => {
+const Tag = ({ tag, isTagPage }) => {
   const navigate = useNavigate();
 
   return (
@@ -17,7 +17,7 @@ const Tag = ({ tag }) => {
         {tag.name}
       </Title>
       <Posts>{tag.posts.length} posts published</Posts>
-      <FollowTag tag={tag} isFollowed={tag.isFollowed} />
+      <FollowTag tag={tag} isFollowed={tag.isFollowed} isTagPage={isTagPage} />
     </Wrapper>
   );
 };

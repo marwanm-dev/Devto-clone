@@ -24,7 +24,7 @@ const PostPage = () => {
       {!isLoading &&
         (post ? (
           <Wrapper>
-            <Reactions post={post} />
+            <Reactions post={post} toInvalidate={{ type: 'Post' }} />
             <Post post={post} isLaptop={isLaptop} />
             {!isLaptop && <AuthorDetails isLaptop={isLaptop} post={post} />}
           </Wrapper>

@@ -26,7 +26,9 @@ const getNumTags = async (req, res) => {
 };
 
 const getTagByName = async (req, res) => {
-  const tag = await Tag.findOne({ name: req.params.name }).populate('posts').exec();
+  const tag = await Tag.findOne({ name: req.params.name })
+    .populate({ path: 'posts', populate: ['author', 'tags'] })
+    .exec();
 
   res.status(200).json(tag.toObject({ getters: true }));
 };

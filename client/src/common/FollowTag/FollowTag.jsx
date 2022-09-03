@@ -6,7 +6,7 @@ import { useHandleFollowMutation } from '../../core/features/tags/tagsApiSlice';
 import { decreaseOpacity } from '../../helpers/utils';
 import LoadingController from '../LoadingController';
 
-const FollowTag = ({ tag, isFollowed }) => {
+const FollowTag = ({ tag, isFollowed, isTagPage }) => {
   const { id: userId } = useSelector(selectCurrentUser);
   const [handleFollow, { isLoading }] = useHandleFollowMutation();
 
@@ -22,6 +22,7 @@ const FollowTag = ({ tag, isFollowed }) => {
             action: isFollowed ? 'unFollow' : 'follow',
             userId,
             tagId: tag.id,
+            isTagPage,
           });
         }}>
         {isFollowed ? 'Following' : 'Follow'}

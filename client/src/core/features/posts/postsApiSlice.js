@@ -1,5 +1,7 @@
 import { GiConsoleController } from 'react-icons/gi';
 import apiSlice from '../api/apiSlice';
+import tagsApiSlice from '../tags/tagsApiSlice';
+import usersApiSlice from '../users/usersApiSlice';
 
 const postsApiSlice = apiSlice.injectEndpoints({
   endpoints: builder => ({
@@ -54,22 +56,63 @@ const postsApiSlice = apiSlice.injectEndpoints({
         method: 'PATCH',
         body: { userId },
       }),
-      invalidatesTags: (result, err, { id }) => [{ type: 'Post', id }],
-      async onQueryStarted({ url, id, actionKey, immutatedArray }, { dispatch, queryFulfilled }) {
+      invalidatesTags: (result, err, { id, toInvalidate }) => [
+        {
+          type: toInvalidate ? toInvalidate.type : 'Post',
+          id: toInvalidate ? toInvalidate.id : id,
+        },
+      ],
+      async onQueryStarted(
+        { url, actionKey, immutatedArray, id, toInvalidate },
+        { dispatch, queryFulfilled }
+      ) {
         const patchResult = dispatch(
-          postsApiSlice.util.updateQueryData('getPost', { url }, draftPost => {
-            draftPost[actionKey] = immutatedArray;
-          })
+          toInvalidate
+            ? toInvalidate.type === 'User'
+              ? usersApiSlice.util.updateQueryData(
+                  'getUser',
+                  toInvalidate.extra.username,
+                  draftUser => {
+                    const foundPost = draftUser.posts.find(post => post.id === id);
+                    foundPost[actionKey] = immutatedArray;
+                  }
+                )
+              : toInvalidate.type === 'Tag'
+              ? tagsApiSlice.util.updateQueryData(
+                  'getTagByName',
+                  toInvalidate.extra.name,
+                  draftTag => {
+                    const foundPost = draftTag.posts.find(post => post.id === id);
+                    foundPost[actionKey] = immutatedArray;
+                  }
+                )
+              : postsApiSlice.util.updateQueryData('getPost', { url }, draftPost => {
+                  draftPost[actionKey] = immutatedArray;
+                })
+            : postsApiSlice.util.updateQueryData('getPostsList', null, draftPosts => {
+                const foundPost = draftPosts.find(post => post.id === id);
+                foundPost[actionKey] = immutatedArray;
+              })
         );
         try {
           await queryFulfilled;
         } catch {
           patchResult.undo();
           dispatch(
-            postsApiSlice.util.invalidateTags([
-              { type: 'Post', id },
-              { type: 'Post', id: 'LIST' },
-            ])
+            toInvalidate
+              ? toInvalidate.type === 'User'
+                ? usersApiSlice.util.invalidateTags([
+                    { type: 'User', id: toInvalidate.id },
+                    { type: 'User', id: 'LIST' },
+                  ])
+                : tagsApiSlice.util.invalidateTags([
+                    { type: 'Tag', id: toInvalidate.id },
+                    { type: 'Tag', id: 'LIST' },
+                  ])
+              : postsApiSlice.util.invalidateTags([
+                  { type: 'Post', id },
+                  { type: 'Post', id: 'LIST' },
+                ])
           );
         }
       },

@@ -101,3 +101,5 @@ export const {
   useUpdateUserMutation,
   useHandleUserFollowMutation,
 } = usersApiSlice;
+
+export default usersApiSlice;

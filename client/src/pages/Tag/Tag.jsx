@@ -30,10 +30,14 @@ const Tag = () => {
               <Hashtag color={tag.hashtagColor}>#</Hashtag>
               {tag.name}
             </Title>
-            <FollowTag tag={tag} isFollowed={tag.followers.includes(userId)} />
+            <FollowTag tag={tag} isFollowed={tag.followers.includes(userId)} isTagPage={true} />
           </CurrentTag>
           <Wrapper>
-            <PostsList tagname={name} />
+            <PostsList
+              posts={tag.posts}
+              toInvalidate={{ type: 'Tag', id: tag.id, extra: { name: tag.name } }}
+              filteredTag={name}
+            />
           </Wrapper>
         </>
       )}

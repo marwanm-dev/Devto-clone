@@ -2,6 +2,7 @@ import { nanoid } from '@reduxjs/toolkit';
 import { useSelector } from 'react-redux';
 import tw, { styled } from 'twin.macro';
 import LoadingSpinner from '../../common/LoadingSpinner';
+import Placeholder from '../../common/Placeholder';
 import RouteWrapper from '../../common/RouteWrapper';
 import { selectCurrentUser } from '../../core/features/auth/authSlice';
 import { useGetAllNotificationsQuery } from '../../core/features/users/usersApiSlice';
@@ -17,11 +18,15 @@ const Notifications = () => {
     <RouteWrapper>
       <Heading>Notifications</Heading>
       <Wrapper>
-        {isLoading && <LoadingSpinner />}
-        {!isLoading &&
+        {isLoading ? (
+          <LoadingSpinner />
+        ) : notifications.length ? (
           notifications.map(notification => (
             <Notification key={nanoid()} notification={notification} />
-          ))}
+          ))
+        ) : (
+          <Placeholder type='notifications' />
+        )}
       </Wrapper>
     </RouteWrapper>
   );

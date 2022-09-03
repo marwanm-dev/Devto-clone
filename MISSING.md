@@ -12,11 +12,7 @@ Redirect to previous page he was on if refresh token expired and he was redirect
 
 _NEEDS FIX_
 
-PostsList must be refactored
-
 Refetching on receiving a notification from socket.io but with a 1 sec delay setTimeout (do without setTimeout), do likeComment and replyComment
-
-Optimistic updates (Bookmarking post homepage, follow tags page not tag page)
 
 .ENV variables on client side
 

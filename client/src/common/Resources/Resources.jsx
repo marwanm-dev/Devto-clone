@@ -5,22 +5,18 @@ import { useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import tw, { styled } from 'twin.macro';
 import { selectCurrentUser } from '../../core/features/auth/authSlice';
-import {
-  useGetFollowingTagsQuery,
-  useGetNumTagsQuery,
-} from '../../core/features/tags/tagsApiSlice';
+import { useGetFollowingTagsQuery, useGetNTagsQuery } from '../../core/features/tags/tagsApiSlice';
 import useRequireAuth from '../../hooks/useRequireAuth';
 
 const Resources = ({ saved }) => {
   const navigate = useNavigate();
   const { isAuthed } = useRequireAuth();
-
   const { id: userId } = useSelector(selectCurrentUser);
   const { data: followingTags } = useGetFollowingTagsQuery(
     { userId },
     { refetchOnMountOrArgChange: true }
   );
-  const { data: tags } = useGetNumTagsQuery(null, { refetchOnMountOrArgChange: true });
+  const { data: tags } = useGetNTagsQuery(null, { refetchOnMountOrArgChange: true });
 
   return (
     <Wrapper>

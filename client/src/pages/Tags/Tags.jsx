@@ -24,7 +24,7 @@ const Tags = () => {
           modifiedTags.map(
             tag =>
               tag.name.toLowerCase().includes(searchValue.toLowerCase()) && (
-                <Tag key={nanoid()} tag={tag} isFollowed={tag.isFollowed} />
+                <Tag key={nanoid()} tag={tag} isFollowed={tag.isFollowed} isTagPage={false} />
               )
           )}
       </Wrapper>

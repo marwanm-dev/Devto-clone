@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { AiOutlineHeart } from 'react-icons/ai';
 import { BsBookmark, BsBookmarkFill } from 'react-icons/bs';
 import { MdOutlineModeComment } from 'react-icons/md';
@@ -11,7 +12,7 @@ import useRequireAuth from '../../../hooks/useRequireAuth';
 import LoadingController from '../../LoadingController/LoadingController';
 import Tags from '../../Tags';
 
-const Post = ({ post, isFirstPost, filteredTag }) => {
+const Post = ({ post, isFirstPost, filteredTag, toInvalidate }) => {
   const navigate = useNavigate();
   const isSmall = useBreakpoint(theme`screens.sm.max`.replace('px', ''));
   const { isAuthed, handleAuth } = useRequireAuth(false);
@@ -27,7 +28,8 @@ const Post = ({ post, isFirstPost, filteredTag }) => {
     likesArr,
     unicornsArr,
     bookmarksArr,
-    post.title
+    post.title,
+    toInvalidate
   );
   const { isBookmarked } = state;
 
@@ -52,7 +54,7 @@ const Post = ({ post, isFirstPost, filteredTag }) => {
         )}
         <Content>
           <Header onClick={() => navigate(`/${post?.author.username}`)}>
-            <Author src={post.author?.picture.url} />
+            <Author src={post.author?.picture?.url} />
             <AuthorMeta>
               <AuthorName>{post.author?.username}</AuthorName>
               <CreatedAt>{formatDate(post.createdAt)}</CreatedAt>
