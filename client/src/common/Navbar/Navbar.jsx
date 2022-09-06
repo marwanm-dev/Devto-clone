@@ -8,7 +8,7 @@ import { Link } from 'react-router-dom';
 import tw, { styled, theme } from 'twin.macro';
 import SocketContext from '../../context/SocketContext';
 import { selectCurrentUser } from '../../core/features/auth/authSlice';
-import { useGetUnreadNotificationsQuery } from '../../core/features/users/usersApiSlice';
+import { useLazyGetUnreadNotificationsQuery } from '../../core/features/users/usersApiSlice';
 import { preventScroll } from '../../helpers/body';
 import useBreakpoint from '../../hooks/useBreakpoint';
 import useRequireAuth from '../../hooks/useRequireAuth';
@@ -25,23 +25,23 @@ const Navbar = () => {
   const [profileMenu, toggleProfileMenu] = useToggle(false);
   const [mobileSearch, toggleMobileSearch] = useToggle(false);
   const [mobileMenu, toggleMobileMenu] = useToggle(false);
-  const { data: unreadNotifications, refetch } = useGetUnreadNotificationsQuery(currentUser.id, {
-    refetchOnMountOrArgChange: true,
-  });
+  const [trigger, { data: unreadNotifications }] = useLazyGetUnreadNotificationsQuery();
   preventScroll(mobileMenu);
   const createToast = useToast();
+
+  useEffect(() => {
+    if (isAuthed) trigger(currentUser.id);
+  }, []);
 
   useEffect(() => {
     socket?.on('notificationReceived', ({ sender, receiverUsername, type, reactionType, post }) => {
       createToast({ sender, receiverUsername, type, reactionType, post });
       setTimeout(() => {
-        refetch();
+        if (isAuthed) trigger(currentUser.id);
       }, 1000);
     });
     return () => socket.off('notificationReceived');
   }, []);
-
-  useEffect(() => {}, [socket]);
 
   return (
     <Wrapper>

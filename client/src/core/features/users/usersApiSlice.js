@@ -5,7 +5,7 @@ import postsApiSlice from '../posts/postsApiSlice';
 
 const usersApiSlice = apiSlice.injectEndpoints({
   endpoints: builder => ({
-    getUser: builder.query({
+    getOneUser: builder.query({
       query: username => `/users/${username}`,
       providesTags: (result, err, args) =>
         result ? [{ type: 'User', id: result.id }] : [{ type: 'User', id: 'LIST' }],
@@ -93,10 +93,10 @@ const usersApiSlice = apiSlice.injectEndpoints({
 });
 
 export const {
-  useGetUserQuery,
+  useGetOneUserQuery,
   useGetUserDashboardQuery,
   useGetAllNotificationsQuery,
-  useGetUnreadNotificationsQuery,
+  useLazyGetUnreadNotificationsQuery,
   useDeleteUserMutation,
   useUpdateUserMutation,
   useHandleUserFollowMutation,

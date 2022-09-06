@@ -1,6 +1,6 @@
+import { persistor } from '../../store';
 import apiSlice from '../api/apiSlice';
 import { logout } from './authSlice';
-import { persistor } from '../../store';
 
 const authApiSlice = apiSlice.injectEndpoints({
   endpoints: builder => ({
@@ -30,8 +30,30 @@ const authApiSlice = apiSlice.injectEndpoints({
         credentials: 'include',
       }),
     }),
+    googleLogin: builder.mutation({
+      query: tokenId => ({
+        url: '/auth/google',
+        method: 'POST',
+        body: { tokenId },
+        credentials: 'include',
+      }),
+    }),
+    githubLogin: builder.mutation({
+      query: code => ({
+        url: '/auth/github',
+        method: 'POST',
+        body: { code },
+        credentials: 'include',
+      }),
+    }),
   }),
   overrideExisting: true,
 });
 
-export const { useLazyLogoutQuery, useSignUpMutation, useLoginMutation } = authApiSlice;
+export const {
+  useLazyLogoutQuery,
+  useSignUpMutation,
+  useLoginMutation,
+  useGoogleLoginMutation,
+  useGithubLoginMutation,
+} = authApiSlice;

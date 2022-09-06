@@ -13,6 +13,7 @@ import useRequireAuth from '../../hooks/useRequireAuth';
 
 const EditProfile = () => {
   const currentUser = useSelector(selectCurrentUser);
+  const [id, setId] = useState(currentUser.id);
   const [name, setName] = useState(currentUser.name);
   const [username, setUsername] = useState(currentUser.username);
   const [file, setFile] = useState(currentUser.picture?.url);
@@ -33,10 +34,10 @@ const EditProfile = () => {
     if (isAuthed) {
       try {
         await updateUser({
-          id: currentUser.id,
+          id,
           name,
           username,
-          picture: { url: previewURL, publicId: currentUser.picture.publicId },
+          picture: { url: previewURL, publicId: currentUser.picture?.publicId },
           bio,
           location,
           education,

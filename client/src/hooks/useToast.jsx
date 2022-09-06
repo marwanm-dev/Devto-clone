@@ -7,7 +7,6 @@ const useToast = () => {
   let message, url;
 
   const createToast = ({ sender, receiverUsername, type, reactionType, post }) => {
-    console.log('createdToast');
     if (type === 'follow') {
       message = `${sender.name} started following you.`;
       url = `/${sender.username}`;

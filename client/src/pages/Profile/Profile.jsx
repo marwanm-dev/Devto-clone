@@ -1,5 +1,5 @@
 import { nanoid } from '@reduxjs/toolkit';
-import { useContext, useEffect } from 'react';
+import { useContext } from 'react';
 import { CgNotes } from 'react-icons/cg';
 import { FaBirthdayCake, FaHashtag, FaRegComment } from 'react-icons/fa';
 import { HiLocationMarker } from 'react-icons/hi';
@@ -14,7 +14,7 @@ import RouteWrapper from '../../common/RouteWrapper';
 import socketContext from '../../context/SocketContext';
 import { selectCurrentUser } from '../../core/features/auth/authSlice';
 import {
-  useGetUserQuery,
+  useGetOneUserQuery,
   useHandleUserFollowMutation,
 } from '../../core/features/users/usersApiSlice';
 import { formatDate } from '../../helpers/string';
@@ -23,7 +23,9 @@ const Profile = () => {
   const navigate = useNavigate();
   const currentUser = useSelector(selectCurrentUser);
   const { username } = useParams();
-  const { data: previewedUser } = useGetUserQuery(username, { refetchOnMountOrArgChange: true });
+  const { data: previewedUser } = useGetOneUserQuery(username, {
+    refetchOnMountOrArgChange: true,
+  });
   const [handleUserFollow, { isLoading }] = useHandleUserFollowMutation();
   const isFollowed = previewedUser?.followers?.includes(currentUser.id);
   const isFollowingYou = previewedUser?.following?.includes(currentUser.id);

@@ -44,8 +44,10 @@ const deleteUser = async (req, res) => {
   const user = await User.findOne({ _id: id }).exec();
   if (!user) return res.status(204).json({ message: `User ID ${id} not found` });
 
-  if (user.picture.publicId !== process.env.CLOUDINARY_DEFAULT_PUBLIC_ID)
-    cloudinary.uploader.destroy(user.picture.publicId);
+  if (user.picture.publicId) {
+    if (user.picture.publicId !== process.env.CLOUDINARY_DEFAULT_PUBLIC_ID)
+      cloudinary.uploader.destroy(user.picture.publicId);
+  }
 
   ['followers', 'following'].forEach(k => {
     (async () => {
@@ -55,7 +57,7 @@ const deleteUser = async (req, res) => {
 
   await deletePostsByUserId(user);
 
-  const deletedUser = await User.deleteOne({ _id: id }).exec();
+  const deletedUser = await User.deleteOne({ _id: id });
 
   res.json(deletedUser.toObject({ getters: true }));
 };
@@ -68,8 +70,10 @@ const updateUser = async (req, res) => {
 
   const { url, public_id: publicId } = await uploadToCloudinary(req.body.picture.url, 'Profiles');
 
-  if (user.picture.publicId !== process.env.CLOUDINARY_DEFAULT_PUBLIC_ID)
-    cloudinary.uploader.destroy(user.picture.publicId);
+  if (user.picture.publicId) {
+    if (user.picture.publicId !== process.env.CLOUDINARY_DEFAULT_PUBLIC_ID)
+      cloudinary.uploader.destroy(user.picture.publicId);
+  }
 
   req.body.picture = { url, publicId };
 

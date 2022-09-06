@@ -77,7 +77,7 @@ const tagsApiSlice = apiSlice.injectEndpoints({
 export const {
   useGetTagsQuery,
   useGetNTagsQuery,
-  useGetFollowingTagsQuery,
+  useLazyGetFollowingTagsQuery,
   useGetTagByNameQuery,
   useHandleFollowMutation,
 } = tagsApiSlice;

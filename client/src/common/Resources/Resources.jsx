@@ -1,22 +1,27 @@
 import { nanoid } from '@reduxjs/toolkit';
+import { useEffect } from 'react';
 import { AiFillFacebook, AiFillGithub, AiFillInstagram } from 'react-icons/ai';
 import { RiSettingsLine } from 'react-icons/ri';
 import { useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import tw, { styled } from 'twin.macro';
 import { selectCurrentUser } from '../../core/features/auth/authSlice';
-import { useGetFollowingTagsQuery, useGetNTagsQuery } from '../../core/features/tags/tagsApiSlice';
+import {
+  useGetNTagsQuery,
+  useLazyGetFollowingTagsQuery
+} from '../../core/features/tags/tagsApiSlice';
 import useRequireAuth from '../../hooks/useRequireAuth';
 
 const Resources = ({ saved }) => {
   const navigate = useNavigate();
   const { isAuthed } = useRequireAuth();
   const { id: userId } = useSelector(selectCurrentUser);
-  const { data: followingTags } = useGetFollowingTagsQuery(
-    { userId },
-    { refetchOnMountOrArgChange: true }
-  );
+  const [trigger, { data: followingTags }] = useLazyGetFollowingTagsQuery();
   const { data: tags } = useGetNTagsQuery(null, { refetchOnMountOrArgChange: true });
+
+  useEffect(() => {
+    if (isAuthed) trigger({ userId });
+  }, [userId]);
 
   return (
     <Wrapper>
