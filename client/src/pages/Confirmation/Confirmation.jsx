@@ -1,9 +1,10 @@
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import tw from 'twin.macro';
+import LoadingController from '../../common/LoadingController';
 import RouteWrapper from '../../common/RouteWrapper';
 import { useLazyLogoutQuery } from '../../core/features/auth/authApiSlice';
-import { selectCurrentToken, selectCurrentUser } from '../../core/features/auth/authSlice';
+import { selectCurrentUser } from '../../core/features/auth/authSlice';
 import { useDeleteUserMutation } from '../../core/features/users/usersApiSlice';
 import { capitalizeFirstLetter } from '../../helpers/string';
 import useRequireAuth from '../../hooks/useRequireAuth';
@@ -12,9 +13,8 @@ const Confirmation = () => {
   const navigate = useNavigate();
   const { confirmType } = useParams();
   const [trigger] = useLazyLogoutQuery();
-  const [deleteUser] = useDeleteUserMutation();
+  const [deleteUser, { isLoading }] = useDeleteUserMutation();
   const { id } = useSelector(selectCurrentUser);
-  const dispatch = useDispatch();
   const { isAuthed, handleAuth } = useRequireAuth();
 
   const handleConfirmation = async () => {
@@ -34,9 +34,11 @@ const Confirmation = () => {
     <RouteWrapper>
       <Wrapper>
         <Heading>Are you sure you want to {confirmType.replace('-', ' ')}?</Heading>
-        <ConfirmButton onClick={handleConfirmation}>
-          Yes, {capitalizeFirstLetter(confirmType.replace('-', ' '))}
-        </ConfirmButton>
+        <LoadingController isLoading={isLoading}>
+          <ConfirmButton onClick={handleConfirmation}>
+            Yes, {capitalizeFirstLetter(confirmType.replace('-', ' '))}
+          </ConfirmButton>
+        </LoadingController>
       </Wrapper>
     </RouteWrapper>
   );

@@ -3,9 +3,10 @@ import {
   useDeleteCommentMutation,
   useUpdateCommentMutation,
 } from '../../core/features/comments/commentsApiSlice';
+import LoadingController from '../LoadingController';
 
 const CommentModifier = ({ id, editMode, setEditMode, textareaRef }) => {
-  const [deleteComment] = useDeleteCommentMutation();
+  const [deleteComment, { isLoading }] = useDeleteCommentMutation();
   const [updateComment] = useUpdateCommentMutation();
 
   const handleDelete = () => {
@@ -18,17 +19,27 @@ const CommentModifier = ({ id, editMode, setEditMode, textareaRef }) => {
         <>
           <Submit
             onClick={() => {
-              updateComment({ id, body: textareaRef.current.value });
-              setEditMode(false);
+              if (textareaRef.current.value) {
+                updateComment({ id, body: textareaRef.current.value });
+                setEditMode(false);
+              }
             }}>
             Submit
           </Submit>
-          <CancelButton onClick={() => setEditMode(false)}>Cancel</CancelButton>
+          <CancelButton
+            onClick={() => {
+              textareaRef.current.value = textareaRef.current.defaultValue;
+              setEditMode(false);
+            }}>
+            Cancel
+          </CancelButton>
         </>
       ) : (
         <>
           <EditButton onClick={() => setEditMode(true)}>Edit</EditButton>
-          <DeleteButton onClick={handleDelete}>Delete</DeleteButton>
+          <LoadingController isLoading={isLoading}>
+            <DeleteButton onClick={handleDelete}>Delete</DeleteButton>
+          </LoadingController>
         </>
       )}
     </Wrapper>

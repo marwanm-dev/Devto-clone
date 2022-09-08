@@ -6,7 +6,7 @@ module.exports = {
         white: 'rgb(255, 252, 252)',
         blue: 'rgb(59, 73, 223)',
         'light-blue': 'rgb(226, 227, 243)',
-        'lightest-gray': 'rgb(255, 255, 255)',
+        'lightest-gray': 'rgb(229, 229, 229)',
         'lighter-gray': 'rgb(245, 245, 245)',
         'light-gray': 'rgb(189, 189, 189)',
         gray: 'rgb(163, 163, 163)',
@@ -27,7 +27,7 @@ module.exports = {
       },
       spacing: {
         sm: '1rem',
-        md: '2rem',
+        md: '2.25rem',
         lg: '3.5rem',
         xl: '10rem',
         pg: '2rem',

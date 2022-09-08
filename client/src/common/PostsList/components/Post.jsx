@@ -148,6 +148,8 @@ const SaveButton = styled.button`
   ${tw`p-2 border text-lg border-solid border-transparent rounded-md hover:(text-blue bg-light-blue)`}
   ${({ isBookmarked }) => isBookmarked && tw`bg-light-gray`}
 `;
-const Wrapper = tw.div`rounded-md w-full overflow-hidden bg-white mb-2`;
+const Wrapper = styled.div`
+  ${tw`rounded-lg w-full overflow-hidden bg-white mb-2 shadow-sm hover:shadow`}
+`;
 
 export default Post;

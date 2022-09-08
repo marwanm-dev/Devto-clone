@@ -14,35 +14,39 @@ import RouteWrapper from '../../common/RouteWrapper';
 import socketContext from '../../context/SocketContext';
 import { selectCurrentUser } from '../../core/features/auth/authSlice';
 import {
-  useGetOneUserQuery,
+  useGetUserProfileQuery,
   useHandleUserFollowMutation,
 } from '../../core/features/users/usersApiSlice';
 import { formatDate } from '../../helpers/string';
+import useRequireAuth from '../../hooks/useRequireAuth';
 
 const Profile = () => {
   const navigate = useNavigate();
   const currentUser = useSelector(selectCurrentUser);
   const { username } = useParams();
-  const { data: previewedUser } = useGetOneUserQuery(username, {
+  const { data: previewedUser } = useGetUserProfileQuery(username, {
     refetchOnMountOrArgChange: true,
   });
   const [handleUserFollow, { isLoading }] = useHandleUserFollowMutation();
   const isFollowed = previewedUser?.followers?.includes(currentUser.id);
   const isFollowingYou = previewedUser?.following?.includes(currentUser.id);
   const { socket } = useContext(socketContext);
+  const { isAuthed, handleAuth } = useRequireAuth(false);
 
   const handleFollow = async () => {
-    if (!isFollowed)
-      socket.emit('follow', {
-        sender: currentUser,
-        receiver: previewedUser,
+    if (isAuthed) {
+      if (!isFollowed)
+        socket.emit('follow', {
+          sender: currentUser,
+          receiver: previewedUser,
+        });
+      await handleUserFollow({
+        previewedUsername: previewedUser.username,
+        previewedId: previewedUser.id,
+        currentId: currentUser.id,
+        action: isFollowed ? 'unFollow' : 'follow',
       });
-    await handleUserFollow({
-      previewedUsername: previewedUser.username,
-      previewedId: previewedUser.id,
-      currentId: currentUser.id,
-      action: isFollowed ? 'unFollow' : 'follow',
-    });
+    } else handleAuth();
   };
 
   return (
@@ -85,25 +89,35 @@ const Profile = () => {
           </Card>
           <MoreInfo>
             <LeftPortion>
-              <AvailableForWrapper>
+              <BoxWrapper>
                 <Heading>Available for</Heading>
-                <AvailableFor>{previewedUser.availableFor || 'Not determined'}</AvailableFor>
-              </AvailableForWrapper>
+                <BoxContent>{previewedUser.availableFor || 'Not determined'}</BoxContent>
+              </BoxWrapper>
+              <BoxWrapper>
+                <Heading>Skills/Languages</Heading>
+                <BoxContent>{previewedUser.skills || 'Not determined'}</BoxContent>
+              </BoxWrapper>
               <Stats>
                 <StatWrapper>
                   <CgNotes />
-                  <Count>{previewedUser.posts?.length || 0}</Count>
-                  <StatName>Posts published</StatName>
+                  <StatContent>
+                    <Count>{previewedUser.posts?.length || 0}</Count>
+                    Posts published
+                  </StatContent>
                 </StatWrapper>
                 <StatWrapper>
                   <FaRegComment />
-                  <Count>{previewedUser.comments?.length || 0}</Count>
-                  <StatName>Comments written</StatName>
+                  <StatContent>
+                    <Count>{previewedUser.comments?.length || 0}</Count>
+                    Comments written
+                  </StatContent>
                 </StatWrapper>
                 <StatWrapper>
                   <FaHashtag />
-                  <Count>{previewedUser.followedTags?.length || 0}</Count>
-                  <StatName>Tags followed</StatName>
+                  <StatContent>
+                    <Count>{previewedUser.followedTags?.length || 0}</Count>
+                    Tags followed
+                  </StatContent>
                 </StatWrapper>
               </Stats>
             </LeftPortion>
@@ -135,8 +149,7 @@ const Posts = tw.div`w-full mt-sm ml-sm`;
 const Wrapper = tw.div`max-w-[1200px]`;
 
 const Card = styled.div`
-  box-shadow: 0 8px 5px -7px rgba(0, 0, 0, 0.2);
-  ${tw`bg-white flex flex-col items-center gap-sm relative rounded-md mob:(items-start)`}
+  ${tw`bg-white flex flex-col items-center gap-sm relative rounded-md mob:(items-start) shadow`}
 `;
 
 const Avatar = tw.img`w-28 h-28 object-cover rounded-full border-4 border-black mob:(ml-md)`;
@@ -177,18 +190,18 @@ const Work = tw.div``;
 
 const Title = tw.p`text-gray`;
 
-const Stats = tw(Card)`w-80 items-start p-5 mt-sm`;
+const Stats = tw(Card)`w-80 items-start p-5 mt-sm shadow`;
 
-const StatWrapper = tw.div`flex items-center gap-2`;
+const StatWrapper = tw.div`flex items-center gap-sm text-xl`;
 
-const Count = tw.p``;
+const StatContent = tw.p``;
 
-const StatName = tw.p``;
+const Count = tw.span`mr-2`;
 
-const AvailableForWrapper = tw(Stats)``;
+const BoxWrapper = tw(Stats)`shadow`;
 
 const Heading = tw.h4`w-full pb-sm border-b border-light-gray`;
 
-const AvailableFor = tw.p`pb-sm`;
+const BoxContent = tw.p`pb-sm whitespace-pre-line`;
 
 export default Profile;

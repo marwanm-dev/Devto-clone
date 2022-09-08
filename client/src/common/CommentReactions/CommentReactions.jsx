@@ -9,9 +9,9 @@ import {
 } from '../../core/features/comments/commentsApiSlice';
 import { checkInArray } from '../../helpers/array';
 import useRequireAuth from '../../hooks/useRequireAuth';
+import LoadingController from '../LoadingController';
 import LikeComment from './components/LikeComment';
 import ReplyComment from './components/ReplyComment';
-import LoadingController from '../LoadingController';
 
 const CommentReactions = ({
   likes,

@@ -1,11 +1,10 @@
-import jwt from 'jwt-decode';
 import { useEffect, useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import tw from 'twin.macro';
-import Auth0 from '../../common/Auth0';
 import Error from '../../common/Error';
 import LoadingSpinner from '../../common/LoadingSpinner';
+import OAuth from '../../common/OAuth';
 import RouteWrapper from '../../common/RouteWrapper';
 import { useLoginMutation } from '../../core/features/auth/authApiSlice';
 import { setCredentials, setToken } from '../../core/features/auth/authSlice';
@@ -31,29 +30,41 @@ const Login = () => {
   const handleSubmit = async e => {
     e.preventDefault();
     try {
-      const payload = await login({ email, pwd }).unwrap();
-      const decoded = jwt(payload.token);
-
-      setEmail('');
-      setPwd('');
+      const {
+        id,
+        name,
+        username,
+        picture,
+        bio,
+        location,
+        education,
+        work,
+        availableFor,
+        skills,
+        createdAt,
+        token,
+      } = await login({ email, pwd }).unwrap();
 
       dispatch(
         setCredentials({
-          id: payload.id,
-          name: payload.name,
-          username: decoded.username,
+          id,
+          name,
+          username,
           email,
-          picture: payload.picture,
-          bio: payload.bio,
-          location: payload.location,
-          education: payload.education,
-          work: payload.work,
-          availableFor: payload.availableFor,
-          skills: payload.skills,
-          createdAt: payload.createdAt,
+          picture,
+          bio,
+          location,
+          education,
+          work,
+          availableFor,
+          skills,
+          createdAt,
         })
       );
-      dispatch(setToken(payload.token));
+      dispatch(setToken(token));
+
+      setEmail('');
+      setPwd('');
     } catch (err) {
       console.log(err);
     }
@@ -66,9 +77,7 @@ const Login = () => {
         <Wrapper>
           <Heading>Welcome to DEV Community</Heading>
           <Paragraph>DEV Community is a community of 748,239 amazing developers</Paragraph>
-
-          <Auth0 />
-
+          <OAuth />
           <Paragraph>Or</Paragraph>
 
           <Title>Login using an Existing account</Title>

@@ -25,18 +25,18 @@ const Tag = ({ tag }) => {
 };
 
 const Wrapper = styled.div`
-  ${tw`rounded-md`}
+  ${tw`rounded-lg overflow-hidden shadow-sm hover:shadow`}
   *:not(a) {
     ${tw`p-3 hover:text-blue cursor-pointer`}
   }
 `;
 
-const TagName = tw.h2`pb-10 bg-lightest-gray border-lighter-gray border-b`;
+const TagName = tw.h2`pb-10 bg-white border-lighter-gray border-b`;
 
-const Title = tw.h4`bg-lightest-gray hover:bg-white`;
+const Title = tw.h4`bg-white`;
 
-const PostWrapper = tw.div`py-3 bg-lightest-gray hover:bg-white border-lighter-gray border-b`;
+const PostWrapper = tw.div`py-3 bg-white border-lighter-gray border-b`;
 
-const NumOfComments = tw.h4`p-0 bg-lightest-gray hover:bg-white`;
+const NumOfComments = tw.h4`p-0 bg-white`;
 
 export default Tag;

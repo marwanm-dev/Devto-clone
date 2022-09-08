@@ -1,19 +1,23 @@
-import tw, { styled } from 'twin.macro';
-import Navbar from '../Navbar';
-import { Outlet } from 'react-router-dom';
-import AuthModal from '../AuthModal';
 import { useSelector } from 'react-redux';
+import { Outlet } from 'react-router-dom';
+import tw, { styled } from 'twin.macro';
 import { selectAuthModal } from '../../core/features/auth/authSlice';
+import AuthModal from '../AuthModal';
+import Footer from '../Footer';
+import Navbar from '../Navbar';
 
 const Layout = () => {
   const authModal = useSelector(selectAuthModal);
 
   return (
-    <Wrapper>
-      <Navbar />
-      {authModal && <AuthModal />}
-      <Outlet />
-    </Wrapper>
+    <>
+      <Wrapper>
+        <Navbar />
+        {authModal && <AuthModal />}
+        <Outlet />
+      </Wrapper>
+      <Footer />
+    </>
   );
 };
 

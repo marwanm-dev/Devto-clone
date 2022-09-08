@@ -1,12 +1,12 @@
-import { createContext, useState, useEffect } from 'react';
+import { createContext, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { selectCurrentUser } from '../core/features/auth/authSlice';
 import { io } from 'socket.io-client';
+import { selectCurrentUser } from '../core/features/auth/authSlice';
 
 const SocketContext = createContext({});
 
 export const SocketProvider = ({ children }) => {
-  const [socket, setSocket] = useState(io('http://localhost:5000'));
+  const [socket, setSocket] = useState(io(process.env.BASE_URL));
   const { username } = useSelector(selectCurrentUser);
 
   useEffect(() => {

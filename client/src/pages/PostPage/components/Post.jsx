@@ -72,6 +72,6 @@ const CommentsContainer = styled.div`
 
 const Content = tw.div`px-lg my-lg mob:(px-0)`;
 
-const Wrapper = tw.div`w-full h-full rounded-md overflow-hidden bg-white`;
+const Wrapper = tw.div`w-full h-full rounded-md overflow-hidden bg-white shadow`;
 
 export default Post;

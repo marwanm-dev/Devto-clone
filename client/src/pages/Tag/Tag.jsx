@@ -57,8 +57,7 @@ const Hashtag = styled.span`
 `;
 
 const CurrentTag = styled.div`
-  box-shadow: 0 0px 8px -4px rgba(0, 0, 0, 0.2);
-  ${tw`bg-lighter-gray py-6 px-4 relative overflow-hidden rounded-md flex items-center justify-between [&>*:not(:first-child )]:mt-sm mb-lg`}
+  ${tw`bg-lighter-gray py-6 px-4 relative overflow-hidden rounded-md flex items-center justify-between [&>*:not(:first-child )]:mt-sm mb-lg shadow-sm`}
 `;
 
 const Wrapper = tw.div`w-3/5 lap:w-4/5 mx-auto`;

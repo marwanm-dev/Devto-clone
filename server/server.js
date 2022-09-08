@@ -4,7 +4,6 @@ const cors = require('cors');
 const mongoose = require('mongoose');
 const cookieParser = require('cookie-parser');
 const { createServer } = require('http');
-
 const socketHandlers = require('./utils/socket');
 
 const corsOptions = require('./config/corsOptions');
@@ -17,12 +16,13 @@ const credentials = require('./middleware/credentials');
 const { Server } = require('socket.io');
 const app = express();
 const httpServer = createServer(app);
-const PORT = process.env.PORT || 5000;
 
-// Connect to MongoDB
 (async () => {
   try {
-    mongoose.connect(process.env.DATABASE_URI, dbConn);
+    mongoose.connect(
+      `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@devto-clone.zmjtehp.mongodb.net/${process.env.DB_NAME}?retryWrites=true&w=majority`,
+      dbConn
+    );
   } catch (err) {
     console.error(err);
   }
@@ -63,5 +63,5 @@ mongoose.connection.once('open', () => {
 
   socketHandlers(io);
 
-  httpServer.listen(PORT);
+  httpServer.listen(process.env.PORT || 5000);
 });

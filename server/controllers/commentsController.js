@@ -10,6 +10,12 @@ const getCommentsByPost = async (req, res) => {
   res.status(200).json(comments.map(comment => comment.toObject({ getters: true })));
 };
 
+const getParentComment = async (req, res) => {
+  const comment = await Comment.findOne({ id: req.params.id });
+
+  res.status(200).json(comment.toObject({ getters: true }));
+};
+
 const postComment = async (req, res) => {
   const { body, author, parentPost, parentComment } = req.body;
 
@@ -20,7 +26,7 @@ const postComment = async (req, res) => {
     author,
   });
 
-  const post = await Post.findById(parentPost);
+  const post = await Post.findById(parentPost).populate('author');
   const user = await User.findById(author);
 
   post.comments.push(comment._id);
@@ -29,7 +35,7 @@ const postComment = async (req, res) => {
   await post.save({ timestamps: false });
   await user.save();
 
-  commentNotification(author, parentPost, comment._id, post.author);
+  commentNotification(author, parentPost, comment._id, post.author.id);
 
   res.status(200).json(comment.toObject({ getters: true }));
 };
@@ -96,6 +102,7 @@ const commentReaction = async (req, res) => {
 
 module.exports = {
   getCommentsByPost,
+  getParentComment,
   postComment,
   updateComment,
   deleteComment,

@@ -25,6 +25,7 @@ body {
   text-rendering: optimizeSpeed;
   line-height: 1.5;
   background: ${theme`colors.lighter-gray`};
+  position: relative; // For the footer
 }
 
 body,

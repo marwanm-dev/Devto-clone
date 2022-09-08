@@ -1,4 +1,4 @@
-# Devto-clone
+# Dev.to-clone
 
 ## Tech used with *vite*🔥:
 
@@ -11,8 +11,7 @@
 - Framer motion
 - React router
 - Cloudinary
-- Axios
-- Auth0
+- OAuth
 
 > Backend
 
@@ -21,6 +20,7 @@
 - Node.js
 - JWT
 - Socket.io
+- Axios
 
 ## Live
 

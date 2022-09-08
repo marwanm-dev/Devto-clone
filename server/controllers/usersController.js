@@ -59,7 +59,7 @@ const deleteUser = async (req, res) => {
 
   const deletedUser = await User.deleteOne({ _id: id });
 
-  res.json(deletedUser.toObject({ getters: true }));
+  res.json(deletedUser);
 };
 
 const updateUser = async (req, res) => {

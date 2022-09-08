@@ -3,22 +3,21 @@ import { useSelector } from 'react-redux';
 import tw, { styled } from 'twin.macro';
 import CommentModifiers from '../../../common/CommentModifiers';
 import CommentReactions from '../../../common/CommentReactions';
+import Textarea from '../../../common/Textarea/Textarea';
 import { selectCurrentUser } from '../../../core/features/auth/authSlice';
 import { formatDate } from '../../../helpers/string';
 import useToggle from '../../../hooks/useToggle';
 import Replies from './Replies';
 
-const Comment = ({ comment, replies, parentCommentIfReply = null }) => {
+const Comment = ({ comment, replies, parentCommentIfReply }) => {
   const currentUser = useSelector(selectCurrentUser);
   const [editMode, setEditMode] = useState(false);
   const [isFocused, setIsFocused] = useState(false);
-  const [textareaHeight, setTextareaHeight] = useState();
   const textareaRef = useRef(null);
   const replyRef = useRef(null);
   const [isReplying, toggleIsReplying] = useToggle(false);
   const [submittedReply, setSubmittedReply] = useState(false);
   const [replyBody, setReplyBody] = useState('');
-  const handleTextareaHeight = () => setTextareaHeight(textareaRef.current.scrollHeight);
 
   useEffect(() => {
     if (submittedReply) {
@@ -39,10 +38,6 @@ const Comment = ({ comment, replies, parentCommentIfReply = null }) => {
     if (isReplying) replyRef.current.focus();
   }, [isReplying]);
 
-  useEffect(() => {
-    handleTextareaHeight();
-  }, []);
-
   return (
     <>
       <Wrapper>
@@ -54,13 +49,7 @@ const Comment = ({ comment, replies, parentCommentIfReply = null }) => {
               <CreatedAt>{formatDate(comment.createdAt)}</CreatedAt>
             </Meta>
 
-            <TextArea
-              onChange={handleTextareaHeight}
-              textareaHeight={textareaHeight}
-              disabled={!editMode}
-              ref={textareaRef}
-              defaultValue={comment.body}
-            />
+            <Textarea ref={textareaRef} disabled={!editMode} defaultValue={comment.body} />
           </Content>
         </CommentContainer>
 
@@ -124,11 +113,6 @@ const Name = tw.p`font-bold`;
 const CreatedAt = tw.p`text-darker-gray italic`;
 
 const Avatar = tw.img`w-10 h-10 rounded-full cursor-pointer`;
-
-const TextArea = styled.textarea`
-  height: ${({ textareaHeight }) => textareaHeight}px;
-  ${tw`w-full resize-none outline-none`}
-`;
 
 const Content = styled.div`
   ${tw`w-full h-full px-3 py-5 bg-white rounded-md border border-solid border-light-gray`}

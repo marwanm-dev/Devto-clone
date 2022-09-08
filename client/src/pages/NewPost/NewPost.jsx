@@ -51,7 +51,6 @@ const NewPost = () => {
             tags,
             authorUsername: currentUser.username,
           }).unwrap();
-          console.log(id);
 
           socket.emit('post', {
             sender: currentUser,

@@ -22,7 +22,7 @@ const PostsList = ({ posts, filteredTag, toInvalidate }) => {
 
   return (
     <Wrapper>
-      {filteredPosts.length ? (
+      {filteredPosts.length > 0 ? (
         filteredPosts.map((post, i) => (
           <Post
             post={post}

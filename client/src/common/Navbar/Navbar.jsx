@@ -26,8 +26,8 @@ const Navbar = () => {
   const [mobileSearch, toggleMobileSearch] = useToggle(false);
   const [mobileMenu, toggleMobileMenu] = useToggle(false);
   const [trigger, { data: unreadNotifications }] = useLazyGetUnreadNotificationsQuery();
-  preventScroll(mobileMenu);
   const createToast = useToast();
+  preventScroll(mobileMenu);
 
   useEffect(() => {
     if (isAuthed) trigger(currentUser.id);
@@ -72,7 +72,7 @@ const Navbar = () => {
                 <RiNotification3Line />
                 {unreadNotifications?.length > 0 && <Count>{unreadNotifications.length}</Count>}
               </NotificationIcon>
-              <Avatar src={currentUser.picture.url} onClick={toggleProfileMenu} />
+              <Avatar src={currentUser.picture?.url} onClick={toggleProfileMenu} />
               {profileMenu && (
                 <ProfileMenu>
                   <ListItem>
@@ -120,30 +120,15 @@ const Navbar = () => {
   );
 };
 
-const Wrapper = styled.nav`
-  box-shadow: 0 4px 2px -3px rgba(0, 0, 0, 0.2);
-  ${tw`w-full bg-white fixed left-0 top-0 z-30 py-2 px-pg`}
-`;
+const Wrapper = tw.nav`w-full bg-white fixed left-0 top-0 z-30 py-2 px-pg shadow-md`;
 
 const Top = tw.div`w-full max-w-pg mx-auto flex justify-between items-center gap-sm py-2`;
 
 const LeftSide = tw.div`flex-1 flex items-center gap-sm`;
 
-const HamburgerIcon = styled.div`
-  ${tw`rounded-md text-black p-1 hover:(text-blue bg-light-blue)`}
-  svg {
-    font-size: 1.5rem;
-  }
-  cursor: pointer;
-`;
+const HamburgerIcon = tw.div`rounded-md text-black p-1 hover:(text-blue bg-light-blue) cursor-pointer [& svg]:text-lg`;
 
-const SearchIcon = styled.div`
-  ${tw`rounded-md text-black p-1 hover:(text-blue bg-light-blue)`}
-  svg {
-    font-size: 1.5rem;
-  }
-  cursor: pointer;
-`;
+const SearchIcon = tw.div`rounded-md text-black p-1 hover:(text-blue bg-light-blue) cursor-pointer [& svg]:text-lg`;
 
 const DevIcon = styled(Link).attrs({
   to: '/',
@@ -187,14 +172,7 @@ const SignUp = styled(Link).attrs({
   ${tw`rounded-md border border-solid border-white py-2 px-3 text-blue bg-white border-blue hover:(text-white bg-blue border-blue)`}
 `;
 
-const ProfileMenu = styled.ul`
-  box-shadow: 0px 0px 8px -2px rgba(0, 0, 0, 0.75);
-
-  a {
-    ${tw`block w-full`}
-  }
-  ${tw`w-60 px-2 py-2 bg-white rounded-md absolute bottom-[calc(-1 * 22rem)] right-0 z-50`}
-`;
+const ProfileMenu = tw.ul`w-60 px-2 py-2 bg-white rounded-md absolute bottom-[calc(-1 * 22rem)] right-0 z-50 shadow-md [a]:(block w-full)`;
 
 const ListItem = styled.li`
   margin: 0.25rem 0;
@@ -224,9 +202,7 @@ const Name = tw.h3``;
 
 const UserGmail = tw.h4`text-gray`;
 
-const Bottom = styled.div`
-  ${tw`flex justify-between flex-col items-center 
- pt-2`}
-`;
+const Bottom = tw.div`flex justify-between flex-col items-center 
+pt-2`;
 
 export default Navbar;

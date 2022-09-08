@@ -32,6 +32,7 @@ const getUnreadNotifications = async (req, res, next) => {
 };
 
 const likeNotification = async (senderId, postId, receiverId) => {
+  console.log(senderId, receiverId);
   if (senderId !== receiverId)
     await Notification.create({
       type: 'like',
@@ -51,6 +52,7 @@ const removeLikeNotification = async (senderId, postId, receiverId) => {
 };
 
 const commentNotification = async (senderId, postId, commentId, receiverId) => {
+  console.log(senderId, receiverId);
   if (senderId !== receiverId)
     await Notification.create({
       type: 'comment',

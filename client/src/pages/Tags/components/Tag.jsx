@@ -44,8 +44,7 @@ const Hashtag = styled.span`
 const Posts = tw.p`text-dark-gray ml-2`;
 
 const Wrapper = styled.div`
-  box-shadow: 0 0px 8px -4px rgba(0, 0, 0, 0.2);
-  ${tw`bg-lighter-gray py-6 px-4 relative overflow-hidden rounded-md [&>*:not(:first-child )]:mt-sm`}
+  ${tw`bg-lighter-gray py-6 px-4 relative overflow-hidden rounded-md shadow-sm [&>*:not(:first-child )]:mt-sm`}
 `;
 
 export default Tag;

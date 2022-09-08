@@ -1,10 +1,10 @@
-import tw from 'twin.macro';
-import { useState, useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import RouteWrapper from '../../common/RouteWrapper';
-import LoadingSpinner from '../../common/LoadingSpinner';
+import tw from 'twin.macro';
 import Error from '../../common/Error';
-import Auth0 from '../../common/Auth0';
+import LoadingSpinner from '../../common/LoadingSpinner';
+import OAuth from '../../common/OAuth';
+import RouteWrapper from '../../common/RouteWrapper';
 import { useSignUpMutation } from '../../core/features/auth/authApiSlice';
 import useBase64 from '../../hooks/useBase64';
 
@@ -82,7 +82,7 @@ const SignUp = () => {
           <Heading>Welcome to DEV Community</Heading>
           <Paragraph>DEV Community is a community of 748,239 amazing developers</Paragraph>
 
-          <Auth0 />
+          <OAuth />
 
           <Paragraph>Or</Paragraph>
 

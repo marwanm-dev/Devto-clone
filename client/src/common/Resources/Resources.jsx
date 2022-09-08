@@ -1,6 +1,5 @@
 import { nanoid } from '@reduxjs/toolkit';
 import { useEffect } from 'react';
-import { AiFillFacebook, AiFillGithub, AiFillInstagram } from 'react-icons/ai';
 import { RiSettingsLine } from 'react-icons/ri';
 import { useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
@@ -8,9 +7,10 @@ import tw, { styled } from 'twin.macro';
 import { selectCurrentUser } from '../../core/features/auth/authSlice';
 import {
   useGetNTagsQuery,
-  useLazyGetFollowingTagsQuery
+  useLazyGetFollowingTagsQuery,
 } from '../../core/features/tags/tagsApiSlice';
 import useRequireAuth from '../../hooks/useRequireAuth';
+import Social from '../Social';
 
 const Resources = ({ saved }) => {
   const navigate = useNavigate();
@@ -67,6 +67,7 @@ const Resources = ({ saved }) => {
           <Link to='contact'>Contact</Link>
         </LinkWrapper>
       </PublicLinks>
+      <Social />
       <OtherLinks>
         <Heading>Other</Heading>
         <LinkWrapper>
@@ -82,23 +83,6 @@ const Resources = ({ saved }) => {
           <Link to='terms-of-use'>Terms of Use</Link>
         </LinkWrapper>
       </OtherLinks>
-      <SocialLinks>
-        <SocialWrapper>
-          <Link to='/'>
-            <AiFillFacebook />
-          </Link>
-        </SocialWrapper>
-        <SocialWrapper>
-          <Link to='/'>
-            <AiFillInstagram />
-          </Link>
-        </SocialWrapper>
-        <SocialWrapper>
-          <Link to='/'>
-            <AiFillGithub />
-          </Link>
-        </SocialWrapper>
-      </SocialLinks>
       <Tags>
         {isAuthed && followingTags?.length > 0 && (
           <>
@@ -121,9 +105,11 @@ const Resources = ({ saved }) => {
         )}
         {(!isAuthed || !followingTags?.length > 0) && (
           <>
-            <Header>
-              <TagsHeading>Popular Tags</TagsHeading>
-            </Header>
+            {tags.length > 0 && (
+              <Header>
+                <TagsHeading>Popular Tags</TagsHeading>
+              </Header>
+            )}
             <PopularTags>
               {tags?.map(tag => (
                 <LinkWrapper key={nanoid()}>
@@ -180,7 +166,7 @@ const OtherLinks = styled.div``;
 
 const Image = styled.img.attrs({ width: '24px' })``;
 
-const Heading = tw.h3`text-black mt-6 px-3`;
+const Heading = tw.h3`text-black mt-3 mb-2 px-3`;
 
 const Header = tw.div`mt-6 flex justify-between items-center`;
 
@@ -189,17 +175,5 @@ const TagsHeading = tw(Heading)`mt-0`;
 const Settings = tw.div`cursor-pointer text-xl`;
 
 const LinkWrapper = tw.div`flex justify-start text-center gap-2 rounded-md text-black p-3 hover:(text-blue bg-light-blue)`;
-
-const SocialLinks = styled.div`
-  svg {
-    width: 100%;
-  }
-  a {
-    ${tw`w-full`}
-  }
-  ${tw`py-3 flex`}
-`;
-
-const SocialWrapper = tw(LinkWrapper)`cursor-pointer text-xl w-full`;
 
 export default Resources;

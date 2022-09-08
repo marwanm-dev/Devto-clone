@@ -5,27 +5,33 @@ import LoadingSpinner from '../../../common/LoadingSpinner';
 import socketContext from '../../../context/SocketContext';
 import { selectCurrentUser } from '../../../core/features/auth/authSlice';
 import {
-  useGetCommentsQuery,
+  useGetCommentssQuery,
   usePostCommentMutation,
 } from '../../../core/features/comments/commentsApiSlice';
 import useRequireAuth from '../../../hooks/useRequireAuth';
 import Comment from './Comment';
 
 const Comments = ({ postTitle, postAuthor, postId }) => {
-  const { data: comments, isLoading } = useGetCommentsQuery(postId, {
+  // todo yup do this commentss
+  const {
+    data: comments,
+    isLoading,
+    refetch,
+  } = useGetCommentssQuery(postId, {
     refetchOnMountOrArgChange: true,
   });
-  const rootComments =
-    comments && comments.filter(comment => !comment.parentComment).sort((a, b) => b.date < a.date);
+
+  const rootComments = comments && comments.filter(comment => !comment.parentComment);
   const replies = comments && comments.filter(comment => comment.parentComment);
 
   const [body, setBody] = useState('');
-  const [postComment] = usePostCommentMutation();
+  const [postComment, { isLoading: newCommentIsLoading }] = usePostCommentMutation();
   const currentUser = useSelector(selectCurrentUser);
   const { isAuthed, handleAuth } = useRequireAuth();
   const { socket } = useContext(socketContext);
 
   const handleNewComment = () => {
+    refetch();
     if (!isAuthed) handleAuth();
     if (body) {
       try {
@@ -52,7 +58,9 @@ const Comments = ({ postTitle, postAuthor, postId }) => {
             <Avatar src={currentUser.picture.url} />
             <AddComment>
               <Input value={body} onChange={e => setBody(e.target.value)} />
-              <Submit onClick={handleNewComment}>Submit</Submit>
+              <Submit onClick={handleNewComment} disabled={newCommentIsLoading}>
+                Submit
+              </Submit>
             </AddComment>
           </AddToDiscussion>
         )}
@@ -88,6 +96,6 @@ const Input = styled.input.attrs({
   ${tw`outline-none w-full px-3 py-5 bg-white rounded-md focus:border-blue border border-solid border-light-gray`}
 `;
 
-const Submit = tw.button`text-white bg-blue py-2 px-3 rounded-md mt-1`;
+const Submit = tw.button`text-white bg-blue py-2 px-3 rounded-md mt-1 disabled:(bg-light-blue cursor-not-allowed)`;
 
 export default Comments;

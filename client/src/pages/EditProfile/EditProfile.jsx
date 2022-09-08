@@ -2,19 +2,22 @@ import 'easymde/dist/easymde.min.css';
 import { useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import tw from 'twin.macro';
+import tw, { styled } from 'twin.macro';
 import Error from '../../common/Error';
 import LoadingSpinner from '../../common/LoadingSpinner';
 import RouteWrapper from '../../common/RouteWrapper';
-import { selectCurrentUser } from '../../core/features/auth/authSlice';
+import Textarea from '../../common/Textarea/Textarea';
+import { selectCurrentUser, selectOAuthed } from '../../core/features/auth/authSlice';
 import { useUpdateUserMutation } from '../../core/features/users/usersApiSlice';
 import useBase64 from '../../hooks/useBase64';
 import useRequireAuth from '../../hooks/useRequireAuth';
 
 const EditProfile = () => {
   const currentUser = useSelector(selectCurrentUser);
+  const oAuthed = useSelector(selectOAuthed);
   const [id, setId] = useState(currentUser.id);
   const [name, setName] = useState(currentUser.name);
+  const [email, setEmail] = useState(currentUser.email);
   const [username, setUsername] = useState(currentUser.username);
   const [file, setFile] = useState(currentUser.picture?.url);
   const [bio, setBio] = useState(currentUser.bio || '');
@@ -24,6 +27,8 @@ const EditProfile = () => {
   const [availableFor, setAvailableFor] = useState(currentUser.availableFor || '');
   const [skills, setSkills] = useState(currentUser.skills || '');
   const filePickerRef = useRef();
+  const bioRef = useRef();
+  const skillsRef = useRef();
   const navigate = useNavigate();
 
   const previewURL = useBase64(file);
@@ -36,7 +41,8 @@ const EditProfile = () => {
         await updateUser({
           id,
           name,
-          username,
+          email: oAuthed ? currentUser.email : email,
+          username: oAuthed ? currentUser.username : username,
           picture: { url: previewURL, publicId: currentUser.picture?.publicId },
           bio,
           location,
@@ -64,9 +70,23 @@ const EditProfile = () => {
               <Label htmlFor='name'>Name</Label>
               <Input id='name' value={name} onChange={e => setName(e.target.value)} />
             </InputWrapper>
-            <InputWrapper>
+            <InputWrapper invalid={oAuthed}>
+              <Label htmlFor='email'>Email</Label>
+              <Input
+                id='email'
+                value={email}
+                onChange={e => setEmail(e.target.value)}
+                disabled={oAuthed}
+              />
+            </InputWrapper>
+            <InputWrapper invalid={oAuthed}>
               <Label htmlFor='username'>Username</Label>
-              <Input id='username' value={username} onChange={e => setUsername(e.target.value)} />
+              <Input
+                id='username'
+                value={username}
+                onChange={e => setUsername(e.target.value)}
+                disabled={oAuthed}
+              />
             </InputWrapper>
             <InputWrapper>
               <Input
@@ -80,7 +100,13 @@ const EditProfile = () => {
             </InputWrapper>
             <InputWrapper>
               <Label htmlFor='bio'>Bio</Label>
-              <Input id='bio' value={bio} onChange={e => setBio(e.target.value)} />
+              <Textarea
+                showOutlines={true}
+                ref={bioRef}
+                id='bio'
+                value={bio}
+                onChange={e => setBio(e.target.value)}
+              />
             </InputWrapper>
             <InputWrapper>
               <Label htmlFor='location'>Location</Label>
@@ -108,7 +134,13 @@ const EditProfile = () => {
             </InputWrapper>
             <InputWrapper>
               <Label htmlFor='skills'>Skills</Label>
-              <Input id='skills' value={skills} onChange={e => setSkills(e.target.value)} />
+              <Textarea
+                showOutlines={true}
+                ref={skillsRef}
+                id='skills'
+                value={skills}
+                onChange={e => setSkills(e.target.value)}
+              />
             </InputWrapper>
 
             {isError && <Error>Something went wrong.</Error>}
@@ -132,7 +164,10 @@ const DeleteButton = tw(
 
 const ImagePreview = tw.img`w-32 h-32 mx-auto border border-light-gray flex justify-center items-center text-center object-cover`;
 
-const InputWrapper = tw.div`flex flex-col gap-2`;
+const InputWrapper = styled.div`
+  ${({ invalid }) => invalid && tw`opacity-25 [*]:cursor-not-allowed cursor-not-allowed`}
+  ${tw`flex flex-col gap-2`}
+`;
 
 const Input = tw.input`py-1 px-2 rounded-md outline-none border-2 border-solid border-lighter-gray focus:border-blue`;
 

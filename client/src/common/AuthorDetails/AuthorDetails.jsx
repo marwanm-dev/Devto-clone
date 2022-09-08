@@ -48,15 +48,30 @@ const AuthorDetails = ({ isLaptop, post }) => {
           </FollowButton>
         </LoadingController>
       )}
-      <Bio>{post?.author.bio}</Bio>
-      <Heading>Skills/languages</Heading>
-      <Skills>{post?.author.skills}</Skills>
-      <Heading>Location</Heading>
-      <Location>{post?.author.Location}</Location>
-      <Heading>Work</Heading>
-      <Work>{post?.author.work}</Work>
-      <Heading>Join date</Heading>
-      <CreatedAt>{formatDate(post?.author.createdAt)}</CreatedAt>
+      {post?.author.bio && (
+        <Section>
+          <Heading>Bio</Heading>
+          <Content>{post.author.bio}</Content>
+        </Section>
+      )}
+      {post?.author.skills && (
+        <Section>
+          <Heading>Skills/languages</Heading>
+          <Content>{post.author.skills}</Content>
+        </Section>
+      )}
+      {post?.author.location && (
+        <Section>
+          <Heading>Location</Heading>
+          <Content>{post.author.location}</Content>
+        </Section>
+      )}
+      {post?.author.createdAt && (
+        <Section>
+          <Heading>Join date</Heading>
+          <Content>{formatDate(post.author.createdAt)}</Content>
+        </Section>
+      )}
     </Wrapper>
   );
 };
@@ -77,18 +92,12 @@ const FollowButton = styled.button`
 
 const EditButton = tw(FollowButton)``;
 
-const Bio = tw.p`text-dark-gray`;
+const Section = tw.div``;
 
-const Heading = tw.h3`text-darker-gray mt-sm`;
+const Content = tw.p`text-dark-gray whitespace-pre-line`;
 
-const Skills = tw.p`text-dark-gray`;
+const Heading = tw.p`text-darker-gray mt-sm mb-2 uppercase font-bold`;
 
-const Location = tw.p`text-dark-gray`;
-
-const Work = tw.p`text-dark-gray`;
-
-const CreatedAt = tw.p`text-dark-gray`;
-
-const Wrapper = tw.div`h-full w-1/3 py-6 px-4 bg-white lap:(w-full border-t border-light-gray)`;
+const Wrapper = tw.div`h-full w-1/3 py-6 px-4 bg-white lap:(w-full border-t border-light-gray) rounded-md shadow`;
 
 export default AuthorDetails;
