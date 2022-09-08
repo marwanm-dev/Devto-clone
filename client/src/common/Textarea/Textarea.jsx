@@ -1,36 +1,24 @@
-import { forwardRef, useEffect, useState } from 'react';
-import { pureFinalPropsSelectorFactory } from 'react-redux/es/connect/selectorFactory';
-import tw, { styled } from 'twin.macro';
+import autosize from 'autosize';
+import { forwardRef, useEffect } from 'react';
+import styled from 'styled-components';
+import tw from 'twin.macro';
 
 const Textarea = forwardRef((props, ref) => {
-  const [textareaHeight, setTextareaHeight] = useState(ref?.current?.scrollHeight);
-
-  const handleTextareaHeight = () => setTextareaHeight(ref.current.scrollHeight);
-
   useEffect(() => {
-    handleTextareaHeight();
+    autosize(ref.current);
   }, []);
 
   useEffect(() => {
     if (props.isFocused) ref.current.focus();
   }, [props.isFocused]);
 
-  // Todo
-  return (
-    <Area
-      ref={ref}
-      onChange={() => console.log('not changing!!')}
-      textareaHeight={textareaHeight}
-      {...props}
-    />
-  );
+  return <Area ref={ref} {...props} />;
 });
 
 const Area = styled.textarea`
-  height: ${({ textareaHeight }) => textareaHeight}px;
-  ${tw`w-full outline-none resize-none whitespace-pre-line`}
+  ${tw`w-full outline-none resize-none whitespace-pre-line rounded-md`}
   ${({ showOutlines }) =>
-    showOutlines && tw`border-2 border-lighter-gray focus:border-blue rounded-md py-1 px-2`}
+    showOutlines && tw`border-2 border-lighter-gray focus:border-blue rounded-md`}
 `;
 
 export default Textarea;

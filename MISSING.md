@@ -1,9 +1,5 @@
 # Development Todos
 
-textareas done but only onChange func not working to adjust the height
-fix replies issue
-create another user and start posting and gifing
-
 _NEEDS FINISHING_
 
 Search queries must be from server to search and filter posts, tags, users and limiting them (Search page)

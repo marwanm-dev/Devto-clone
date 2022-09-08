@@ -78,10 +78,13 @@ const Comment = ({ comment, replies, parentCommentIfReply }) => {
         {isReplying && (
           <AddToDiscussion>
             <AddReply>
-              <Input
+              <Textarea
                 ref={replyRef}
                 value={replyBody}
                 onChange={e => setReplyBody(e.target.value)}
+                placeholder='Reply'
+                showOutlines={true}
+                className='px-3 py-5 border border-light-gray'
               />
               <Submit onClick={() => setSubmittedReply(true)}>Submit</Submit>
             </AddReply>
@@ -97,12 +100,6 @@ const Comment = ({ comment, replies, parentCommentIfReply }) => {
 const AddToDiscussion = tw.div`flex justify-start items-start gap-sm`;
 
 const AddReply = tw.div`w-full`;
-
-const Input = styled.input.attrs({
-  placeholder: ' Add your reply',
-})`
-  ${tw`outline-none w-full px-3 py-5 bg-white rounded-md focus:border-blue border border-solid border-light-gray`}
-`;
 
 const Submit = tw.button`text-white bg-blue py-2 px-3 rounded-md mt-1`;
 

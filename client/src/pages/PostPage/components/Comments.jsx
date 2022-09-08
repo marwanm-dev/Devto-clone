@@ -1,7 +1,8 @@
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import tw, { styled } from 'twin.macro';
 import LoadingSpinner from '../../../common/LoadingSpinner';
+import Textarea from '../../../common/Textarea/Textarea';
 import socketContext from '../../../context/SocketContext';
 import { selectCurrentUser } from '../../../core/features/auth/authSlice';
 import {
@@ -29,6 +30,7 @@ const Comments = ({ postTitle, postAuthor, postId }) => {
   const currentUser = useSelector(selectCurrentUser);
   const { isAuthed, handleAuth } = useRequireAuth();
   const { socket } = useContext(socketContext);
+  const addCommentRef = useRef(null);
 
   const handleNewComment = () => {
     refetch();
@@ -57,7 +59,14 @@ const Comments = ({ postTitle, postAuthor, postId }) => {
           <AddToDiscussion>
             <Avatar src={currentUser.picture.url} />
             <AddComment>
-              <Input value={body} onChange={e => setBody(e.target.value)} />
+              <Textarea
+                ref={addCommentRef}
+                value={body}
+                placeholder='Add to discussion..'
+                onChange={e => setBody(e.target.value)}
+                showOutlines={true}
+                className='px-3 py-5  border border-light-gray'
+              />
               <Submit onClick={handleNewComment} disabled={newCommentIsLoading}>
                 Submit
               </Submit>
@@ -89,12 +98,6 @@ const AddToDiscussion = tw.div`flex justify-start items-start gap-sm`;
 const Avatar = tw.img`w-10 h-10 rounded-full cursor-pointer`;
 
 const AddComment = tw.div`w-full`;
-
-const Input = styled.input.attrs({
-  placeholder: ' Add to Discussion',
-})`
-  ${tw`outline-none w-full px-3 py-5 bg-white rounded-md focus:border-blue border border-solid border-light-gray`}
-`;
 
 const Submit = tw.button`text-white bg-blue py-2 px-3 rounded-md mt-1 disabled:(bg-light-blue cursor-not-allowed)`;
 

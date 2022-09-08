@@ -8,6 +8,7 @@
   },
   "dependencies": {
     "@reduxjs/toolkit": "^1.8.2",
+    "autosize": "^5.0.1",
     "easymde": "^2.16.1",
     "framer-motion": "^6.3.11",
     "gapi-script": "^1.2.0",
