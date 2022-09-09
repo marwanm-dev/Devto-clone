@@ -11,7 +11,7 @@ import {
   useGetTagByNameQuery,
   useHandleFollowMutation,
 } from '../../core/features/tags/tagsApiSlice';
-
+import Hashtag from '../../common/Hashtag';
 const Tag = () => {
   const { name } = useParams();
   const { data: tag, isLoading } = useGetTagByNameQuery(name, {
@@ -27,7 +27,9 @@ const Tag = () => {
           <CurrentTag>
             <Bg color={tag.hashtagColor} />
             <Title>
-              <Hashtag color={tag.hashtagColor}>#</Hashtag>
+              <HashtagWrapper color={tag.hashtagColor}>
+                <Hashtag />
+              </HashtagWrapper>
               {tag.name}
             </Title>
             <FollowTag tag={tag} isFollowed={tag.followers.includes(userId)} isTagPage={true} />
@@ -52,7 +54,7 @@ const Bg = styled.div`
 
 const Title = tw.h2`px-2 py-1 rounded-md w-max`;
 
-const Hashtag = styled.span`
+const HashtagWrapper = styled.span`
   color: ${({ color }) => color};
 `;
 

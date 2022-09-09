@@ -5,6 +5,13 @@ import postsApiSlice from '../posts/postsApiSlice';
 
 const usersApiSlice = apiSlice.injectEndpoints({
   endpoints: builder => ({
+    getUsers: builder.query({
+      query: () => '/users',
+      providesTags: (result, err, args) =>
+        result
+          ? [{ type: 'User', id: 'LIST' }, ...result.map(({ id }) => ({ type: 'User', id }))]
+          : [{ type: 'User', id: 'LIST' }],
+    }),
     getUserProfile: builder.query({
       query: username => `/users/${username}`,
       providesTags: (result, err, args) =>
@@ -93,6 +100,7 @@ const usersApiSlice = apiSlice.injectEndpoints({
 });
 
 export const {
+  useGetUsersQuery,
   useGetUserProfileQuery,
   useGetUserDashboardQuery,
   useGetAllNotificationsQuery,

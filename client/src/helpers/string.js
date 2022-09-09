@@ -11,4 +11,11 @@ export const createPostUrl = (postTitle, postId) => {
   return `${postTitle.replaceAll(' ', '+')}-${postId}`;
 };
 
-export const formatDate = timestamp => moment(timestamp).startOf('seconds').fromNow();
+export const formatDate = (timestamp, momented = true) => {
+  const date = new Date(timestamp).toLocaleDateString('en-us', {
+    month: 'short',
+    day: 'numeric',
+    year: momented ? undefined : '2-digit',
+  });
+  return momented ? `${date} (${moment(timestamp).startOf('seconds').fromNow()})` : date;
+};

@@ -25,7 +25,7 @@ const Notifications = () => {
             <Notification key={nanoid()} notification={notification} />
           ))
         ) : (
-          <Placeholder type='notifications' />
+          <Placeholder />
         )}
       </Wrapper>
     </RouteWrapper>

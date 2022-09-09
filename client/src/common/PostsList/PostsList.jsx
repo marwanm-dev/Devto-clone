@@ -1,39 +1,23 @@
 import { nanoid } from '@reduxjs/toolkit';
-import { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
 import tw from 'twin.macro';
-import { selectSearchValue } from '../../core/features/search/searchSlice';
-import usePlaceholder from '../../hooks/usePlaceholder';
 import Placeholder from '../Placeholder';
 import Post from './components/Post';
 
-const PostsList = ({ posts, filteredTag, toInvalidate }) => {
-  const searchValue = useSelector(selectSearchValue);
-  const [filteredPosts, setFilteredPosts] = useState(posts);
-  usePlaceholder('posts by title');
-
-  useEffect(() => {
-    setFilteredPosts(
-      searchValue
-        ? posts.filter(post => post.title.toLowerCase().includes(searchValue.toLowerCase()))
-        : posts
-    );
-  }, [searchValue, posts]);
-
+const PostsList = ({ posts, filteredTag, toInvalidate, enableImages = true }) => {
   return (
     <Wrapper>
-      {filteredPosts.length > 0 ? (
-        filteredPosts.map((post, i) => (
+      {posts.length > 0 ? (
+        posts.map((post, i) => (
           <Post
             post={post}
-            isFirstPost={i === 0}
+            isFirstPost={enableImages && i === 0}
             filteredTag={filteredTag}
             key={nanoid()}
             toInvalidate={toInvalidate}
           />
         ))
       ) : (
-        <Placeholder type='posts' />
+        <Placeholder  />
       )}
     </Wrapper>
   );

@@ -17,6 +17,7 @@ import Notifications from '../pages/Notifications';
 import PostPage from '../pages/PostPage';
 import PrivacyPolicy from '../pages/PrivacyPolicy';
 import Profile from '../pages/Profile';
+import Search from '../pages/Search';
 import SignUp from '../pages/SignUp';
 import Tag from '../pages/Tag';
 import Tags from '../pages/Tags';
@@ -41,6 +42,7 @@ const Routes = () => {
           <Route path='code-of-conduct' element={<CodeOfConduct />} />
           <Route path='privacy-policy' element={<PrivacyPolicy />} />
           <Route path='terms-of-use' element={<TermsOfUse />} />
+          <Route path='search' element={<Search />} />
           <Route element={<RequireAuth />}>
             <Route path='post' element={<NewPost />} />
           </Route>
@@ -64,7 +66,9 @@ const Routes = () => {
             <Route path='*' element={<NotFound />} />
           </Route>
 
-          <Route path='customize' element={<EditProfile />} />
+          <Route element={<RequireAuth />}>
+            <Route path='customize' element={<EditProfile />} />
+          </Route>
 
           <Route path='auth'>
             <Route path='login' element={<Login />} />

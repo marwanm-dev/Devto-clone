@@ -10,6 +10,7 @@ import {
   useLazyGetFollowingTagsQuery,
 } from '../../core/features/tags/tagsApiSlice';
 import useRequireAuth from '../../hooks/useRequireAuth';
+import Hashtag from '../Hashtag';
 import Social from '../Social';
 
 const Resources = ({ saved }) => {
@@ -40,48 +41,66 @@ const Resources = ({ saved }) => {
         </DevCommunity>
       )}
       <PublicLinks>
-        <LinkWrapper>
-          <Image src='../../../assets/images/home.png' />
-          <Link to='/'>Home</Link>
-        </LinkWrapper>
+        <Link to='/'>
+          <LinkWrapper>
+            <Image src='../../../assets/images/home.png' />
+            Home
+          </LinkWrapper>
+        </Link>
 
-        <LinkWrapper>
-          <Image src='../../../assets/images/reading.png' />
-          <Link to={!saved && 'reading-list'}>Reading List</Link>
-        </LinkWrapper>
+        <Link to={!saved && 'reading-list'}>
+          <LinkWrapper>
+            <Image src='../../../assets/images/reading.png' />
+            Reading List
+          </LinkWrapper>
+        </Link>
 
-        <LinkWrapper>
-          <Image src='../../../assets/images/tags.png' />
-          <Link to='tags'>Tags</Link>
-        </LinkWrapper>
-        <LinkWrapper>
-          <Image src='../../../assets/images/faq.png' />
-          <Link to='faq'>FAQ</Link>
-        </LinkWrapper>
-        <LinkWrapper>
-          <Image src='../../../assets/images/about.png' />
-          <Link to='about'>About</Link>
-        </LinkWrapper>
-        <LinkWrapper>
-          <Image src='../../../assets/images/chat.png' />
-          <Link to='contact'>Contact</Link>
-        </LinkWrapper>
+        <Link to='tags'>
+          <LinkWrapper>
+            <Image src='../../../assets/images/tags.png' />
+            Tags
+          </LinkWrapper>
+        </Link>
+        <Link to='faq'>
+          <LinkWrapper>
+            <Image src='../../../assets/images/faq.png' />
+            FAQ
+          </LinkWrapper>
+        </Link>
+        <Link to='about'>
+          <LinkWrapper>
+            <Image src='../../../assets/images/about.png' />
+            About
+          </LinkWrapper>
+        </Link>
+        <Link to='contact'>
+          <LinkWrapper>
+            <Image src='../../../assets/images/chat.png' />
+            Contact
+          </LinkWrapper>
+        </Link>
       </PublicLinks>
       <Social />
       <OtherLinks>
         <Heading>Other</Heading>
-        <LinkWrapper>
-          <Image src='../../../assets/images/code-of-conduct.png' />
-          <Link to='code-of-conduct'>Code of Conduct</Link>
-        </LinkWrapper>
-        <LinkWrapper>
-          <Image src='../../../assets/images/privacy-policy.png' />
-          <Link to='privacy-policy'>Privacy Policy</Link>
-        </LinkWrapper>
-        <LinkWrapper>
-          <Image src='../../../assets/images/terms-of-use.png' />
-          <Link to='terms-of-use'>Terms of Use</Link>
-        </LinkWrapper>
+        <Link to='code-of-conduct'>
+          <LinkWrapper>
+            <Image src='../../../assets/images/code-of-conduct.png' />
+            Code of Conduct
+          </LinkWrapper>
+        </Link>
+        <Link to='privacy-policy'>
+          <LinkWrapper>
+            <Image src='../../../assets/images/privacy-policy.png' />
+            Privacy Policy
+          </LinkWrapper>
+        </Link>
+        <Link to='terms-of-use'>
+          <LinkWrapper>
+            <Image src='../../../assets/images/terms-of-use.png' />
+            Terms of Use
+          </LinkWrapper>
+        </Link>
       </OtherLinks>
       <Tags>
         {isAuthed && followingTags?.length > 0 && (
@@ -96,9 +115,12 @@ const Resources = ({ saved }) => {
             </Header>
             <SubscribedTags>
               {followingTags?.map(tag => (
-                <LinkWrapper key={nanoid()}>
-                  <Link to={`/tags/${tag.name}`}>#{tag.name}</Link>
-                </LinkWrapper>
+                <Link key={nanoid()} to={`/tags/${tag.name}`}>
+                  <LinkWrapper>
+                    <Hashtag />
+                    {tag.name}
+                  </LinkWrapper>
+                </Link>
               ))}
             </SubscribedTags>
           </>
@@ -112,9 +134,12 @@ const Resources = ({ saved }) => {
             )}
             <PopularTags>
               {tags?.map(tag => (
-                <LinkWrapper key={nanoid()}>
-                  <Link to={`/tags/${tag.name}`}>#{tag.name}</Link>
-                </LinkWrapper>
+                <Link key={nanoid()} to={`/tags/${tag.name}`}>
+                  <LinkWrapper>
+                    <Hashtag />
+                    {tag.name}
+                  </LinkWrapper>
+                </Link>
               ))}
             </PopularTags>
           </>
@@ -174,6 +199,6 @@ const TagsHeading = tw(Heading)`mt-0`;
 
 const Settings = tw.div`cursor-pointer text-xl`;
 
-const LinkWrapper = tw.div`flex justify-start text-center gap-2 rounded-md text-black p-3 hover:(text-blue bg-light-blue)`;
+const LinkWrapper = tw.div`flex justify-start items-center gap-2 rounded-md text-black p-3 hover:(text-blue bg-light-blue)`;
 
 export default Resources;

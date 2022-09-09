@@ -1,6 +1,7 @@
 import { nanoid } from '@reduxjs/toolkit';
 import tw, { styled } from 'twin.macro';
 import { decreaseOpacity } from '../../../helpers/utils';
+import Hashtag from '../../../common/Hashtag';
 
 const FollowedTags = ({ followedTags, navigate }) => {
   return (
@@ -12,7 +13,9 @@ const FollowedTags = ({ followedTags, navigate }) => {
             bg={decreaseOpacity(tag.hashtagColor)}
             color={tag.hashtagColor}
             onClick={() => navigate(`/tags/${tag.name}`)}>
-            <Hashtag color={tag.hashtagColor}>#</Hashtag>
+            <HashtagWrapper color={tag.hashtagColor}>
+              <Hashtag />
+            </HashtagWrapper>
             {tag.name}
           </Title>
           <Posts>{tag.posts.length} posts published</Posts>
@@ -37,7 +40,7 @@ const Title = styled.h2`
   ${tw`cursor-pointer px-2 py-1 rounded-md w-max`}
 `;
 
-const Hashtag = styled.span`
+const HashtagWrapper = styled.span`
   color: ${({ color }) => color};
 `;
 

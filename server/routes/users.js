@@ -4,6 +4,8 @@ const usersController = require('../controllers/usersController');
 const notificationsController = require('../controllers/notificationsController');
 const verifyJWT = require('../middleware/verifyJWT');
 
+router.route('/').get(usersController.getUsers);
+
 router
   .route('/:id')
   .patch(verifyJWT, usersController.updateUser)

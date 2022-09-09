@@ -8,7 +8,6 @@ import RouteWrapper from '../../common/RouteWrapper';
 import { selectCurrentUser } from '../../core/features/auth/authSlice';
 import { useGetUserDashboardQuery } from '../../core/features/users/usersApiSlice';
 import useLocalStorage from '../../hooks/useLocalStorage';
-import useRequireAuth from '../../hooks/useRequireAuth';
 import FollowedTags from './components/FollowedTags';
 import Followers from './components/Followers';
 import Following from './components/Following';

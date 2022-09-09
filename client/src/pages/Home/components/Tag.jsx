@@ -1,6 +1,7 @@
 import { nanoid } from '@reduxjs/toolkit';
 import { Link, useNavigate } from 'react-router-dom';
 import tw, { styled } from 'twin.macro';
+import Hashtag from '../../../common/Hashtag';
 
 const Tag = ({ tag }) => {
   const navigate = useNavigate();
@@ -8,7 +9,10 @@ const Tag = ({ tag }) => {
   return (
     <Wrapper>
       <Link to={`tags/${tag.name}`}>
-        <TagName>#{tag.name}</TagName>
+        <TagName>
+          <Hashtag />
+          {tag.name}
+        </TagName>
       </Link>
       {tag.posts.slice(0, 5).map(post => (
         <PostWrapper

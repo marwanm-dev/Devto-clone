@@ -2,6 +2,7 @@ import { nanoid } from '@reduxjs/toolkit';
 import { useNavigate } from 'react-router-dom';
 import tw, { styled } from 'twin.macro';
 import { decreaseOpacity } from '../../helpers/utils';
+import Hashtag from '../Hashtag';
 
 const Tags = ({ tags, isColored, filteredTag }) => {
   const navigate = useNavigate();
@@ -16,12 +17,12 @@ const Tags = ({ tags, isColored, filteredTag }) => {
           bg={decreaseOpacity(tag.hashtagColor)}
           isColored={isColored}
           onClick={() => navigate(`/tags/${tag.name}`)}>
-          <Hashtag
+          <HashtagWrapper
             isFiltered={tag.name === filteredTag}
             isColored={isColored}
             color={tag.hashtagColor}>
-            #
-          </Hashtag>
+            <Hashtag />
+          </HashtagWrapper>
           {tag.name}
         </Tag>
       ))}
@@ -42,7 +43,7 @@ const Tag = styled.div`
     props.isFiltered &&
     `background: ${props.bg};border-color: ${props.color};&:hover{background: ${props.bg};}`}
 `;
-const Hashtag = styled.span`
+const HashtagWrapper = styled.span`
   color: ${props => (props.isColored || props.isFiltered) && props.color};
 `;
 

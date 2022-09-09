@@ -6,6 +6,17 @@ const { uploadToCloudinary } = require('../utils/cloudinary');
 const { deletePostsByUserId } = require('./postsController');
 const { followNotification, removeFollowNotification } = require('./notificationsController');
 
+const getUsers = async (req, res) => {
+  const users = await User.find({})
+    .populate({
+      path: 'posts',
+      populate: ['author', 'tags'],
+    })
+    .sort({ followers: -1 });
+
+  res.json(users);
+};
+
 const getUser = async (req, res) => {
   const username = req.params.username;
   if (!username) return res.status(400).json({ message: 'User name required' });
@@ -104,10 +115,4 @@ const handleFollow = async (req, res) => {
   res.json(followedUser.toObject({ getters: true }));
 };
 
-module.exports = {
-  getUser,
-  getUserDashboard,
-  deleteUser,
-  updateUser,
-  handleFollow,
-};
+module.exports = { getUsers, getUser, getUserDashboard, deleteUser, updateUser, handleFollow };

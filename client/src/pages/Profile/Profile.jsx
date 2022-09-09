@@ -6,10 +6,10 @@ import { HiLocationMarker } from 'react-icons/hi';
 import { useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import tw, { styled } from 'twin.macro';
+import FollowUser from '../../common/FollowUser/FollowUser';
 import LoadingController from '../../common/LoadingController/LoadingController';
 import NotFound from '../../common/NotFound/NotFound';
 import PostsList from '../../common/PostsList';
-import Post from '../../common/PostsList/components/Post';
 import RouteWrapper from '../../common/RouteWrapper';
 import socketContext from '../../context/SocketContext';
 import { selectCurrentUser } from '../../core/features/auth/authSlice';
@@ -18,7 +18,6 @@ import {
   useHandleUserFollowMutation,
 } from '../../core/features/users/usersApiSlice';
 import { formatDate } from '../../helpers/string';
-import useRequireAuth from '../../hooks/useRequireAuth';
 
 const Profile = () => {
   const navigate = useNavigate();
@@ -27,27 +26,6 @@ const Profile = () => {
   const { data: previewedUser } = useGetUserProfileQuery(username, {
     refetchOnMountOrArgChange: true,
   });
-  const [handleUserFollow, { isLoading }] = useHandleUserFollowMutation();
-  const isFollowed = previewedUser?.followers?.includes(currentUser.id);
-  const isFollowingYou = previewedUser?.following?.includes(currentUser.id);
-  const { socket } = useContext(socketContext);
-  const { isAuthed, handleAuth } = useRequireAuth(false);
-
-  const handleFollow = async () => {
-    if (isAuthed) {
-      if (!isFollowed)
-        socket.emit('follow', {
-          sender: currentUser,
-          receiver: previewedUser,
-        });
-      await handleUserFollow({
-        previewedUsername: previewedUser.username,
-        previewedId: previewedUser.id,
-        currentId: currentUser.id,
-        action: isFollowed ? 'unFollow' : 'follow',
-      });
-    } else handleAuth();
-  };
 
   return (
     <RouteWrapper>
@@ -58,11 +36,7 @@ const Profile = () => {
             {previewedUser.username === currentUser.username ? (
               <EditButton onClick={() => navigate('/customize')}>Edit profile</EditButton>
             ) : (
-              <LoadingController isLoading={isLoading}>
-                <FollowButton onClick={handleFollow} isFollowed={isFollowed}>
-                  {isFollowed ? 'Following' : isFollowingYou ? 'Follow back' : 'Follow'}
-                </FollowButton>
-              </LoadingController>
+              <FollowUser currentUser={currentUser} previewedUser={previewedUser} />
             )}
             <Name>{previewedUser.name}</Name>
             <Bio>{previewedUser.bio || 'No bio'}</Bio>
@@ -73,7 +47,7 @@ const Profile = () => {
               </LocationWrapper>
               <CreatedAtWrapper>
                 <FaBirthdayCake />
-                <CreatedAt>Joined {formatDate(previewedUser.createdAt)}</CreatedAt>
+                <CreatedAt>Joined {formatDate(previewedUser.createdAt, false)}</CreatedAt>
               </CreatedAtWrapper>
             </Other>
             <Footer>
@@ -155,14 +129,6 @@ const Card = styled.div`
 const Avatar = tw.img`w-28 h-28 object-cover rounded-full mob:(ml-md)`;
 
 const EditButton = tw.button`absolute top-md right-md text-white bg-blue rounded-md py-2 px-4`;
-
-const FollowButton = styled.button`
-  ${tw`absolute top-md right-md bg-blue text-white border border-solid border-transparent rounded-md py-2 px-4`}
-  ${({ isFollowed }) =>
-    isFollowed
-      ? tw`text-blue border-blue bg-transparent`
-      : tw`hover:(text-blue border-blue bg-transparent)`}
-`;
 
 const Name = tw.h2` mob:(ml-md)`;
 

@@ -2,7 +2,9 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import tw, { styled } from 'twin.macro';
 import FollowTag from '../../../common/FollowTag';
+import Hashtag from '../../../common/Hashtag';
 import { decreaseOpacity } from '../../../helpers/utils';
+
 const Tag = ({ tag, isTagPage }) => {
   const navigate = useNavigate();
 
@@ -13,7 +15,9 @@ const Tag = ({ tag, isTagPage }) => {
         bg={decreaseOpacity(tag.hashtagColor)}
         color={tag.hashtagColor}
         onClick={() => navigate(`/tags/${tag.name}`)}>
-        <Hashtag color={tag.hashtagColor}>#</Hashtag>
+        <HashtagWrapper color={tag.hashtagColor}>
+          <Hashtag />
+        </HashtagWrapper>
         {tag.name}
       </Title>
       <Posts>{tag.posts.length} posts published</Posts>
@@ -37,7 +41,7 @@ const Title = styled.h2`
   ${tw`cursor-pointer px-2 py-1 rounded-md w-max`}
 `;
 
-const Hashtag = styled.span`
+const HashtagWrapper = styled.span`
   color: ${({ color }) => color};
 `;
 
