@@ -55,24 +55,22 @@ const Comments = ({ postTitle, postAuthor, postId }) => {
     <Wrapper>
       <CommentContainer>
         <Heading>Discussion ({comments?.length} comments)</Heading>
-        {isAuthed && (
-          <AddToDiscussion>
-            <Avatar src={currentUser.picture.url} />
-            <AddComment>
-              <Textarea
-                ref={addCommentRef}
-                value={body}
-                placeholder='Add to discussion..'
-                onChange={e => setBody(e.target.value)}
-                showOutlines={true}
-                className='px-3 py-5  border border-light-gray'
-              />
-              <Submit onClick={handleNewComment} disabled={newCommentIsLoading}>
-                Submit
-              </Submit>
-            </AddComment>
-          </AddToDiscussion>
-        )}
+        <AddToDiscussion>
+          <Avatar src={currentUser?.picture?.url || '../../assets/images/default-avatar.png'} />
+          <AddComment>
+            <Textarea
+              ref={addCommentRef}
+              value={body}
+              placeholder='Add to discussion..'
+              onChange={e => setBody(e.target.value)}
+              showOutlines={true}
+              className='px-3 py-5  border border-light-gray'
+            />
+            <Submit onClick={handleNewComment} disabled={newCommentIsLoading}>
+              Submit
+            </Submit>
+          </AddComment>
+        </AddToDiscussion>
         {isLoading && <LoadingSpinner />}
         {!isLoading &&
           rootComments.map(comment => (
@@ -95,7 +93,7 @@ const Heading = tw.h2`mb-md`;
 
 const AddToDiscussion = tw.div`flex justify-start items-start gap-sm`;
 
-const Avatar = tw.img`w-10 h-10 rounded-full cursor-pointer`;
+const Avatar = tw.img`w-10 h-10 rounded-full`;
 
 const AddComment = tw.div`w-full`;
 

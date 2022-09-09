@@ -157,7 +157,7 @@ const NotificationIcon = styled(Link).attrs({
 const Count = tw.div`bg-red text-white rounded-full font-bold text-xs px-1 absolute top-0 right-0`;
 
 const Avatar = styled.img`
-  ${tw`max-w-none w-12 h-12 transition-none hover:(border border border-light-gray) object-cover rounded-full overflow-hidden cursor-pointer`}
+  ${tw`max-w-none w-12 h-12 transition-none object-cover rounded-full overflow-hidden cursor-pointer`}
 `;
 
 const Login = styled(Link).attrs({

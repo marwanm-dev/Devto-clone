@@ -11,6 +11,6 @@ router.route('/limit/:userId').get(tagsController.getFollowingTags);
 
 router.route('/:name').get(tagsController.getTagByName);
 
-router.route('/:name/:action').patch(tagsController.handleFollow);
+router.route('/:name/:action').patch(verifyJWT, tagsController.handleFollow);
 
 module.exports = router;

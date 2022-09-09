@@ -98,6 +98,6 @@ const Content = tw.p`text-dark-gray whitespace-pre-line`;
 
 const Heading = tw.p`text-darker-gray mt-sm mb-2 uppercase font-bold`;
 
-const Wrapper = tw.div`h-full w-1/3 py-6 px-4 bg-white lap:(w-full border-t border-light-gray) rounded-md shadow`;
+const Wrapper = tw.div`max-w-xl h-full py-6 px-4 bg-white lap:(w-full border-t border-light-gray) rounded-md shadow`;
 
 export default AuthorDetails;

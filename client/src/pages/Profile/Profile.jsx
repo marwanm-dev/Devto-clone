@@ -152,7 +152,7 @@ const Card = styled.div`
   ${tw`bg-white flex flex-col items-center gap-sm relative rounded-md mob:(items-start) shadow`}
 `;
 
-const Avatar = tw.img`w-28 h-28 object-cover rounded-full border-4 border-black mob:(ml-md)`;
+const Avatar = tw.img`w-28 h-28 object-cover rounded-full mob:(ml-md)`;
 
 const EditButton = tw.button`absolute top-md right-md text-white bg-blue rounded-md py-2 px-4`;
 

@@ -3,15 +3,15 @@ const router = express.Router();
 const commentsController = require('../controllers/commentsController');
 const verifyJWT = require('../middleware/verifyJWT');
 
-router.route('/').post(commentsController.postComment);
+router.route('/').post(verifyJWT, commentsController.postComment);
 
 router.route('/:postId').get(commentsController.getCommentsByPost);
 
 router
   .route('/:commentId')
-  .delete(commentsController.deleteComment)
-  .patch(commentsController.updateComment);
+  .delete(verifyJWT, commentsController.deleteComment)
+  .patch(verifyJWT, commentsController.updateComment);
 
-router.route('/:commentId/:action').patch(commentsController.commentReaction);
+router.route('/:commentId/:action').patch(verifyJWT, commentsController.commentReaction);
 
 module.exports = router;

@@ -59,7 +59,7 @@ const Post = ({ post, isFirstPost, filteredTag, toInvalidate }) => {
               <AuthorName>{post.author?.username}</AuthorName>
               <CreatedAt>{formatDate(post.createdAt)}</CreatedAt>
               {formatDate(post.updatedAt) !== formatDate(post.createdAt) && (
-                <UpdatedAt>{`Last updated ${formatDate(post.updatedAt)}`}</UpdatedAt>
+                <UpdatedAt>{`Updated ${formatDate(post.updatedAt)}`}</UpdatedAt>
               )}
             </AuthorMeta>
           </Header>

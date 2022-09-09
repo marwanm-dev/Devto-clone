@@ -31,6 +31,7 @@
     "react-syntax-highlighter": "^15.5.0",
     "react-toastify": "^9.0.8",
     "redux-persist": "^6.0.0",
+    "remark-breaks": "^3.0.2",
     "socket.io-client": "^4.5.1",
     "styled-components": "^5.3.5",
     "tailwindcss": "^3.1.3"

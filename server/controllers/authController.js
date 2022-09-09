@@ -2,9 +2,7 @@ const User = require('../model/User');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const { OAuth2Client } = require('google-auth-library');
-const client = new OAuth2Client(
-  '696107882857-aohdavkpvfllchnd8folvqom8lar11rc.apps.googleusercontent.com'
-);
+const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 const axios = require('axios');
 
 const handleLogin = async (req, res) => {
@@ -22,7 +20,7 @@ const handleLogin = async (req, res) => {
     const refreshToken = jwt.sign(
       { username: foundUser.username },
       process.env.REFRESH_TOKEN_SECRET,
-      { expiresIn: '10m' }
+      { expiresIn: '5m' }
     );
     res.cookie('jwt', refreshToken, {
       httpOnly: true,

@@ -105,7 +105,7 @@ const Resources = ({ saved }) => {
         )}
         {(!isAuthed || !followingTags?.length > 0) && (
           <>
-            {tags.length > 0 && (
+            {tags?.length > 0 && (
               <Header>
                 <TagsHeading>Popular Tags</TagsHeading>
               </Header>

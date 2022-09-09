@@ -18,7 +18,7 @@ const Textarea = forwardRef((props, ref) => {
 const Area = styled.textarea`
   ${tw`w-full outline-none resize-none whitespace-pre-line rounded-md`}
   ${({ showOutlines }) =>
-    showOutlines && tw`border-2 border-lighter-gray focus:border-blue rounded-md`}
+    showOutlines && tw`border-2 border-lighter-gray focus:border-blue rounded-md py-1 px-2`}
 `;
 
 export default Textarea;

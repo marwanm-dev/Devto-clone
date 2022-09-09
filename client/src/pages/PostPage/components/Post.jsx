@@ -1,8 +1,7 @@
-import ReactMarkdown from 'react-markdown';
 import { useNavigate } from 'react-router-dom';
 import tw, { styled } from 'twin.macro';
 import AuthorDetails from '../../../common/AuthorDetails';
-import SyntaxHighlight from '../../../common/SyntaxHighlight';
+import CustomMarkdown from '../../../common/CustomMarkdown';
 import Tags from '../../../common/Tags';
 import { formatDate } from '../../../helpers/string';
 import Comments from './Comments';
@@ -23,14 +22,14 @@ const Post = ({ post, isLaptop }) => {
             <AuthorName>{post.author.username}</AuthorName>
             <CreatedAt>{formatDate(post.createdAt)}</CreatedAt>
             {formatDate(post.updatedAt) !== formatDate(post.createdAt) && (
-              <UpdatedAt>{`Last updated ${formatDate(post.updatedAt)}`}</UpdatedAt>
+              <UpdatedAt>{`Updated ${formatDate(post.updatedAt)}`}</UpdatedAt>
             )}
           </AuthorMeta>
         </Header>
         <Title>{post.title}</Title>
         <Tags tags={post.tags} isColored={true} />
         <PostBody>
-          <ReactMarkdown children={post.body} components={SyntaxHighlight} />
+          <CustomMarkdown children={post.body} />
         </PostBody>
         <CommentsContainer>
           {post.comments && (
