@@ -2,7 +2,7 @@ import apiSlice from '../api/apiSlice';
 
 const commentsApiSlice = apiSlice.injectEndpoints({
   endpoints: builder => ({
-    getCommentss: builder.query({
+    getComments: builder.query({
       query: postId => `/comments/${postId}`,
       providesTags: (result, err, args) =>
         result
@@ -24,7 +24,7 @@ const commentsApiSlice = apiSlice.injectEndpoints({
         try {
           const { data: comment } = await queryFulfilled;
           dispatch(
-            commentsApiSlice.util.updateQueryData('getCommentss', parentPost, draftComments => {
+            commentsApiSlice.util.updateQueryData('getComments', parentPost, draftComments => {
               Object.assign(draftComments, comment);
             })
           );
@@ -46,7 +46,7 @@ const commentsApiSlice = apiSlice.injectEndpoints({
         method: 'PATCH',
         body: data,
       }),
-      invalidatesTags: (result, err, { id }) => [{ type: 'Comment', id: id }],
+      invalidatesTags: (result, err, { id }) => [{ type: 'Comment', id }],
     }),
     commentReaction: builder.mutation({
       query: ({ id, action, userId }) => ({
@@ -57,7 +57,7 @@ const commentsApiSlice = apiSlice.injectEndpoints({
       invalidatesTags: (result, err, { id }) => [{ type: 'Comment', id }],
       async onQueryStarted({ id, action, userId, parentPost }, { dispatch, queryFulfilled }) {
         const patchResult = dispatch(
-          commentsApiSlice.util.updateQueryData('getCommentss', parentPost, draftComments => {
+          commentsApiSlice.util.updateQueryData('getComments', parentPost, draftComments => {
             const comment = draftComments.find(comment => comment.id === id);
             const userIdIndex = comment.likes.indexOf(userId);
             action === 'like' ? comment.likes.push(userId) : comment.likes.splice(userIdIndex, 1);
@@ -81,7 +81,7 @@ const commentsApiSlice = apiSlice.injectEndpoints({
 });
 
 export const {
-  useGetCommentssQuery,
+  useGetCommentsQuery,
   usePostCommentMutation,
   useDeleteCommentMutation,
   useUpdateCommentMutation,

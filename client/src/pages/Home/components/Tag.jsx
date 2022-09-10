@@ -30,12 +30,12 @@ const Tag = ({ tag }) => {
 
 const Wrapper = styled.div`
   ${tw`rounded-lg overflow-hidden shadow-sm hover:shadow`}
-  *:not(a) {
+  *:not(a,svg,div) {
     ${tw`p-3 hover:text-blue cursor-pointer`}
   }
 `;
 
-const TagName = tw.h2`pb-10 bg-white border-lighter-gray border-b`;
+const TagName = tw.h2`bg-white border-lighter-gray border-b`;
 
 const Title = tw.h4`bg-white`;
 

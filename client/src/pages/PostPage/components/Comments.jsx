@@ -6,19 +6,18 @@ import Textarea from '../../../common/Textarea/Textarea';
 import socketContext from '../../../context/SocketContext';
 import { selectCurrentUser } from '../../../core/features/auth/authSlice';
 import {
-  useGetCommentssQuery,
+  useGetCommentsQuery,
   usePostCommentMutation,
 } from '../../../core/features/comments/commentsApiSlice';
 import useRequireAuth from '../../../hooks/useRequireAuth';
 import Comment from './Comment';
 
 const Comments = ({ postTitle, postAuthor, postId }) => {
-  // todo yup do this commentss
   const {
     data: comments,
     isLoading,
     refetch,
-  } = useGetCommentssQuery(postId, {
+  } = useGetCommentsQuery(postId, {
     refetchOnMountOrArgChange: true,
   });
 

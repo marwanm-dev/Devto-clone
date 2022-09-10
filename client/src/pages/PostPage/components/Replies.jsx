@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import tw, { styled } from 'twin.macro';
 import Comment from './Comment';
 

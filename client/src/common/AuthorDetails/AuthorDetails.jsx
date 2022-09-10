@@ -7,6 +7,7 @@ import { selectCurrentUser } from '../../core/features/auth/authSlice';
 import { useHandleUserFollowMutation } from '../../core/features/users/usersApiSlice';
 import { formatDate } from '../../helpers/string';
 import LoadingController from '../LoadingController/LoadingController';
+import ShowMore from '../ShowMore/ShowMore';
 
 const AuthorDetails = ({ isLaptop, post }) => {
   const navigate = useNavigate();
@@ -57,7 +58,9 @@ const AuthorDetails = ({ isLaptop, post }) => {
       {post?.author.skills && (
         <Section>
           <Heading>Skills/languages</Heading>
-          <Content>{post.author.skills}</Content>
+          <Content>
+            <ShowMore text={post.author.skills || 'Not determined'} maxChars={300} />
+          </Content>
         </Section>
       )}
       {post?.author.location && (

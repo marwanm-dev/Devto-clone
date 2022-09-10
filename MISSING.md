@@ -2,23 +2,24 @@
 
 _NEEDS FINISHING_
 
-Search queries must be from server to search and filter posts, tags, users and limiting them (Search page)
-
 FAQ, About, Contact
+
+Add new Notification types: likeComment and replyComment
 
 Redirect to previous page he was on if refresh token expired and he was redirected to login and actually logged back
 
 _NEEDS FIX_
 
-deletion of a reply (only) results in deleting the lowest one on that comment until refresh
+Deletion of a reply (only) results in deleting the lowest one on that specific comment until refetch/refresh
 
 Detection of what inputs changed on post edit (do not reupload the same image!)
-On google login, when edit profile if same image it gets uploaded
 
-Refetching on receiving a notification from socket.io but with a 1 sec delay setTimeout (do without setTimeout), do likeComment and replyComment
+Flash on Saving a post (in PostsList)
+
+Refetching on receiving a notification from socket.io with a 1 sec delay setTimeout do without (STANDBY)
+
+LoadingController is on pointer-events-none (STANDBY)
 
 Made a socket context instead of redux slice (STANDBY)
 
 OnEdit dashboard displays EditPost page before loading post (STANDBY)
-
-Flash on Saving a post (in PostsList)

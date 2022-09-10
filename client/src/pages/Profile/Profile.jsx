@@ -11,6 +11,7 @@ import LoadingController from '../../common/LoadingController/LoadingController'
 import NotFound from '../../common/NotFound/NotFound';
 import PostsList from '../../common/PostsList';
 import RouteWrapper from '../../common/RouteWrapper';
+import ShowMore from '../../common/ShowMore';
 import socketContext from '../../context/SocketContext';
 import { selectCurrentUser } from '../../core/features/auth/authSlice';
 import {
@@ -69,9 +70,12 @@ const Profile = () => {
               </BoxWrapper>
               <BoxWrapper>
                 <Heading>Skills/Languages</Heading>
-                <BoxContent>{previewedUser.skills || 'Not determined'}</BoxContent>
+                <BoxContent>
+                  <ShowMore text={previewedUser.skills} maxChars={300} />
+                </BoxContent>
               </BoxWrapper>
               <Stats>
+                <Heading>Stats</Heading>
                 <StatWrapper>
                   <CgNotes />
                   <StatContent>
@@ -114,9 +118,9 @@ const Profile = () => {
   );
 };
 
-const LeftPortion = tw.div``;
+const LeftPortion = tw.div`mob:(flex flex-row gap-2)`;
 
-const MoreInfo = tw.div`flex`;
+const MoreInfo = tw.div`flex mob:flex-col-reverse`;
 
 const Posts = tw.div`w-full mt-sm ml-sm`;
 
@@ -136,11 +140,11 @@ const Bio = tw.p`text-lg max-w-2xl text-center mob:text-left mob:(ml-md)`;
 
 const Other = tw.div`flex gap-lg mob:(ml-md)`;
 
-const LocationWrapper = tw.div`flex gap-2 text-gray`;
+const LocationWrapper = tw.div`flex gap-2 text-gray items-center`;
+
+const CreatedAtWrapper = tw(LocationWrapper)``;
 
 const Location = tw.div``;
-
-const CreatedAtWrapper = tw.div`flex gap-2 text-gray`;
 
 const CreatedAt = tw.div``;
 

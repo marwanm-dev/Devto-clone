@@ -5,7 +5,7 @@ const LoadingController = ({ children, isLoading }) => (
 );
 
 const Controller = styled.div`
-  ${({ isLoading }) => isLoading && tw`cursor-not-allowed`}
+  ${({ isLoading }) => isLoading && tw`pointer-events-none opacity-60`}
 `;
 
 export default LoadingController;

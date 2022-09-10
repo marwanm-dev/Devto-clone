@@ -17,6 +17,7 @@ const Tags = ({ value }) => {
   const { id: userId } = useSelector(selectCurrentUser);
   const [filteredTags, setFilteredTags] = useState([]);
   const navigate = useNavigate();
+
   useEffect(() => {
     setFilteredTags(tags?.filter(tag => tag.name.toLowerCase().includes(value.toLowerCase())));
   }, [value, tags]);

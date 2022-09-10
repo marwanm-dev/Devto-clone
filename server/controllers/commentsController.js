@@ -97,7 +97,7 @@ const commentReaction = async (req, res) => {
     { new: true }
   );
 
-  res.status(200).json(updatedComment.toObject({ getters: true }));
+  res.status(200).json(updatedComment?.toObject({ getters: true }));
 };
 
 module.exports = {
