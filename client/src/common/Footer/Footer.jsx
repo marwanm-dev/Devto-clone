@@ -15,7 +15,7 @@ const Footer = () => {
           react.
         </Link>
       </Content>
-      <Social isFooter={true} />
+      <Social footer='true' />
     </Wrapper>
   );
 };

@@ -1,4 +1,4 @@
-import { AnimatePresence, AnimatePresence, motion, motion } from 'framer-motion';
+import { AnimatePresence, motion } from 'framer-motion';
 import { useContext, useEffect, useState } from 'react';
 import { FaDev } from 'react-icons/fa';
 import { GiHamburgerMenu } from 'react-icons/gi';

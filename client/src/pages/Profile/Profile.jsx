@@ -44,7 +44,7 @@ const Profile = () => {
             <Other>
               <LocationWrapper>
                 <HiLocationMarker />
-                <Location>{previewedUser.location || 'Not determined'}</Location>
+                <Location>{previewedUser.location || 'Not determined yet'}</Location>
               </LocationWrapper>
               <CreatedAtWrapper>
                 <FaBirthdayCake />
@@ -54,11 +54,11 @@ const Profile = () => {
             <Footer>
               <EducationWrapper>
                 <Title>Education</Title>
-                <Education>{previewedUser.education || 'Not determined'}</Education>
+                <Education>{previewedUser.education || 'Not determined yet'}</Education>
               </EducationWrapper>
               <WorkWrapper>
                 <Title>Work</Title>
-                <Work>{previewedUser.work || 'Not determined'}</Work>
+                <Work>{previewedUser.work || 'Not determined yet'}</Work>
               </WorkWrapper>
             </Footer>
           </Card>
@@ -66,12 +66,12 @@ const Profile = () => {
             <LeftPortion>
               <BoxWrapper>
                 <Heading>Available for</Heading>
-                <BoxContent>{previewedUser.availableFor || 'Not determined'}</BoxContent>
+                <BoxContent>{previewedUser.availableFor || 'Not determined yet'}</BoxContent>
               </BoxWrapper>
               <BoxWrapper>
                 <Heading>Skills/Languages</Heading>
                 <BoxContent>
-                  <ShowMore text={previewedUser.skills} maxChars={300} />
+                  <ShowMore text={previewedUser.skills || 'Not determined yet'} maxChars={300} />
                 </BoxContent>
               </BoxWrapper>
               <Stats>

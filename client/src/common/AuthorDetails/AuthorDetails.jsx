@@ -59,7 +59,7 @@ const AuthorDetails = ({ isLaptop, post }) => {
         <Section>
           <Heading>Skills/languages</Heading>
           <Content>
-            <ShowMore text={post.author.skills || 'Not determined'} maxChars={300} />
+            <ShowMore text={post.author?.skills || 'Not determined yet'} maxChars={300} />
           </Content>
         </Section>
       )}
@@ -101,6 +101,6 @@ const Content = tw.p`text-dark-gray whitespace-pre-line`;
 
 const Heading = tw.p`text-darker-gray mt-sm mb-2 uppercase font-bold`;
 
-const Wrapper = tw.div`max-w-xl h-full py-6 px-4 bg-white lap:(w-full border-t border-light-gray) rounded-md shadow`;
+const Wrapper = tw.div`max-w-sm min-w-[250px] lap:(max-w-full) h-full py-6 px-4 bg-white lap:(w-full border-t border-light-gray) rounded-md shadow`;
 
 export default AuthorDetails;

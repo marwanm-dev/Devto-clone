@@ -8,7 +8,7 @@ const ShowMore = ({ text, maxChars }) => {
 
   return (
     <>
-      {condition && (showMore ? text : text.slice(0, 100))}
+      {showMore ? text : text.slice(0, 100)}
       {condition && (
         <Wrapper onClick={toggleShowMore}>
           {' '}
