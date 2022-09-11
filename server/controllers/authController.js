@@ -20,7 +20,7 @@ const handleLogin = async (req, res) => {
     const refreshToken = jwt.sign(
       { username: foundUser.username },
       process.env.REFRESH_TOKEN_SECRET,
-      { expiresIn: '5m' }
+      { expiresIn: '1h' }
     );
     res.cookie('jwt', refreshToken, {
       httpOnly: true,

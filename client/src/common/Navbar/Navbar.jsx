@@ -1,3 +1,4 @@
+import { AnimatePresence, AnimatePresence, motion, motion } from 'framer-motion';
 import { useContext, useEffect, useState } from 'react';
 import { FaDev } from 'react-icons/fa';
 import { GiHamburgerMenu } from 'react-icons/gi';
@@ -6,6 +7,7 @@ import { RiNotification3Line } from 'react-icons/ri';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import tw, { styled, theme } from 'twin.macro';
+import profileMenu from '../../animations/profileMenu';
 import SocketContext from '../../context/SocketContext';
 import { selectCurrentUser } from '../../core/features/auth/authSlice';
 import { useLazyGetUnreadNotificationsQuery } from '../../core/features/users/usersApiSlice';
@@ -22,7 +24,7 @@ const Navbar = () => {
   const { isAuthed } = useRequireAuth();
   const { socket } = useContext(SocketContext);
   const isMobile = useBreakpoint(theme`screens.mob.max`.replace('px', ''));
-  const [profileMenu, toggleProfileMenu] = useToggle(false);
+  const [profileMenuOpen, toggleProfileMenuOpen] = useToggle(false);
   const [mobileSearch, toggleMobileSearch] = useToggle(false);
   const [mobileMenu, toggleMobileMenu] = useToggle(false);
   const [trigger, { data: unreadNotifications }] = useLazyGetUnreadNotificationsQuery();
@@ -72,34 +74,36 @@ const Navbar = () => {
                 <RiNotification3Line />
                 {unreadNotifications?.length > 0 && <Count>{unreadNotifications.length}</Count>}
               </NotificationIcon>
-              <Avatar src={currentUser.picture?.url} onClick={toggleProfileMenu} />
-              {profileMenu && (
-                <ProfileMenu>
-                  <ListItem>
-                    <Link to={`/${currentUser.username}`}>
-                      <Name>{currentUser.name}</Name>
-                      <UserGmail>
-                        @{currentUser.email.slice(0, currentUser.email.indexOf('@'))}
-                      </UserGmail>
-                    </Link>
-                  </ListItem>
-                  <ListItem>
-                    <Link to='dashboard'>Dashboard</Link>
-                  </ListItem>
-                  <ListItem>
-                    <Link to='post'>Create Post</Link>
-                  </ListItem>
-                  <ListItem>
-                    <Link to='readinglist'>Reading list</Link>
-                  </ListItem>
-                  <ListItem>
-                    <Link to='customize'>Settings</Link>
-                  </ListItem>
-                  <ListItem>
-                    <Link to='/auth/confirm/logout-account'>Sign Out</Link>
-                  </ListItem>
-                </ProfileMenu>
-              )}
+              <Avatar src={currentUser.picture?.url} onClick={toggleProfileMenuOpen} />
+              <AnimatePresence>
+                {profileMenuOpen && (
+                  <ProfileMenu variants={profileMenu} initial='initial' animate='shown' exit='exit'>
+                    <ListItem>
+                      <Link to={`/${currentUser.username}`}>
+                        <Name>{currentUser.name}</Name>
+                        <UserGmail>
+                          @{currentUser.email.slice(0, currentUser.email.indexOf('@'))}
+                        </UserGmail>
+                      </Link>
+                    </ListItem>
+                    <ListItem>
+                      <Link to='dashboard'>Dashboard</Link>
+                    </ListItem>
+                    <ListItem>
+                      <Link to='post'>Create Post</Link>
+                    </ListItem>
+                    <ListItem>
+                      <Link to='readinglist'>Reading list</Link>
+                    </ListItem>
+                    <ListItem>
+                      <Link to='customize'>Settings</Link>
+                    </ListItem>
+                    <ListItem>
+                      <Link to='/auth/confirm/logout-account'>Sign Out</Link>
+                    </ListItem>
+                  </ProfileMenu>
+                )}
+              </AnimatePresence>
             </>
           ) : (
             <>
@@ -172,7 +176,9 @@ const SignUp = styled(Link).attrs({
   ${tw`rounded-md border border-solid border-white py-2 px-3 text-blue bg-white border-blue hover:(text-white bg-blue border-blue)`}
 `;
 
-const ProfileMenu = tw.ul`w-60 px-2 py-2 bg-white rounded-md absolute bottom-[calc(-1 * 22rem)] right-0 z-50 shadow-md [a]:(block w-full)`;
+const ProfileMenu = tw(
+  motion.ul
+)`w-60 px-2 py-2 bg-white rounded-md absolute bottom-[calc(-1 * 22rem)] right-0 z-50 shadow-md [a]:(block w-full)`;
 
 const ListItem = styled.li`
   margin: 0.25rem 0;

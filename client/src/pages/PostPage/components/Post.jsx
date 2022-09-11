@@ -69,7 +69,7 @@ const CommentsContainer = styled.div`
   ${tw`mt-md`}
 `;
 
-const Content = tw.div`px-lg my-lg mob:(px-0)`;
+const Content = tw.div`px-lg my-lg mob:(px-sm)`;
 
 const Wrapper = tw.div`w-full h-full rounded-md overflow-hidden bg-white shadow`;
 

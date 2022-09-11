@@ -10,6 +10,8 @@ Redirect to previous page he was on if refresh token expired and he was redirect
 
 _NEEDS FIX_
 
+On Production disable redux/react -devtools
+
 Deletion of a reply (only) results in deleting the lowest one on that specific comment until refetch/refresh
 
 Detection of what inputs changed on post edit (do not reupload the same image!)
@@ -17,8 +19,6 @@ Detection of what inputs changed on post edit (do not reupload the same image!)
 Flash on Saving a post (in PostsList)
 
 Refetching on receiving a notification from socket.io with a 1 sec delay setTimeout do without (STANDBY)
-
-LoadingController is on pointer-events-none (STANDBY)
 
 Made a socket context instead of redux slice (STANDBY)
 
