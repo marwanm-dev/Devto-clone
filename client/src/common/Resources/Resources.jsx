@@ -83,19 +83,19 @@ const Resources = ({ saved }) => {
       <Social />
       <OtherLinks>
         <Heading>Other</Heading>
-        <Link to='code-of-conduct'>
+        <Link to=''>
           <LinkWrapper>
             <Image src='../../../assets/images/code-of-conduct.png' />
             Code of Conduct
           </LinkWrapper>
         </Link>
-        <Link to='privacy-policy'>
+        <Link to=''>
           <LinkWrapper>
             <Image src='../../../assets/images/privacy-policy.png' />
             Privacy Policy
           </LinkWrapper>
         </Link>
-        <Link to='terms-of-use'>
+        <Link to=''>
           <LinkWrapper>
             <Image src='../../../assets/images/terms-of-use.png' />
             Terms of Use

@@ -11,11 +11,11 @@ const handleLogin = async (req, res) => {
 
   const foundUser = await User.findOne({ email }).exec();
   if (!foundUser) return res.status(401).json({ message: 'Unauthorized' });
-
+  console.log(foundUser);
   const match = await bcrypt.compare(pwd, foundUser.password);
   if (match) {
     const token = jwt.sign({ username: foundUser.username }, process.env.ACCESS_TOKEN_SECRET, {
-      expiresIn: '30s',
+      expiresIn: '1m',
     });
     const refreshToken = jwt.sign(
       { username: foundUser.username },

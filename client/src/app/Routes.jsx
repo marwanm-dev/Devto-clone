@@ -4,7 +4,6 @@ import { Route, Routes as RouterRoutes, useLocation } from 'react-router-dom';
 
 // Pages
 import About from '../pages/About';
-import CodeOfConduct from '../pages/CodeOfConduct';
 import Confirmation from '../pages/Confirmation';
 import Contact from '../pages/Contact';
 import Dashboard from '../pages/Dashboard';
@@ -16,13 +15,11 @@ import Login from '../pages/Login';
 import NewPost from '../pages/NewPost';
 import Notifications from '../pages/Notifications';
 import PostPage from '../pages/PostPage';
-import PrivacyPolicy from '../pages/PrivacyPolicy';
 import Profile from '../pages/Profile';
 import Search from '../pages/Search';
 import SignUp from '../pages/SignUp';
 import Tag from '../pages/Tag';
 import Tags from '../pages/Tags';
-import TermsOfUse from '../pages/TermsOfUse';
 
 // Components
 import Layout from '../common/Layout';
@@ -44,9 +41,6 @@ const Routes = () => {
           <Route path='faq' element={<FAQ />} />
           <Route path='about' element={<About />} />
           <Route path='contact' element={<Contact />} />
-          <Route path='code-of-conduct' element={<CodeOfConduct />} />
-          <Route path='privacy-policy' element={<PrivacyPolicy />} />
-          <Route path='terms-of-use' element={<TermsOfUse />} />
           <Route path='search' element={<Search />} />
           <Route element={<RequireAuth />}>
             <Route path='post' element={<NewPost />} />

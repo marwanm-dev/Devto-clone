@@ -48,15 +48,15 @@ app.use(express.json({ limit: '50mb' }));
 app.use(cookieParser());
 
 // Routes
-app.use('/api', require('./routes/root'));
-app.use('/api/register', require('./routes/register'));
-app.use('/api/auth', require('./routes/auth'));
-app.use('/api/logout', require('./routes/logout'));
-app.use('/api/refresh', require('./routes/refresh'));
-app.use('/api/users', require('./routes/users'));
-app.use('/api/posts', require('./routes/posts'));
-app.use('/api/comments', require('./routes/comments'));
-app.use('/api/tags', require('./routes/tags'));
+app.use('/', require('./routes/root'));
+app.use('/register', require('./routes/register'));
+app.use('/auth', require('./routes/auth'));
+app.use('/logout', require('./routes/logout'));
+app.use('/refresh', require('./routes/refresh'));
+app.use('/users', require('./routes/users'));
+app.use('/posts', require('./routes/posts'));
+app.use('/comments', require('./routes/comments'));
+app.use('/tags', require('./routes/tags'));
 
 mongoose.connection.once('open', () => {
   const io = new Server(httpServer, { cors: corsOptions });

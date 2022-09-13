@@ -2,8 +2,6 @@
 
 _NEEDS FINISHING_
 
-FAQ, About, Contact
-
 Add new Notification types: likeComment and replyComment
 
 Redirect to previous page he was on if refresh token expired and he was redirected to login and actually logged back

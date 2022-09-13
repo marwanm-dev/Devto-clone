@@ -79,14 +79,14 @@ const updateUser = async (req, res) => {
   const user = await User.findOne({ _id: id }).exec();
   if (!user) return res.status(204).json({ message: `User ID ${id} not found` });
 
-  const { url, public_id: publicId } = await uploadToCloudinary(req.body.picture.url, 'Profiles');
-
-  if (user.picture.publicId) {
-    if (user.picture.publicId !== process.env.CLOUDINARY_DEFAULT_PUBLIC_ID)
-      cloudinary.uploader.destroy(user.picture.publicId);
+  if (req.body.picture.publicId !== process.env.CLOUDINARY_DEFAULT_PUBLIC_ID) {
+    const { url, public_id: publicId } = await uploadToCloudinary(req.body.picture.url, 'Profiles');
+    req.body.picture = { url, publicId };
+    console.log(publicId);
   }
 
-  req.body.picture = { url, publicId };
+  if (user.picture?.publicId !== process.env.CLOUDINARY_DEFAULT_PUBLIC_ID)
+    cloudinary.uploader.destroy(user.picture.publicId);
 
   const updatedUser = await User.findOneAndUpdate({ _id: id }, { ...req.body }, { new: true });
   res.json(updatedUser.toObject({ getters: true }));

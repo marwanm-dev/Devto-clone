@@ -1,5 +1,3 @@
-import { nanoid } from '@reduxjs/toolkit';
-import { useContext } from 'react';
 import { CgNotes } from 'react-icons/cg';
 import { FaBirthdayCake, FaHashtag, FaRegComment } from 'react-icons/fa';
 import { HiLocationMarker } from 'react-icons/hi';
@@ -7,30 +5,28 @@ import { useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import tw, { styled } from 'twin.macro';
 import FollowUser from '../../common/FollowUser/FollowUser';
-import LoadingController from '../../common/LoadingController/LoadingController';
+import LoadingSpinner from '../../common/LoadingSpinner';
 import NotFound from '../../common/NotFound/NotFound';
 import PostsList from '../../common/PostsList';
 import RouteWrapper from '../../common/RouteWrapper';
 import ShowMore from '../../common/ShowMore';
-import socketContext from '../../context/SocketContext';
 import { selectCurrentUser } from '../../core/features/auth/authSlice';
-import {
-  useGetUserProfileQuery,
-  useHandleUserFollowMutation,
-} from '../../core/features/users/usersApiSlice';
+import { useGetUserProfileQuery } from '../../core/features/users/usersApiSlice';
 import { formatDate } from '../../helpers/string';
 
 const Profile = () => {
   const navigate = useNavigate();
   const currentUser = useSelector(selectCurrentUser);
   const { username } = useParams();
-  const { data: previewedUser } = useGetUserProfileQuery(username, {
+  const { data: previewedUser, isLoading } = useGetUserProfileQuery(username, {
     refetchOnMountOrArgChange: true,
   });
 
   return (
     <RouteWrapper>
-      {previewedUser ? (
+      {isLoading ? (
+        <LoadingSpinner />
+      ) : previewedUser ? (
         <Wrapper>
           <Card>
             <Avatar src={previewedUser.picture.url} />
