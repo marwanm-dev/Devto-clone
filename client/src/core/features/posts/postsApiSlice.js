@@ -5,7 +5,7 @@ import usersApiSlice from '../users/usersApiSlice';
 
 const postsApiSlice = apiSlice.injectEndpoints({
   endpoints: builder => ({
-    getPostsList: builder.query({
+    getPosts: builder.query({
       query: id => `/posts${id ? `/bookmarked/${id}` : ''}`,
       providesTags: (result, err, args) =>
         result
@@ -89,7 +89,7 @@ const postsApiSlice = apiSlice.injectEndpoints({
               : postsApiSlice.util.updateQueryData('getPost', { url }, draftPost => {
                   draftPost[actionKey] = immutatedArray;
                 })
-            : postsApiSlice.util.updateQueryData('getPostsList', null, draftPosts => {
+            : postsApiSlice.util.updateQueryData('getPosts', null, draftPosts => {
                 const foundPost = draftPosts.find(post => post.id === id);
                 foundPost[actionKey] = immutatedArray;
               })
@@ -122,9 +122,9 @@ const postsApiSlice = apiSlice.injectEndpoints({
 });
 
 export const {
-  useGetPostsListQuery,
+  useGetPostsQuery,
   useGetPostQuery,
-  useGetBookmarkedPostsQuery,
+  useGetBookmarkedPostsListQuery,
   useCreatePostMutation,
   useUpdatePostMutation,
   useDeletePostMutation,

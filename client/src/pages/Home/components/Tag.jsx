@@ -31,7 +31,10 @@ const Tag = ({ tag }) => {
 const Wrapper = styled.div`
   ${tw`rounded-lg overflow-hidden shadow-sm hover:shadow`}
   *:not(a,svg,div) {
-    ${tw`p-3 hover:text-blue cursor-pointer`}
+    ${tw`p-3 cursor-pointer`}
+  }
+  *:not(a, svg) {
+    ${tw`hover:text-blue`}
   }
 `;
 

@@ -1,4 +1,5 @@
 import { AnimatePresence } from 'framer-motion';
+import { useEffect } from 'react';
 import { Route, Routes as RouterRoutes, useLocation } from 'react-router-dom';
 
 // Pages
@@ -30,6 +31,10 @@ import RequireAuth from '../common/RequireAuth/RequireAuth';
 
 const Routes = () => {
   const location = useLocation();
+
+  useEffect(() => {
+    window.scrollTo({ top: 0 });
+  }, [location]);
 
   return (
     <AnimatePresence exitBeforeEnter>

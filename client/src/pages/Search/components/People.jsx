@@ -50,7 +50,14 @@ const People = ({ value }) => {
                     <JoinDate>Joined {formatDate(user.createdAt)}</JoinDate>
                   </Flex>
                 </AdditionalInfo>
-                <FollowUser currentUser={currentUser} previewedUser={user} bottom={true} />
+                {user.username !== currentUser.username && (
+                  <FollowUser
+                    currentUser={currentUser}
+                    previewedUser={user}
+                    bottom={true}
+                    preventPropagation={true}
+                  />
+                )}
               </FlexEnd>
             </Content>
           </User>

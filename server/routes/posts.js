@@ -10,8 +10,8 @@ router.route('/bookmarked/:userId').get(postsController.getPosts);
 router
   .route('/:username/:postUrl')
   .get(postsController.getPost)
-  .patch(postsController.updatePost)
-  .delete(postsController.deletePost);
+  .patch(verifyJWT, postsController.updatePost)
+  .delete(verifyJWT, postsController.deletePost);
 
 router.route('/:username/:postUrl/:action').patch(verifyJWT, postsController.postReaction);
 

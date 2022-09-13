@@ -14,7 +14,7 @@ const getUsers = async (req, res) => {
     })
     .sort({ followers: -1 });
 
-  res.json(users);
+  res.json(users.map(user => user.toObject({ getters: true })));
 };
 
 const getUser = async (req, res) => {

@@ -31,18 +31,19 @@ const Navbar = () => {
   const createToast = useToast();
   preventScroll(mobileMenu);
 
-  useEffect(() => {
+  const getUnreadNotifications = () => {
     if (isAuthed) trigger(currentUser.id);
-  }, []);
+  };
 
   useEffect(() => {
+    getUnreadNotifications();
     socket?.on('notificationReceived', ({ sender, receiverUsername, type, reactionType, post }) => {
       createToast({ sender, receiverUsername, type, reactionType, post });
       setTimeout(() => {
-        if (isAuthed) trigger(currentUser.id);
+        getUnreadNotifications();
       }, 1000);
     });
-    return () => socket.off('notificationReceived');
+    return () => socket?.off('notificationReceived');
   }, []);
 
   return (

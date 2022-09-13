@@ -2,16 +2,14 @@ import { nanoid } from '@reduxjs/toolkit';
 import tw, { styled } from 'twin.macro';
 
 const Following = ({ following, navigate }) => {
-  const onClick = () => navigate(`/${user.username}`);
-
   return (
     <Wrapper>
       {following.map(user => (
-        <User key={nanoid()}>
-          <Picture src={user.picture.url} onClick={onClick} />
+        <User key={nanoid()} onClick={() => navigate(`/${user.username}`)}>
+          <Picture src={user.picture.url} />
           <Info>
-            <Username onClick={onClick}>{user.username}</Username>
-            <Email onClick={onClick}>@{user.email.slice(0, user.email.indexOf('@'))}</Email>
+            <Username>{user.username}</Username>
+            <Email>@{user.email.slice(0, user.email.indexOf('@'))}</Email>
           </Info>
         </User>
       ))}

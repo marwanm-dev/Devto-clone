@@ -5,14 +5,15 @@ import { useHandleUserFollowMutation } from '../../core/features/users/usersApiS
 import useRequireAuth from '../../hooks/useRequireAuth';
 import LoadingController from '../LoadingController';
 
-const FollowUser = ({ currentUser, previewedUser, bottom = false }) => {
+const FollowUser = ({ currentUser, previewedUser, bottom = false, preventPropagation }) => {
   const [handleUserFollow, { isLoading }] = useHandleUserFollowMutation();
   const { isAuthed, handleAuth } = useRequireAuth(false);
-  const isFollowed = previewedUser?.followers?.includes(currentUser.id);
-  const isFollowingYou = previewedUser?.following?.includes(currentUser.id);
+  const isFollowed = previewedUser.followers.includes(currentUser.id);
+  const isFollowingYou = previewedUser.following.includes(currentUser.id);
   const { socket } = useContext(socketContext);
 
-  const handleFollow = async () => {
+  const handleFollow = async e => {
+    if (preventPropagation) e.stopPropagation();
     if (isAuthed) {
       if (!isFollowed)
         socket.emit('follow', {

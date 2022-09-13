@@ -5,7 +5,7 @@ import PostsList from '../../common/PostsList';
 import Resources from '../../common/Resources';
 import RouteWrapper from '../../common/RouteWrapper';
 import { selectCurrentUser } from '../../core/features/auth/authSlice';
-import { useGetPostsListQuery } from '../../core/features/posts/postsApiSlice';
+import { useGetPostsQuery } from '../../core/features/posts/postsApiSlice';
 import useBreakpoint from '../../hooks/useBreakpoint';
 import Tags from './components/Tags';
 
@@ -13,7 +13,7 @@ const Home = ({ saved }) => {
   const isMobile = useBreakpoint(theme`screens.mob.max`.replace('px', ''));
   const isLaptop = useBreakpoint(theme`screens.lap.max`.replace('px', ''));
   const { id } = useSelector(selectCurrentUser);
-  const { data: posts, isLoading } = useGetPostsListQuery(saved ? id : null, {
+  const { data: posts, isLoading } = useGetPostsQuery(saved ? id : null, {
     refetchOnMountOrArgChange: true,
   });
 

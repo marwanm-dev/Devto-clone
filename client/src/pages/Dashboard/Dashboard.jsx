@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import tw, { styled } from 'twin.macro';
 import LoadingSpinner from '../../common/LoadingSpinner';
+import Placeholder from '../../common/Placeholder';
 import RouteWrapper from '../../common/RouteWrapper';
 import { selectCurrentUser } from '../../core/features/auth/authSlice';
 import { useGetUserDashboardQuery } from '../../core/features/users/usersApiSlice';
@@ -51,13 +52,27 @@ const Dashboard = () => {
             {!isLoading &&
               user &&
               (selected === 'posts' ? (
-                <Posts posts={user.posts} username={user.username} navigate={navigate} />
+                user.posts.length > 0 ? (
+                  <Posts posts={user.posts} username={user.username} navigate={navigate} />
+                ) : (
+                  <Placeholder />
+                )
               ) : selected === 'followers' ? (
-                <Followers followers={user.followers} navigate={navigate} />
+                user.followers.length > 0 ? (
+                  <Followers followers={user.followers} navigate={navigate} />
+                ) : (
+                  <Placeholder />
+                )
               ) : selected === 'followedTags' ? (
-                <FollowedTags followedTags={user.followedTags} navigate={navigate} />
-              ) : (
+                user.followedTags.length > 0 ? (
+                  <FollowedTags followedTags={user.followedTags} navigate={navigate} />
+                ) : (
+                  <Placeholder />
+                )
+              ) : user.following ? (
                 <Following following={user.following} navigate={navigate} />
+              ) : (
+                <Placeholder />
               ))}
           </Main>
         </DashboardWrapper>

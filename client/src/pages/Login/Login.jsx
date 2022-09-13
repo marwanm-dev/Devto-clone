@@ -7,7 +7,7 @@ import LoadingSpinner from '../../common/LoadingSpinner';
 import OAuth from '../../common/OAuth';
 import RouteWrapper from '../../common/RouteWrapper';
 import { useLoginMutation } from '../../core/features/auth/authApiSlice';
-import { setCredentials, setToken } from '../../core/features/auth/authSlice';
+import { setCredentials, setOAuthed, setToken } from '../../core/features/auth/authSlice';
 
 const Login = () => {
   const navigate = useNavigate();
@@ -24,6 +24,7 @@ const Login = () => {
 
   useEffect(() => {
     reset();
+    dispatch(setOAuthed(false));
     isSuccess && navigate('/');
   }, [email, pwd]);
 

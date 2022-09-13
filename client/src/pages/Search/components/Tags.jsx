@@ -1,3 +1,4 @@
+import { nanoid } from '@reduxjs/toolkit';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
@@ -28,7 +29,7 @@ const Tags = ({ value }) => {
         <LoadingSpinner />
       ) : filteredTags?.length > 0 ? (
         filteredTags.map(tag => (
-          <Tag onClick={() => navigate(`/tags/${tag.name}`)}>
+          <Tag key={nanoid()} onClick={() => navigate(`/tags/${tag.name}`)}>
             <Flex>
               <HashtagWrapper bg={decreaseOpacity(tag.hashtagColor)} color={tag.hashtagColor}>
                 <Hashtag large={true} />

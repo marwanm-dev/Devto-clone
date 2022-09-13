@@ -2,10 +2,10 @@ import { useEffect, useState } from 'react';
 import tw, { styled } from 'twin.macro';
 import LoadingSpinner from '../../../common/LoadingSpinner';
 import PostsList from '../../../common/PostsList';
-import { useGetPostsListQuery } from '../../../core/features/posts/postsApiSlice';
+import { useGetPostsQuery } from '../../../core/features/posts/postsApiSlice';
 
 const Posts = ({ value }) => {
-  const { data: posts, isLoading } = useGetPostsListQuery(null, {
+  const { data: posts, isLoading } = useGetPostsQuery(null, {
     refetchOnMountOrArgChange: true,
   });
   const [filteredPosts, setFilteredPosts] = useState([]);
