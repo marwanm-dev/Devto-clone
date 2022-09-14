@@ -19,7 +19,7 @@ const Post = ({ post, isLaptop }) => {
             onClick={() => navigate(`/${post.author.username}`)}
           />
           <AuthorMeta>
-            <AuthorName>{post.author.username}</AuthorName>
+            <AuthorName>{post.author.name}</AuthorName>
             <CreatedAt>{formatDate(post.createdAt)}</CreatedAt>
             {formatDate(post.updatedAt) !== formatDate(post.createdAt) && (
               <UpdatedAt>{`Updated ${formatDate(post.updatedAt)}`}</UpdatedAt>

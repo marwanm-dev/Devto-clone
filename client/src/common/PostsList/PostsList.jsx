@@ -6,7 +6,7 @@ import Post from './components/Post';
 const PostsList = ({ posts, filteredTag, toInvalidate, enableImages = true }) => {
   return (
     <Wrapper>
-      {posts.length > 0 ? (
+      {posts?.length > 0 ? (
         posts.map((post, i) => (
           <Post
             post={post}
@@ -17,7 +17,7 @@ const PostsList = ({ posts, filteredTag, toInvalidate, enableImages = true }) =>
           />
         ))
       ) : (
-        <Placeholder  />
+        <Placeholder />
       )}
     </Wrapper>
   );

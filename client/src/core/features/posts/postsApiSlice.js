@@ -24,7 +24,12 @@ const postsApiSlice = apiSlice.injectEndpoints({
         body: { ...data },
       }),
       invalidatesTags: (result, err, args) =>
-        result ? [{ type: 'Post', id: result.id }] : [{ type: 'Post', id: 'LIST' }],
+        result
+          ? [
+              { type: 'Comment', id: 'LIST' },
+              { type: 'Post', id: result.id },
+            ]
+          : [{ type: 'Post', id: 'LIST' }],
     }),
     updatePost: builder.mutation({
       query: ({ meta, data }) => ({
@@ -70,7 +75,7 @@ const postsApiSlice = apiSlice.injectEndpoints({
           toInvalidate
             ? toInvalidate.type === 'User'
               ? usersApiSlice.util.updateQueryData(
-                  'getUser',
+                  'getUserProfile',
                   toInvalidate.extra.username,
                   draftUser => {
                     const foundPost = draftUser.posts.find(post => post.id === id);

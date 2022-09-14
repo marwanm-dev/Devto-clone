@@ -53,7 +53,11 @@ const Dashboard = () => {
               user &&
               (selected === 'posts' ? (
                 user.posts.length > 0 ? (
-                  <Posts posts={user.posts} username={user.username} navigate={navigate} />
+                  <Posts
+                    posts={user.posts.sort((a, b) => b.createdAt - a.createdAt)}
+                    username={user.username}
+                    navigate={navigate}
+                  />
                 ) : (
                   <Placeholder />
                 )
@@ -65,7 +69,10 @@ const Dashboard = () => {
                 )
               ) : selected === 'followedTags' ? (
                 user.followedTags.length > 0 ? (
-                  <FollowedTags followedTags={user.followedTags} navigate={navigate} />
+                  <FollowedTags
+                    followedTags={user.followedTags.sort((a, b) => b.posts.length - a.posts.length)}
+                    navigate={navigate}
+                  />
                 ) : (
                   <Placeholder />
                 )

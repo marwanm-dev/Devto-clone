@@ -38,7 +38,7 @@ const AuthorDetails = ({ isLaptop, post }) => {
     <Wrapper isLaptop={isLaptop} scrollY={scrollY}>
       <Header onClick={() => navigate(`/${post?.author.username}`)}>
         <Avatar src={post?.author?.picture?.url} />
-        <Name>{post?.author.username}</Name>
+        <Name>{post?.author.name}</Name>
       </Header>
       {post?.author.username === currentUser.username ? (
         <EditButton onClick={() => navigate('/customize')}>Edit details</EditButton>

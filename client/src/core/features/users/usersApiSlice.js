@@ -47,7 +47,7 @@ const usersApiSlice = apiSlice.injectEndpoints({
         dispatch(setCredentials(body));
         const { username } = body;
         dispatch(
-          usersApiSlice.util.updateQueryData('getUser', username, draftUser => {
+          usersApiSlice.util.updateQueryData('getUserProfile', username, draftUser => {
             Object.assign(draftUser, updatedUser);
           })
         );
@@ -81,7 +81,7 @@ const usersApiSlice = apiSlice.injectEndpoints({
                     : draftPost.author.followers.splice(currentUserIndex, 1);
                 }
               )
-            : usersApiSlice.util.updateQueryData('getUser', username, draftUser => {
+            : usersApiSlice.util.updateQueryData('getUserProfile', username, draftUser => {
                 const currentUserIndex = draftUser.followers.indexOf(currentId);
                 action === 'follow'
                   ? draftUser.followers.push(currentId)

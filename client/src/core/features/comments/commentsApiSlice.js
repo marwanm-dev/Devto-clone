@@ -18,7 +18,10 @@ const commentsApiSlice = apiSlice.injectEndpoints({
       }),
       invalidatesTags: (result, err, args) =>
         result
-          ? [{ type: 'Comment', id: 'LIST' }, ...result.map(({ id }) => ({ type: 'Comment', id }))]
+          ? [
+              { type: 'Comment', id: 'LIST' },
+              { type: 'Comment', id: result.id },
+            ]
           : [{ type: 'Comment', id: 'LIST' }],
       async onQueryStarted({ parentPost }, { dispatch, queryFulfilled }) {
         try {

@@ -23,7 +23,7 @@ const getUser = async (req, res) => {
 
   const user = await User.findOne({ username })
     .populate({
-      path: 'posts',
+      path: { path: 'posts', options: { sort: { createdAt: -1 } } },
       populate: ['author', 'tags'],
     })
     .exec();
