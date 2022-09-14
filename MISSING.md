@@ -8,6 +8,8 @@ Redirection after login
 
 _NEEDS FIX_
 
+Slow bookmarking on posts
+
 Deletion of a reply (only) results in deleting the lowest one on that specific comment until refetched/refresh
 
 Detection of what inputs changed on post edit
