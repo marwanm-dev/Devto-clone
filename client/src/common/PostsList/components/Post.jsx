@@ -121,7 +121,7 @@ const Image = styled.img`
 `;
 const Content = tw.div`px-sm py-md`;
 const Header = tw.div`flex justify-between items-center w-max gap-sm mb-2`;
-const Author = tw.img`w-12 h-13 rounded-full cursor-pointer`;
+const Author = tw.img`w-12 h-12 rounded-full cursor-pointer`;
 const AuthorMeta = tw.div``;
 const AuthorName = tw.h4`text-darker-gray pr-1 pt-1 rounded-md hover:bg-lighter-gray cursor-pointer`;
 const CreatedAt = tw.p`text-darker-gray`;
