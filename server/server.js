@@ -47,6 +47,8 @@ app.use(express.json({ limit: '50mb' }));
 
 app.use(cookieParser());
 
+app.use('/', express.static('build'));
+
 // Routes
 app.use('/', require('./routes/root'));
 app.use('/register', require('./routes/register'));
