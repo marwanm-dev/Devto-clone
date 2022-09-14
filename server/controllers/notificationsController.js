@@ -9,7 +9,7 @@ const getAllNotifications = async (req, res, next) => {
     .populate('receiver')
     .populate('sender')
     .populate('post')
-    .populate('comment', 'body');
+    .populate(['comment', 'body']);
 
   res.json(notifications.map(notification => notification.toObject({ getters: true })));
 };
@@ -26,7 +26,7 @@ const getUnreadNotifications = async (req, res, next) => {
     .populate('receiver')
     .populate('sender')
     .populate('post')
-    .populate('comment', 'body');
+    .populate(['comment', 'body']);
 
   res.json(unreadNotifications);
 };

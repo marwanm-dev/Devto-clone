@@ -6,7 +6,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import tw, { styled } from 'twin.macro';
 import { selectCurrentUser } from '../../core/features/auth/authSlice';
 import {
-  useGetNTagsQuery,
+  useGetNumTagsQuery,
   useLazyGetFollowingTagsQuery,
 } from '../../core/features/tags/tagsApiSlice';
 import useRequireAuth from '../../hooks/useRequireAuth';
@@ -18,7 +18,7 @@ const Resources = ({ saved }) => {
   const { isAuthed } = useRequireAuth();
   const { id: userId } = useSelector(selectCurrentUser);
   const [trigger, { data: followingTags }] = useLazyGetFollowingTagsQuery();
-  const { data: tags } = useGetNTagsQuery(null, { refetchOnMountOrArgChange: true });
+  const { data: tags } = useGetNumTagsQuery(null, { refetchOnMountOrArgChange: true });
 
   useEffect(() => {
     if (isAuthed) trigger({ userId });

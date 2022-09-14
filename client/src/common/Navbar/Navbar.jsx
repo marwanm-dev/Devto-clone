@@ -38,6 +38,7 @@ const Navbar = () => {
   useEffect(() => {
     getUnreadNotifications();
     socket?.on('notificationReceived', ({ sender, receiverUsername, type, reactionType, post }) => {
+      console.log('notificationReceived')
       createToast({ sender, receiverUsername, type, reactionType, post });
       setTimeout(() => {
         getUnreadNotifications();

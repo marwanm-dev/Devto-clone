@@ -16,7 +16,7 @@ const tagsApiSlice = apiSlice.injectEndpoints({
           ? [{ type: 'Tag', id: 'LIST' }, ...result.map(({ id }) => ({ type: 'Tag', id }))]
           : [{ type: 'Tag', id: 'LIST' }],
     }),
-    getNTags: builder.query({
+    getNumTags: builder.query({
       query: () => '/tags/limit',
       providesTags: (result, err, args) =>
         result
@@ -76,7 +76,7 @@ const tagsApiSlice = apiSlice.injectEndpoints({
 
 export const {
   useGetTagsQuery,
-  useGetNTagsQuery,
+  useGetNumTagsQuery,
   useLazyGetFollowingTagsQuery,
   useGetTagByNameQuery,
   useHandleFollowMutation,
