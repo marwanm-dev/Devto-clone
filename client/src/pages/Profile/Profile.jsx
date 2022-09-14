@@ -11,14 +11,14 @@ import PostsList from '../../common/PostsList';
 import RouteWrapper from '../../common/RouteWrapper';
 import ShowMore from '../../common/ShowMore';
 import { selectCurrentUser } from '../../core/features/auth/authSlice';
-import { useGetUserProfileQuery } from '../../core/features/users/usersApiSlice';
+import { useGetUserQuery } from '../../core/features/users/usersApiSlice';
 import { formatDate } from '../../helpers/string';
 
 const Profile = () => {
   const navigate = useNavigate();
   const currentUser = useSelector(selectCurrentUser);
   const { username } = useParams();
-  const { data: previewedUser, isLoading } = useGetUserProfileQuery(username, {
+  const { data: previewedUser, isLoading } = useGetUserQuery(username, {
     refetchOnMountOrArgChange: true,
   });
 

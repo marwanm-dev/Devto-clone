@@ -12,7 +12,7 @@ const usersApiSlice = apiSlice.injectEndpoints({
           ? [{ type: 'User', id: 'LIST' }, ...result.map(({ id }) => ({ type: 'User', id }))]
           : [{ type: 'User', id: 'LIST' }],
     }),
-    getUserProfile: builder.query({
+    getUser: builder.query({
       query: username => `/users/${username}`,
       providesTags: (result, err, args) =>
         result ? [{ type: 'User', id: result.id }] : [{ type: 'User', id: 'LIST' }],
@@ -47,7 +47,7 @@ const usersApiSlice = apiSlice.injectEndpoints({
         dispatch(setCredentials(body));
         const { username } = body;
         dispatch(
-          usersApiSlice.util.updateQueryData('getUserProfile', username, draftUser => {
+          usersApiSlice.util.updateQueryData('getUser', username, draftUser => {
             Object.assign(draftUser, updatedUser);
           })
         );
@@ -81,7 +81,7 @@ const usersApiSlice = apiSlice.injectEndpoints({
                     : draftPost.author.followers.splice(currentUserIndex, 1);
                 }
               )
-            : usersApiSlice.util.updateQueryData('getUserProfile', username, draftUser => {
+            : usersApiSlice.util.updateQueryData('getUser', username, draftUser => {
                 const currentUserIndex = draftUser.followers.indexOf(currentId);
                 action === 'follow'
                   ? draftUser.followers.push(currentId)
@@ -101,7 +101,7 @@ const usersApiSlice = apiSlice.injectEndpoints({
 
 export const {
   useGetUsersQuery,
-  useGetUserProfileQuery,
+  useGetUserQuery,
   useGetUserDashboardQuery,
   useGetAllNotificationsQuery,
   useLazyGetUnreadNotificationsQuery,

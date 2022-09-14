@@ -75,7 +75,7 @@ const postsApiSlice = apiSlice.injectEndpoints({
           toInvalidate
             ? toInvalidate.type === 'User'
               ? usersApiSlice.util.updateQueryData(
-                  'getUserProfile',
+                  'getUser',
                   toInvalidate.extra.username,
                   draftUser => {
                     const foundPost = draftUser.posts.find(post => post.id === id);
