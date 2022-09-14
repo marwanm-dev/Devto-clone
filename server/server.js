@@ -65,5 +65,5 @@ mongoose.connection.once('open', () => {
 
   socketHandlers(io);
 
-  httpServer.listen(process.env.PORT || 5000);
+  httpServer.listen(process.env.PORT || 8000);
 });
