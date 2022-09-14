@@ -8,6 +8,6 @@ module.exports = {
       callback(new Error('Not allowed by CORS'));
     }
   },
-  credentials: true,
+  methods: ['GET', 'POST', 'DELETE', 'PUT', 'PATCH'],
   optionsSuccessStatus: 200,
 };
