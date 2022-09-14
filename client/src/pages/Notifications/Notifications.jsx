@@ -5,12 +5,12 @@ import LoadingSpinner from '../../common/LoadingSpinner';
 import Placeholder from '../../common/Placeholder';
 import RouteWrapper from '../../common/RouteWrapper';
 import { selectCurrentUser } from '../../core/features/auth/authSlice';
-import { useGetAllNotificationsQuery } from '../../core/features/users/usersApiSlice';
+import { useGetNotificationsQuery } from '../../core/features/users/usersApiSlice';
 import Notification from './components/Notification';
 
 const Notifications = () => {
   const { id } = useSelector(selectCurrentUser);
-  const { data: notifications, isLoading } = useGetAllNotificationsQuery(id, {
+  const { data: notifications, isLoading } = useGetNotificationsQuery(id, {
     refetchOnMountOrArgChange: true,
   });
 
@@ -20,7 +20,7 @@ const Notifications = () => {
       <Wrapper>
         {isLoading ? (
           <LoadingSpinner />
-        ) : notifications.length ? (
+        ) : notifications?.length ? (
           notifications.map(notification => (
             <Notification key={nanoid()} notification={notification} />
           ))

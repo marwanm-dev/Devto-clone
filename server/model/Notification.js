@@ -11,10 +11,10 @@ const NotificationSchema = new Schema(
       type: Boolean,
       default: false,
     },
-    sender: { type: Schema.Types.ObjectId, ref: 'User' },
-    receiver: { type: Schema.Types.ObjectId, ref: 'User' },
-    post: { type: Schema.Types.ObjectId, ref: 'Post' },
-    comment: { type: Schema.Types.ObjectId, ref: 'Comment' },
+    sender: { type: mongoose.Types.ObjectId, ref: 'User' },
+    receiver: { type: mongoose.Types.ObjectId, ref: 'User' },
+    post: { type: mongoose.Types.ObjectId, ref: 'Post' },
+    comment: { type: mongoose.Types.ObjectId, ref: 'Comment' },
   },
   { timestamps: { createdAt: true, updatedAt: false } }
 );

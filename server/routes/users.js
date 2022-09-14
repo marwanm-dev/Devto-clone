@@ -17,7 +17,7 @@ router.route('/dash/:username').get(usersController.getUserDashboard);
 
 router.route('/:previewedId/:action').patch(verifyJWT, usersController.handleFollow);
 
-router.route('/:userId/notifications').get(notificationsController.getAllNotifications);
+router.route('/:userId/notifications').get(notificationsController.getNotifications);
 
 router.route('/:userId/notifications/unread').get(notificationsController.getUnreadNotifications);
 

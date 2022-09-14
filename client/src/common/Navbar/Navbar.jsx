@@ -38,13 +38,13 @@ const Navbar = () => {
   useEffect(() => {
     getUnreadNotifications();
     socket?.on('notificationReceived', ({ sender, receiverUsername, type, reactionType, post }) => {
-      console.log('notificationReceived')
       createToast({ sender, receiverUsername, type, reactionType, post });
       setTimeout(() => {
         getUnreadNotifications();
-      }, 1000);
+      }, 1500);
     });
-    return () => socket?.off('notificationReceived');
+
+    return () => socket.off('notificationReceived');
   }, []);
 
   return (

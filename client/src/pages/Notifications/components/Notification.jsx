@@ -25,7 +25,7 @@ const Notification = ({ notification: { type, sender, receiver, post, comment } 
           ) : type === 'comment' && post ? (
             <>
               <Bold onClick={() => navigate(`/${sender.username}`)}>{sender.name}</Bold> commented
-              on your post with {comment.body} on
+              on your post with {comment?.body} on
               <Bold
                 onClick={() =>
                   navigate(`/${receiver.username}/${createPostUrl(post.title, post.id)}`)

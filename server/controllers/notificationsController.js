@@ -1,6 +1,6 @@
 const Notification = require('../model/Notification');
 
-const getAllNotifications = async (req, res, next) => {
+const getNotifications = async (req, res, next) => {
   const { userId } = req.params;
 
   await Notification.updateMany({ receiver: userId }, { read: true });
@@ -9,7 +9,7 @@ const getAllNotifications = async (req, res, next) => {
     .populate('receiver')
     .populate('sender')
     .populate('post')
-    .populate(['comment', 'body']);
+    .populate({ path: 'comment', populate: 'body' });
 
   res.json(notifications.map(notification => notification.toObject({ getters: true })));
 };
@@ -26,7 +26,7 @@ const getUnreadNotifications = async (req, res, next) => {
     .populate('receiver')
     .populate('sender')
     .populate('post')
-    .populate(['comment', 'body']);
+    .populate({ path: 'comment', populate: 'body' });
 
   res.json(unreadNotifications);
 };
@@ -105,7 +105,7 @@ const removePostNotification = async (senderId, postId, receiverId) => {
 };
 
 module.exports = {
-  getAllNotifications,
+  getNotifications,
   getUnreadNotifications,
   likeNotification,
   removeLikeNotification,

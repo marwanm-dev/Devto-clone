@@ -22,7 +22,7 @@ const usersApiSlice = apiSlice.injectEndpoints({
       providesTags: (result, err, args) =>
         result ? [{ type: 'User', id: result.id }] : [{ type: 'User', id: 'LIST' }],
     }),
-    getAllNotifications: builder.query({
+    getNotifications: builder.query({
       query: id => `/users/${id}/notifications`,
     }),
     getUnreadNotifications: builder.query({
@@ -103,7 +103,7 @@ export const {
   useGetUsersQuery,
   useGetUserQuery,
   useGetUserDashboardQuery,
-  useGetAllNotificationsQuery,
+  useGetNotificationsQuery,
   useLazyGetUnreadNotificationsQuery,
   useDeleteUserMutation,
   useUpdateUserMutation,

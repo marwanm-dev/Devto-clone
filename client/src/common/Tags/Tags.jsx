@@ -30,7 +30,7 @@ const Tags = ({ tags, isColored, filteredTag }) => {
   );
 };
 
-const Wrapper = tw.div`mb-2 flex [&>*:not(:first-child)]:ml-1`;
+const Wrapper = tw.div`mb-2 flex [&>*:not(:first-child)]:ml-1 flex-wrap`;
 
 const Tag = styled.div`
   ${tw`px-2 py-1 mr-1 rounded-md cursor-pointer text-darker-gray hover:bg-lighter-gray`};

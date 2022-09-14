@@ -34,7 +34,7 @@ const handleLogin = async (req, res) => {
 
     res.json({ ...foundUser.toObject({ getters: true }), token });
   } else {
-    return res.status(401);
+    return res.status(401).json({ message: 'Unauthorized' });
   }
 };
 
