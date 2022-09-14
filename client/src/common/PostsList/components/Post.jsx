@@ -56,7 +56,7 @@ const Post = ({ post, isFirstPost, filteredTag, toInvalidate }) => {
           <Header onClick={() => navigate(`/${post?.author.username}`)}>
             <Author src={post.author?.picture?.url} />
             <AuthorMeta>
-              <AuthorName>{post.author?.username}</AuthorName>
+              <AuthorName>{post.author?.name}</AuthorName>
               <CreatedAt>{formatDate(post.createdAt)}</CreatedAt>
               {formatDate(post.updatedAt) !== formatDate(post.createdAt) && (
                 <UpdatedAt>{`Updated ${formatDate(post.updatedAt)}`}</UpdatedAt>
