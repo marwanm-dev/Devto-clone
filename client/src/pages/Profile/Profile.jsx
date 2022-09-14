@@ -1,5 +1,7 @@
+import { useEffect } from 'react';
 import { CgNotes } from 'react-icons/cg';
 import { FaBirthdayCake, FaHashtag, FaRegComment } from 'react-icons/fa';
+import { GiConsoleController } from 'react-icons/gi';
 import { HiLocationMarker } from 'react-icons/hi';
 import { useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';

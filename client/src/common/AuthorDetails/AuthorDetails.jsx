@@ -79,7 +79,7 @@ const AuthorDetails = ({ isLaptop, post }) => {
   );
 };
 
-const Header = tw.div`flex items-center gap-2`;
+const Header = tw.div`flex items-center gap-sm`;
 
 const Avatar = tw.img`cursor-pointer w-14 h-14 rounded-full`;
 
