@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "scripts": {
     "dev": "nodemon server",
-    "build": "pm2 start server.js"
+    "build": "node server"
   },
   "dependencies": {
     "axios": "^0.27.2",
@@ -17,7 +17,6 @@
     "google-auth-library": "^8.5.1",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^6.0.11",
-    "pm2": "^5.2.0",
     "socket.io": "^4.5.1",
     "uuid": "^8.3.2"
   },
