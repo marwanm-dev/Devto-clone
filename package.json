@@ -2,7 +2,7 @@
   "name": "devto-clone",
   "version": "1.0.0",
   "scripts": {
-    "stack": "concurrently \"cd server && npm run serve\" \"cd client && npm run build\""
+    "stack": "concurrently \"cd server && npm run dev\" \"cd client && npm run dev\""
   },
   "author": "marodevv",
   "license": "ISC",

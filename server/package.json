@@ -1,6 +1,7 @@
 {
-  "name": "server",
+  "name": "devto-clone-server",
   "version": "1.0.0",
+  "author": "marodevv",
   "scripts": {
     "dev": "nodemon server",
     "build": "pm2 start server.js"

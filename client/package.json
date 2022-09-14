@@ -1,6 +1,7 @@
 {
-  "name": "project-name",
+  "name": "devto-clone",
   "version": "1.0.0",
+  "author": "marodevv",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
