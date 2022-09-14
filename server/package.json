@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "scripts": {
     "dev": "nodemon server",
-    "build": "node server.js"
+    "build": "pm2 start server.js"
   },
   "dependencies": {
     "axios": "^0.27.2",
