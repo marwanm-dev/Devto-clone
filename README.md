@@ -59,17 +59,31 @@
 
 ### Login / Signup / Edit / Delete
 
+![Uploading Login - Signup -Edit - Delete profile.gif…]()
+
 ### Google / github OAuth
+
+![Uploading Login OAuth.gif…]()
 
 ### Create / Update / Edit / Delete Posts
 
+![Uploading CRUD Posts.gif…]()
+
 ### Reactions / Comments / Follows with Real-time notifications
+
+![Uploading Real time notifications - Reactions - Comments - Replies - Follows.gif…]()
 
 ### Tags / ReadingList
 
+![Uploading Tags - ReadingList.gif…]()
+
 ### Dashboard
 
+![Dashboard](https://user-images.githubusercontent.com/90101257/190119722-fb78a3ad-082c-45ad-b438-ee30606825ef.gif)
+
 ### Search Engine
+
+![Uploading Search engine.gif…]()
 
 ## How to setup locally
 
