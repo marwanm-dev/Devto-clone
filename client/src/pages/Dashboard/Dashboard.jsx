@@ -69,10 +69,7 @@ const Dashboard = () => {
                 )
               ) : selected === 'followedTags' ? (
                 user.followedTags.length > 0 ? (
-                  <FollowedTags
-                    followedTags={user.followedTags.sort((a, b) => b.posts.length - a.posts.length)}
-                    navigate={navigate}
-                  />
+                  <FollowedTags followedTags={user.followedTags} navigate={navigate} />
                 ) : (
                   <Placeholder />
                 )
