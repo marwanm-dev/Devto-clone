@@ -36,12 +36,6 @@
 - Socket.io
 - Axios
 
-## Live
-
-> Client: https://marodevv-devto-clone.vercel.app
-
-> Server: https://marodevv-devto-clone.vercel.app
-
 ## Features
 
 - Login / Signup
@@ -59,23 +53,23 @@
 
 ### Login / Signup / Edit / Delete
 
-![Uploading Login - Signup -Edit - Delete profile.gif…]()
+![Login - Signup -Edit - Delete profile](https://user-images.githubusercontent.com/90101257/190129885-a618117c-71c5-48c8-a091-01e5f03266e3.gif)
 
 ### Google / github OAuth
 
-![Uploading Login OAuth.gif…]()
+![Login OAuth](https://user-images.githubusercontent.com/90101257/190130170-31e95df0-86e9-4b79-8325-9bc3fcc3f164.gif)
 
 ### Create / Update / Edit / Delete Posts
 
-![Uploading CRUD Posts.gif…]()
+![CRUD Posts](https://user-images.githubusercontent.com/90101257/190130345-68b6275c-743c-48da-9c65-e5c5515989d8.gif)
 
 ### Reactions / Comments / Follows with Real-time notifications
 
-![Uploading Real time notifications - Reactions - Comments - Replies - Follows.gif…]()
+![Real time notifications - Reactions - Comments - Replies - Follows](https://user-images.githubusercontent.com/90101257/190132480-e07976d2-936a-49c2-897c-e6be5527b465.gif)
 
 ### Tags / ReadingList
 
-![Uploading Tags - ReadingList.gif…]()
+![Tags - ReadingList](https://user-images.githubusercontent.com/90101257/190130607-7e6a7035-dc56-4dc7-b2e9-d2c6d00d5a87.gif)
 
 ### Dashboard
 
@@ -83,7 +77,13 @@
 
 ### Search Engine
 
-![Uploading Search engine.gif…]()
+![Search engine](https://user-images.githubusercontent.com/90101257/190130621-24249495-af37-4ecb-a57f-8909a5d13dbb.gif)
+
+## Live
+
+> Client: https://marodevv-devto-clone.vercel.app
+
+> Server: https://marodevv-devto-clone.vercel.app
 
 ## How to setup locally
 
