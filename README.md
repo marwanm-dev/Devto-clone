@@ -7,7 +7,7 @@
   <br />
 </div>
 
-> An Dev.to clone created with MERN stack and more (Essentially FB without stories but for developers)
+> A Dev.to clone created with MERN stack and more (Essentially FB without stories but for developers)
 
 <a href="https://marodevv-devto-clone.vercel.app">
   <img src='https://user-images.githubusercontent.com/90101257/190000739-e824f9a6-2014-4df1-8aca-6ce64e11f4dd.PNG' />
