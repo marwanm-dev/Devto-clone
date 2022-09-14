@@ -44,7 +44,7 @@
     "autoprefixer": "^10.4.7",
     "postcss": "^8.4.14",
     "twin.macro": "^2.8.2",
-    "vite": "^2.9.12",
+    "vite": "^2.9.13",
     "vite-plugin-babel-macros": "^1.0.6"
   },
   "babelMacros": {
