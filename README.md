@@ -1,5 +1,5 @@
 <div align="center">
-  <a href="https://marodevv-devto-clone.onrender.com/">
+  <a href="https://marodevv-devto-clone.vercel.app">
         <img src="https://res.cloudinary.com/practicaldev/image/fetch/s--QG4or-x4--/c_limit%2Cf_auto%2Cfl_progressive%2Cq_auto%2Cw_880/https://thepracticaldev.s3.amazonaws.com/i/jrzutxzs0l43wqvw5k8z.png" width="200">
   </a>
   <br />
@@ -9,7 +9,7 @@
 
 > A Dev.to clone created with MERN stack and more (Essentially FB without stories but for developers)
 
-<a href="https://marodevv-devto-clone-server.onrender.com/">
+<a href="https://marodevv-devto-clone.vercel.app">
   <img src='https://user-images.githubusercontent.com/90101257/190000739-e824f9a6-2014-4df1-8aca-6ce64e11f4dd.PNG' />
 </a>
 
@@ -86,15 +86,15 @@
 
 ## Live
 
-> Client: https://marodevv-devto-clone.onrender.com/
+> Client: https://marodevv-devto-clone.vercel.app
 
-> Server: https://marodevv-devto-clone-server.onrender.com/
+> Server: https://marodevv-devto-clone-server.vercel.app
 
 ## How to setup locally
 
 ### Clone Repo
 
-Clone the repo to your local machine by `https://github.com/marodevv/Devto-clone`
+Clone the repo to your local machine by `https://github.com/marodevv/dev.to-clone`
 
 ### Setup
 
