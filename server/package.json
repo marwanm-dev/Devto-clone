@@ -4,7 +4,7 @@
   "author": "marodevv",
   "scripts": {
     "dev": "nodemon server",
-    "build": "pm2 start server.js"
+    "build": "node server"
   },
   "dependencies": {
     "axios": "^0.27.2",
