@@ -88,13 +88,13 @@
 
 > Client: https://marodevv-devto-clone.vercel.app
 
-> Server: https://marodevv-devto-clone-server.vercel.app
+> Server: https://marodevv-devto-clone-server.onrender.com
 
 ## How to setup locally
 
 ### Clone Repo
 
-Clone the repo to your local machine by `https://github.com/marodevv/dev.to-clone`
+Clone the repo to your local machine by `https://github.com/marodevv/Devto-clone`
 
 ### Setup
 
