@@ -18,7 +18,7 @@
 > Frontend
 
 - React
-- Redux toolkit
+- Redux toolkit (Advanced RTK)
 - Tailwind
 - Styled components
 - Framer motion
@@ -42,7 +42,7 @@
 - Login / Signup
 - View / Edit Profile
 - Google / Github OAuth
-- Real-time Notifications
+- Real-time Notifications Toasted
 - CRUD Posts / Comments / Replies / Tags
 - Follow / Unfollow Users
 - Follow / Unfollow Tags
@@ -67,7 +67,7 @@
 
 ![CRUD Posts](https://user-images.githubusercontent.com/90101257/190130345-68b6275c-743c-48da-9c65-e5c5515989d8.gif)
 
-### Reactions / Comments / Follows with Real-time notifications
+### Reactions / Comments / Follows with Real-time notifications (Toasted)
 
 ![Real time notifications - Reactions - Comments - Replies - Follows](https://user-images.githubusercontent.com/90101257/190132480-e07976d2-936a-49c2-897c-e6be5527b465.gif)
 

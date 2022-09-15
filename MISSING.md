@@ -12,4 +12,4 @@ Deletion of a reply (only) results in deleting the lowest one on that specific c
 
 Detection of what inputs changed on post edit
 
-Made a socket context instead of redux slice (STANDBY)
+Made a socket context instead of redux slice
