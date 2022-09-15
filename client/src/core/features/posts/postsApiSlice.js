@@ -64,7 +64,7 @@ const postsApiSlice = apiSlice.injectEndpoints({
       invalidatesTags: (result, err, { id, toInvalidate }) => [
         {
           type: toInvalidate ? toInvalidate.type : 'Post',
-          id: toInvalidate ? toInvalidate.id : id,
+          id: toInvalidate?.id ? toInvalidate.id : id,
         },
       ],
       async onQueryStarted(
@@ -94,9 +94,8 @@ const postsApiSlice = apiSlice.injectEndpoints({
               : postsApiSlice.util.updateQueryData('getPost', { url }, draftPost => {
                   draftPost[actionKey] = immutatedArray;
                 })
-            : postsApiSlice.util.updateQueryData('getPosts', null, draftPosts => {
-                const foundPost = draftPosts.find(post => post.id === id);
-                foundPost[actionKey] = immutatedArray;
+            : postsApiSlice.util.updateQueryData('getPost', { url }, draftPost => {
+                draftPost[actionKey] = immutatedArray;
               })
         );
         try {

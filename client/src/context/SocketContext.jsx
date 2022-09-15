@@ -6,7 +6,11 @@ import { selectCurrentUser } from '../core/features/auth/authSlice';
 const SocketContext = createContext({});
 
 export const SocketProvider = ({ children }) => {
-  const [socket, setSocket] = useState(io(process.env.BASE_URL));
+  const [socket, setSocket] = useState(
+    io(process.env.BASE_URL, {
+      transports: ['websocket', 'polling'],
+    })
+  );
   const { username } = useSelector(selectCurrentUser);
 
   useEffect(() => {

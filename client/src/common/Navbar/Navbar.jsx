@@ -41,7 +41,7 @@ const Navbar = () => {
       createToast({ sender, receiverUsername, type, reactionType, post });
       setTimeout(() => {
         getUnreadNotifications();
-      }, 1500);
+      }, 1000);
     });
 
     return () => socket.off('notificationReceived');
