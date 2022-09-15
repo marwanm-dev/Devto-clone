@@ -42,6 +42,7 @@
 - Login / Signup
 - View / Edit Profile
 - Google / Github OAuth
+- Ultimate mobile responsiveness
 - Real-time Notifications Toasted
 - CRUD Posts / Comments / Replies / Tags
 - Follow / Unfollow Users
