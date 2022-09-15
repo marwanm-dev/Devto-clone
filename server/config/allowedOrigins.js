@@ -1,1 +1,1 @@
-module.exports = [process.env.CLIENT_URL, 'http://localhost:3000', 'http://localhost:4173'];
+module.exports = [process.env.CLIENT_URL, 'http://localhost:3000'];
