@@ -1,6 +1,5 @@
 import { AnimatePresence, motion } from 'framer-motion';
 import { useContext, useEffect, useState } from 'react';
-import { FaDev } from 'react-icons/fa';
 import { GiHamburgerMenu } from 'react-icons/gi';
 import { IoSearch } from 'react-icons/io5';
 import { RiNotification3Line } from 'react-icons/ri';
@@ -57,7 +56,7 @@ const Navbar = () => {
             </HamburgerIcon>
           )}
           <DevIcon>
-            <FaDev />
+            <Image src='../../assets/images/dev-unofficial.png' />
           </DevIcon>
           {isMobile || <Search />}
           {isMobile && mobileMenu && <MobileMenu toggleMobileMenu={toggleMobileMenu} />}
@@ -125,6 +124,8 @@ const Navbar = () => {
     </Wrapper>
   );
 };
+
+const Image = tw.img`w-11 h-11 rounded-md`;
 
 const Wrapper = tw.nav`w-full bg-white fixed left-0 top-0 z-30 py-2 px-pg shadow-md`;
 
