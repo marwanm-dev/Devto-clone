@@ -1,6 +1,6 @@
 <div align="center">
   <a href="https://marodevv-devto-clone.vercel.app">
-        <img src="https://res.cloudinary.com/practicaldev/image/fetch/s--QG4or-x4--/c_limit%2Cf_auto%2Cfl_progressive%2Cq_auto%2Cw_880/https://thepracticaldev.s3.amazonaws.com/i/jrzutxzs0l43wqvw5k8z.png" width="200">
+        <img src="!https://user-images.githubusercontent.com/90101257/190815704-8d15a2f7-0eac-4a4e-9f39-26b093f5068c.png" width="200">
   </a>
   <br />
   <h1>Dev.to-clone</h1>
