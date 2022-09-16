@@ -1,6 +1,6 @@
 <div align="center">
   <a href="https://marodevv-devto-clone.vercel.app">
-        <img src="!https://user-images.githubusercontent.com/90101257/190815704-8d15a2f7-0eac-4a4e-9f39-26b093f5068c.png" width="200">
+        <img src="https://user-images.githubusercontent.com/90101257/190815704-8d15a2f7-0eac-4a4e-9f39-26b093f5068c.png" width="200">
   </a>
   <br />
   <h1>Dev.to-clone</h1>
