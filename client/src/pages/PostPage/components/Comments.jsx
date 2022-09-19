@@ -72,7 +72,7 @@ const Comments = ({ postTitle, postAuthor, postId }) => {
         </AddToDiscussion>
         {isLoading && <LoadingSpinner />}
         {!isLoading &&
-          rootComments.map(comment => (
+          rootComments?.map(comment => (
             <Comment
               key={comment.id}
               comment={comment}
