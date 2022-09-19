@@ -156,7 +156,7 @@ const EditPost = () => {
                     value={tags}
                     onFocus={() => setIsTagsFocused(true)}
                     onBlur={() => setIsTagsFocused(false)}
-                    onChange={e => setTags(e.target.value)}
+                    onChange={e => setTags(e.target.value.replace(/ /g, ''))}
                     required
                   />
                 </InputWrapper>

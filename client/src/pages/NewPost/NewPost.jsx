@@ -35,7 +35,7 @@ const NewPost = () => {
   useEffect(() => titleRef.current.focus(), []);
 
   useEffect(() => {
-    if (title && file && body.length > 0 && tags.length > 0) setInputsFilled(true);
+    if (title && file && body && tags) setInputsFilled(true);
     else setInputsFilled(false);
   }, [title, file, body, tags]);
 
@@ -114,7 +114,7 @@ const NewPost = () => {
                 value={tags}
                 onFocus={() => setIsTagsFocused(true)}
                 onBlur={() => setIsTagsFocused(false)}
-                onChange={e => setTags(e.target.value)}
+                onChange={e => setTags(e.target.value.replace(/ /g, ''))}
                 required
               />
             </InputWrapper>
