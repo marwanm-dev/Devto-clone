@@ -1,19 +1,18 @@
-import { useState, useRef, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux';
-import tw from 'twin.macro';
-import SimpleMDE from 'react-simplemde-editor';
-import RouteWrapper from '../../common/RouteWrapper';
-import LoadingSpinner from '../../common/LoadingSpinner';
-import Error from '../../common/Error';
-import useBase64 from '../../hooks/useBase64';
-import { useCreatePostMutation } from '../../core/features/posts/postsApiSlice';
 import 'easymde/dist/easymde.min.css';
-import { selectCurrentUser } from '../../core/features/auth/authSlice';
-import useRequireAuth from '../../hooks/useRequireAuth';
-import { useContext } from 'react';
+import { useContext, useEffect, useRef, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import SimpleMDE from 'react-simplemde-editor';
+import tw from 'twin.macro';
+import Error from '../../common/Error';
+import LoadingSpinner from '../../common/LoadingSpinner';
+import RouteWrapper from '../../common/RouteWrapper';
 import socketContext from '../../context/SocketContext';
+import { selectCurrentUser } from '../../core/features/auth/authSlice';
+import { useCreatePostMutation } from '../../core/features/posts/postsApiSlice';
 import { useGetUserDashboardQuery } from '../../core/features/users/usersApiSlice';
+import useBase64 from '../../hooks/useBase64';
+import useRequireAuth from '../../hooks/useRequireAuth';
 
 const NewPost = () => {
   const [title, setTitle] = useState('');
@@ -36,7 +35,7 @@ const NewPost = () => {
   useEffect(() => titleRef.current.focus(), []);
 
   useEffect(() => {
-    if (title && file && body && tags) setInputsFilled(true);
+    if (title && file && body.length > 0 && tags.length > 0) setInputsFilled(true);
     else setInputsFilled(false);
   }, [title, file, body, tags]);
 
