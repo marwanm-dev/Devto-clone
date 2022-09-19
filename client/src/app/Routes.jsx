@@ -3,13 +3,11 @@ import { useEffect } from 'react';
 import { Route, Routes as RouterRoutes, useLocation } from 'react-router-dom';
 
 // Pages
-import About from '../pages/About';
 import Confirmation from '../pages/Confirmation';
 import Contact from '../pages/Contact';
 import Dashboard from '../pages/Dashboard';
 import EditPost from '../pages/EditPost';
 import EditProfile from '../pages/EditProfile';
-import FAQ from '../pages/FAQ';
 import Home from '../pages/Home';
 import Login from '../pages/Login';
 import NewPost from '../pages/NewPost';
@@ -38,8 +36,6 @@ const Routes = () => {
       <RouterRoutes location={location} key={location.pathname}>
         <Route path='/' element={<Layout />}>
           <Route index element={<Home />} />
-          <Route path='faq' element={<FAQ />} />
-          <Route path='about' element={<About />} />
           <Route path='contact' element={<Contact />} />
           <Route path='search' element={<Search />} />
           <Route element={<RequireAuth />}>
