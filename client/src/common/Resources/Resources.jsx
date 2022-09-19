@@ -61,19 +61,19 @@ const Resources = ({ saved }) => {
             Tags
           </LinkWrapper>
         </Link>
-        <Link to='faq'>
+        <Link to=''>
           <LinkWrapper>
             <Image src='../../../assets/images/faq.png' />
             FAQ
           </LinkWrapper>
         </Link>
-        <Link to='about'>
+        <Link to=''>
           <LinkWrapper>
             <Image src='../../../assets/images/about.png' />
             About
           </LinkWrapper>
         </Link>
-        <Link to='contact'>
+        <Link to=''>
           <LinkWrapper>
             <Image src='../../../assets/images/chat.png' />
             Contact
