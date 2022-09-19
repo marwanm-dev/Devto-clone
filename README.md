@@ -60,7 +60,7 @@
 
 ![Login - Signup -Edit - Delete profile](https://user-images.githubusercontent.com/90101257/190129885-a618117c-71c5-48c8-a091-01e5f03266e3.gif)
 
-### Google / github OAuth
+### Google / Github OAuth
 
 ![Login OAuth](https://user-images.githubusercontent.com/90101257/190130170-31e95df0-86e9-4b79-8325-9bc3fcc3f164.gif)
 
