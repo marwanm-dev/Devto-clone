@@ -4,7 +4,6 @@ export const getPostParams = postUrl => {
     const decoded = decodeURIComponent(postUrl);
     const postId = decoded.slice(decoded.length - 24, decoded.length);
     const postTitle = decoded.slice(0, decoded.indexOf(postId) - 1);
-    console.log({ decoded, postId, postTitle });
     return { postTitle, postId };
 };
 
@@ -16,9 +15,7 @@ export const unCapitalizeFirstLetter = string => {
 };
 
 export const createPostUrl = (postTitle, postId) => {
-    console.log(encodeURIComponent(`${postTitle}-${postId}`));
     return encodeURIComponent(`${postTitle}-${postId}`);
-    // return `${postTitle.replaceAll(' ', '+')}-${postId}`;
 };
 
 export const formatDate = (timestamp, momented = true) => {

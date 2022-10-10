@@ -2,7 +2,6 @@ const getPostParams = postUrl => {
     const decoded = decodeURIComponent(postUrl);
     const postId = decoded.slice(decoded.length - 24, decoded.length);
     const postTitle = decoded.slice(0, decoded.indexOf(postId) - 1);
-    console.log({ decoded, postId, postTitle });
     return { postTitle, postId };
 };
 

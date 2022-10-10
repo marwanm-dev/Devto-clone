@@ -10,8 +10,8 @@ const usePostReaction = (id, author, likes, unicorns, bookmarks, postTitle, toIn
     const currentUser = useSelector(selectCurrentUser);
 
     const username = author?.username;
-    const { encodedTitle, encodedId } = getPostParams(`${postTitle}-${id}`);
-    const postUrl = createPostUrl(encodedTitle, encodedId);
+    // const { encodedTitle, encodedId } = getPostParams(`${postTitle}-${id}`);
+    const postUrl = createPostUrl(postTitle, id);
 
     const { socket } = useContext(SocketContext);
 

@@ -14,7 +14,6 @@ const PostPage = () => {
     const isLaptop = useBreakpoint(theme`screens.lap.max`.replace('px', ''));
     const { username, postUrl } = useParams();
     const { postTitle, postId } = getPostParams(postUrl);
-    console.log(postUrl, createPostUrl(postTitle, postId));
     const { data: post, isLoading } = useGetPostQuery(
         { url: `${username}/${createPostUrl(postTitle, postId)}` },
         { refetchOnMountOrArgChange: true }
