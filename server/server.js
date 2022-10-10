@@ -18,14 +18,14 @@ const app = express();
 const httpServer = createServer(app);
 
 (async () => {
-  try {
-    mongoose.connect(
-      `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@devto-clone.zmjtehp.mongodb.net/${process.env.DB_NAME}?retryWrites=true&w=majority`,
-      dbConn
-    );
-  } catch (err) {
-    console.error(err);
-  }
+    try {
+        mongoose.connect(
+            `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@cluster0.cho6tzb.mongodb.net/${process.env.DB_NAME}?retryWrites=true&w=majority`,
+            dbConn
+        );
+    } catch (err) {
+        console.error(err);
+    }
 })();
 
 // custom middleware logger
@@ -59,9 +59,9 @@ app.use('/comments', require('./routes/comments'));
 app.use('/tags', require('./routes/tags'));
 
 mongoose.connection.once('open', () => {
-  const io = new Server(httpServer, { cors: corsOptions });
+    const io = new Server(httpServer, { cors: corsOptions });
 
-  socketHandlers(io);
+    socketHandlers(io);
 
-  httpServer.listen(process.env.PORT || 8000);
+    httpServer.listen(process.env.PORT || 8000);
 });
