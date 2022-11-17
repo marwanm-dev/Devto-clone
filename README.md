@@ -1,5 +1,5 @@
 <div align="center">
-  <a href="https://marodevv-devto-clone.vercel.app">
+  <a href="https://marwanmodev-devto-clone.vercel.app">
         <img src="https://user-images.githubusercontent.com/90101257/190815704-8d15a2f7-0eac-4a4e-9f39-26b093f5068c.png" width="200">
   </a>
   <br />
@@ -9,7 +9,7 @@
 
 > A Dev.to clone created with MERN stack and more (Essentially FB without stories feature)
 
-<a href="https://marodevv-devto-clone.vercel.app">
+<a href="https://marwanmodev-devto-clone.vercel.app">
   <img src='https://user-images.githubusercontent.com/90101257/190000739-e824f9a6-2014-4df1-8aca-6ce64e11f4dd.PNG' />
 </a>
 
@@ -17,42 +17,42 @@
 
 > Frontend
 
-- React
-- Redux toolkit (Advanced RTK)
-- Tailwind
-- Styled components
-- Framer motion
-- React router
-- Cloudinary (Image hosting)
+-   React
+-   Redux toolkit (Advanced RTK)
+-   Tailwind
+-   Styled components
+-   Framer motion
+-   React router
+-   Cloudinary (Image hosting)
 
 > Backend
 
-- MongoDB
-- Express
-- Node.js
-- OAuth (Google/Github)
-- JWT
-- Socket.io (Real-time)
-- Cloudinary
-- Mongoose
-- Axios
+-   MongoDB
+-   Express
+-   Node.js
+-   OAuth (Google/Github)
+-   JWT
+-   Socket.io (Real-time)
+-   Cloudinary
+-   Mongoose
+-   Axios
 
 ## Features
 
-- Login / Signup
-- View / Edit Profile
-- Google / Github OAuth
-- Ultimate mobile responsiveness
-- Real-time Notifications Toasted
-- CRUD Posts / Comments / Replies / Tags
-- Follow / Unfollow Users
-- Follow / Unfollow Tags
-- Like / Unicorn / Bookmark Posts
-- Like comments
-- Advanced Search engine for posts, people and tags
-- Filter for posts
-- Reading List
-- Dashboard
+-   Login / Signup
+-   View / Edit Profile
+-   Google / Github OAuth
+-   Ultimate mobile responsiveness
+-   Real-time Notifications Toasted
+-   CRUD Posts / Comments / Replies / Tags
+-   Follow / Unfollow Users
+-   Follow / Unfollow Tags
+-   Like / Unicorn / Bookmark Posts
+-   Like comments
+-   Advanced Search engine for posts, people and tags
+-   Filter for posts
+-   Reading List
+-   Dashboard
 
 ## Screenshots
 
@@ -86,15 +86,15 @@
 
 ## Live
 
-> Client: https://marodevv-devto-clone.vercel.app
+> Client: https://marwanmodev-devto-clone.vercel.app
 
-> Server: https://marodevv-devto-clone-server.onrender.com
+> Server: https://marwanmodev-devto-clone-server.onrender.com
 
 ## How to setup locally
 
 ### Clone Repo
 
-Clone the repo to your local machine by `https://github.com/marodevv/Devto-clone`
+Clone the repo to your local machine by `https://github.com/marwanmodev/Devto-clone`
 
 ### Setup
 

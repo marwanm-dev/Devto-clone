@@ -1,7 +1,7 @@
 {
     "name": "devto-clone",
     "version": "1.0.0",
-    "author": "marodevv",
+    "author": "marwanmodev",
     "scripts": {
         "dev": "vite",
         "build": "vite build",

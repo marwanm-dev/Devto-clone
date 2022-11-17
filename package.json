@@ -1,15 +1,15 @@
 {
-  "name": "devto-clone",
-  "version": "1.0.0",
-  "scripts": {
-    "stack": "concurrently \"cd server && npm run dev\" \"cd client && npm run dev\""
-  },
-  "author": "marodevv",
-  "license": "ISC",
-  "devDependencies": {
-    "concurrently": "^7.2.1"
-  },
-  "dependencies": {
-    "pm2": "^5.2.0"
-  }
+    "name": "devto-clone",
+    "version": "1.0.0",
+    "scripts": {
+        "stack": "concurrently \"cd server && npm run dev\" \"cd client && npm run dev\""
+    },
+    "author": "marwanmodev",
+    "license": "ISC",
+    "devDependencies": {
+        "concurrently": "^7.2.1"
+    },
+    "dependencies": {
+        "pm2": "^5.2.0"
+    }
 }
