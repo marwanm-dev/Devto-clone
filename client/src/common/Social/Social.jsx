@@ -5,7 +5,7 @@ import tw, { styled } from 'twin.macro';
 const Social = ({ footer }) => {
     return (
         <Wrapper footer={footer}>
-            <SocialLink to='//github.com/marwanmodev' target='_blank' footer={footer}>
+            <SocialLink to='//github.com/marwanm-dev' target='_blank' footer={footer}>
                 <IconWrapper>
                     <AiFillGithub />
                 </IconWrapper>
@@ -15,10 +15,7 @@ const Social = ({ footer }) => {
                     <AiFillInstagram />
                 </IconWrapper>
             </SocialLink>
-            <SocialLink
-                to='//www.linkedin.com/in/marwan-mostafa-4ba111210'
-                target='_blank'
-                footer={footer}>
+            <SocialLink to='//www.linkedin.com/in/marwanm-dev' target='_blank' footer={footer}>
                 <IconWrapper>
                     <AiFillLinkedin />
                 </IconWrapper>
