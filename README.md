@@ -1,5 +1,5 @@
 <div align="center">
-  <a href="https://marwanmodev-devto-clone.vercel.app">
+  <a href="https://marwanm-devto-clone.vercel.app">
         <img src="https://user-images.githubusercontent.com/90101257/190815704-8d15a2f7-0eac-4a4e-9f39-26b093f5068c.png" width="200">
   </a>
   <br />
@@ -9,7 +9,7 @@
 
 > A Dev.to clone created with MERN stack and more (Essentially FB without stories feature)
 
-<a href="https://marwanmodev-devto-clone.vercel.app">
+<a href="https://marwanm-devto-clone.vercel.app">
   <img src='https://user-images.githubusercontent.com/90101257/190000739-e824f9a6-2014-4df1-8aca-6ce64e11f4dd.PNG' />
 </a>
 
@@ -86,15 +86,15 @@
 
 ## Live
 
-> Client: https://marwanmodev-devto-clone.vercel.app
+> Client: https://marwanm-devto-clone.vercel.app
 
-> Server: https://marwanmodev-devto-clone-server.onrender.com
+> Server: https://marwanm-devto-clone-server.onrender.com
 
 ## How to setup locally
 
 ### Clone Repo
 
-Clone the repo to your local machine by `https://github.com/marwanmodev/Devto-clone`
+Clone the repo to your local machine by `https://github.com/marwanm-dev/Devto-clone`
 
 ### Setup
 
