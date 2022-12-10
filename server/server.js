@@ -20,7 +20,7 @@ const httpServer = createServer(app);
 (async () => {
     try {
         mongoose.connect(
-            `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@cluster0.cho6tzb.mongodb.net/${process.env.DB_NAME}?retryWrites=true&w=majority`,
+            `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@cluster0.dbn6czj.mongodb.net/${process.env.DB_NAME}?retryWrites=true&w=majority`,
             dbConn
         );
     } catch (err) {
@@ -63,5 +63,5 @@ mongoose.connection.once('open', () => {
 
     socketHandlers(io);
 
-    httpServer.listen(process.env.PORT || 8000);
+    httpServer.listen(process.env.PORT || 5000);
 });

@@ -24,6 +24,7 @@
         "react-google-button": "^0.7.2",
         "react-google-login": "^5.2.2",
         "react-icons": "^4.4.0",
+        "react-infinite-scroll-component": "^6.1.0",
         "react-login-github": "^1.0.8",
         "react-markdown": "^8.0.3",
         "react-redux": "^8.0.2",

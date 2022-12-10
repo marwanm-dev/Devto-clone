@@ -3,7 +3,7 @@ const cloudinary = require('../config/cloudinary');
 const uploadToCloudinary = async (file, folder) => {
   try {
     const uploadedResponse = await cloudinary.uploader.upload(file, {
-      folder: `Devto clone/${folder}`,
+      folder: `DevToClone/${folder}`,
     });
     return uploadedResponse;
   } catch (err) {
