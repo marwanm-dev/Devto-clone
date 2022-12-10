@@ -4,11 +4,11 @@ import tw, { styled } from 'twin.macro';
 import {
   useGithubLoginMutation,
   useGoogleLoginMutation,
-  useLoginMutation,
+  useLoginMutation
 } from '../../core/features/auth/authApiSlice';
 import { setCredentials, setOAuthed, setToken } from '../../core/features/auth/authSlice';
 import Github from './components/Github';
-import Google from './components/Google';
+// import Google from './components/Google';
 
 const OAuth = () => {
   const dispatch = useDispatch();
@@ -69,7 +69,7 @@ const OAuth = () => {
 
   return (
     <Wrapper>
-      <Google onLogin={handleOAuth} />
+      {/* <Google onLogin={handleOAuth} /> */}
       <Github onLogin={handleOAuth} />
     </Wrapper>
   );
